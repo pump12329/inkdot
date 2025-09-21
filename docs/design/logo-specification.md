@@ -639,7 +639,9 @@ logo-animations.css     - 动画效果CSS
 本文档将根据品牌发展和应用需求持续更新，请关注最新版本。
 
 ### 联系方式
-如有Logo使用相关问题，请联系设计团队。
+如有Logo使用相关问题，请联系设计团队：
+- **技术支持**：linhuinan542@gmail.com
+- **项目Issues**：[GitHub Issues](https://github.com/pump12329/inkdot/issues)
 
 ---
 

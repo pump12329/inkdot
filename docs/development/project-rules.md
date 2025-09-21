@@ -179,38 +179,12 @@ src/
 ## AI功能开发规范（极简主义）
 
 ### AI服务集成原则
-- **优先使用DeepSeek API**，OpenRouter作为备选
-- **统一接口设计**：所有AI服务使用相同的接口
-- **智能默认配置**：减少用户配置负担
-- **渐进式功能**：高级AI功能按需启用
-- **成本透明**：API调用成本监控和用户可见
-- **错误处理简化**：统一的错误处理和用户友好的提示
-
-```typescript
-// AI服务抽象
-interface AIService {
-  name: 'deepseek' | 'openrouter';
-  generateText(prompt: string, options?: AIOptions): Promise<string>;
-  analyzeContent(content: string): Promise<ContentAnalysis>;
-}
-
-// 错误处理示例
-async function callAI(service: AIService, prompt: string): Promise<string> {
-  try {
-    return await service.generateText(prompt);
-  } catch (error) {
-    console.error('AI调用失败:', error);
-    // 重试逻辑
-    return await retryAICall(service, prompt);
-  }
-}
-```
-
-### 节点级AI功能
-- 每个节点都支持AI操作
-- AI功能通过指令系统调用: `@ai`, `@expand`, `@analyze`
-- 支持上下文感知的AI建议
-- 实现AI操作历史记录
+- **模型可自主选择**：用户可在 DeepSeek API 与 OpenRouter 等模型间自由切换
+- **统一接口设计**：所有 AI 服务需实现统一的接口规范
+- **智能默认配置**：为用户预设合理参数，降低配置门槛
+- **渐进式功能**：高级 AI 能力按需解锁，逐步引导用户体验
+- **成本透明**：API 调用费用实时监控，用户可见
+- **统一错误处理**：所有错误反馈需标准化，提示清晰友好
 
 ## 极简主义设计原则
 

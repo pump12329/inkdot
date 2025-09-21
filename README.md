@@ -147,10 +147,11 @@ inkdot/
 
 ## 📞 联系我们
 
-- 项目Issues：[GitHub Issues](https://github.com/pump12329/inkdot/issues)
-- 讨论区：[GitHub Discussions](https://github.com/pump12329/inkdot/discussions)
-- 邮箱：linhuinan542@gmail.com
-- 开发者：pump12329
+- **项目Issues**：[GitHub Issues](https://github.com/pump12329/inkdot/issues)
+- **社区讨论**：[GitHub Discussions](https://github.com/pump12329/inkdot/discussions)
+- **技术支持**：linhuinan542@gmail.com
+- **项目维护者**：pump12329
+- **项目主页**：[https://github.com/pump12329/inkdot](https://github.com/pump12329/inkdot)
 
 ---
 

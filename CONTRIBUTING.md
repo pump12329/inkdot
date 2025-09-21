@@ -20,7 +20,7 @@ cd inkdot
 
 ### 3. 添加上游仓库
 ```bash
-git remote add upstream https://github.com/original-username/inkdot.git
+git remote add upstream https://github.com/pump12329/inkdot.git
 ```
 
 ### 4. 安装依赖
@@ -271,9 +271,10 @@ git push origin your-feature-branch
 - 邮件列表
 
 ### 联系方式
-- 项目维护者：@maintainer
-- 技术问题：tech@inkdot.dev
-- 一般咨询：contact@inkdot.dev
+- **项目维护者**：pump12329
+- **技术支持**：linhuinan542@gmail.com
+- **项目Issues**：[GitHub Issues](https://github.com/pump12329/inkdot/issues)
+- **社区讨论**：[GitHub Discussions](https://github.com/pump12329/inkdot/discussions)
 
 ## 🙏 贡献者
 

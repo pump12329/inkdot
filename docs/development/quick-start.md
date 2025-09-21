@@ -22,7 +22,7 @@ npm --version
 ### 2. 项目初始化
 ```bash
 # 克隆项目 (如果从GitHub)
-git clone https://github.com/your-username/inkdot.git
+git clone https://github.com/pump12329/inkdot.git
 cd inkdot
 
 # 或者直接在当前目录开始

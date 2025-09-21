@@ -157,8 +157,9 @@ npm run docs:update docs/README.md
 ## 📞 联系方式
 
 如有文档相关问题或建议，请通过以下方式联系：
-- 项目Issues：提交文档改进建议
-- 开发者邮箱：技术问题咨询
+- **项目Issues**：[GitHub Issues](https://github.com/pump12329/inkdot/issues)
+- **技术支持**：linhuinan542@gmail.com
+- **社区讨论**：[GitHub Discussions](https://github.com/pump12329/inkdot/discussions)
 
 ---
 
