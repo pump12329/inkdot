@@ -7,8 +7,15 @@
         "timestamp": "node docs/tools/timestamp-helper.js",
         "timestamp:current": "node docs/tools/timestamp-helper.js current",
         "timestamp:help": "node docs/tools/timestamp-helper.js help",
+        "timestamp:scan": "node docs/tools/timestamp-helper.js scan",
+        "timestamp:batch": "node docs/tools/timestamp-helper.js batch-update",
+        "timestamp:fix": "node docs/tools/timestamp-helper.js fix-headers",
+        "timestamp:find": "node docs/tools/timestamp-helper.js find-md",
         "docs:update": "node docs/tools/timestamp-helper.js update-doc",
-        "docs:header": "node docs/tools/timestamp-helper.js header"
+        "docs:header": "node docs/tools/timestamp-helper.js header",
+        "docs:scan": "node docs/tools/timestamp-helper.js scan",
+        "docs:batch": "node docs/tools/timestamp-helper.js batch-update",
+        "docs:fix": "node docs/tools/timestamp-helper.js fix-headers"
     },
     "keywords": [
         "mindmap",

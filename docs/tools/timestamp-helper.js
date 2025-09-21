@@ -6,6 +6,8 @@
  */
 
 const fs = require('fs')
+const path = require('path')
+const { execSync } = require('child_process')
 
 // 项目启动时间 (T0 基准点)
 const PROJECT_START_DATE = new Date('2025-09-21T00:00:00Z')
@@ -138,6 +140,194 @@ function updateDocumentTimestamp(filePath, newTimestamp = null) {
 }
 
 /**
+ * 批量更新文档时间戳
+ * @param {string[]} filePaths - 文档文件路径数组
+ * @param {string} newTimestamp - 新的时间戳 (可选)
+ */
+function batchUpdateDocumentTimestamps(filePaths, newTimestamp = null) {
+  const timestamp = newTimestamp || getCurrentTimestamp()
+  let successCount = 0
+  let errorCount = 0
+
+  console.log(`🔄 开始批量更新时间戳到: ${timestamp}`)
+  console.log(`📁 处理文件数量: ${filePaths.length}`)
+  console.log('─'.repeat(50))
+
+  filePaths.forEach((filePath, index) => {
+    try {
+      if (!fs.existsSync(filePath)) {
+        console.error(`❌ [${index + 1}/${filePaths.length}] 文件不存在: ${filePath}`)
+        errorCount++
+        return
+      }
+
+      updateDocumentTimestamp(filePath, timestamp)
+      successCount++
+    } catch (error) {
+      console.error(`❌ [${index + 1}/${filePaths.length}] 更新失败: ${filePath} - ${error.message}`)
+      errorCount++
+    }
+  })
+
+  console.log('─'.repeat(50))
+  console.log(`✅ 批量更新完成: 成功 ${successCount} 个, 失败 ${errorCount} 个`)
+}
+
+/**
+ * 查找所有Markdown文档
+ * @param {string} rootPath - 根目录路径
+ * @param {string[]} excludeDirs - 排除的目录
+ * @returns {string[]} Markdown文件路径数组
+ */
+function findAllMarkdownFiles(rootPath = '.', excludeDirs = ['node_modules', '.git', 'dist', 'build']) {
+  const markdownFiles = []
+
+  function scanDirectory(dirPath) {
+    if (!fs.existsSync(dirPath)) return
+
+    const items = fs.readdirSync(dirPath)
+
+    items.forEach(item => {
+      const fullPath = path.join(dirPath, item)
+      const stat = fs.statSync(fullPath)
+
+      if (stat.isDirectory()) {
+        // 跳过排除的目录
+        if (!excludeDirs.includes(item)) {
+          scanDirectory(fullPath)
+        }
+      } else if (stat.isFile() && path.extname(item) === '.md') {
+        markdownFiles.push(fullPath)
+      }
+    })
+  }
+
+  scanDirectory(rootPath)
+  return markdownFiles
+}
+
+/**
+ * 检查文档是否有时间戳头部
+ * @param {string} filePath - 文档文件路径
+ * @returns {object} 检查结果
+ */
+function checkDocumentTimestampHeader(filePath) {
+  if (!fs.existsSync(filePath)) {
+    return { hasHeader: false, reason: '文件不存在' }
+  }
+
+  const content = fs.readFileSync(filePath, 'utf8')
+  const lines = content.split('\n').slice(0, 10) // 只检查前10行
+
+  const hasVersion = lines.some(line => line.includes('**文档版本**'))
+  const hasTimestamp = lines.some(line => line.includes('**最后更新**'))
+  const hasStatus = lines.some(line => line.includes('**状态**'))
+
+  if (hasVersion && hasTimestamp && hasStatus) {
+    return { hasHeader: true, reason: '完整的时间戳头部' }
+  } else if (hasTimestamp) {
+    return { hasHeader: false, reason: '时间戳头部不完整' }
+  } else {
+    return { hasHeader: false, reason: '缺少时间戳头部' }
+  }
+}
+
+/**
+ * 扫描并报告文档状态
+ * @param {string} rootPath - 根目录路径
+ */
+function scanDocumentStatus(rootPath = '.') {
+  const markdownFiles = findAllMarkdownFiles(rootPath)
+  const results = {
+    total: markdownFiles.length,
+    withHeader: 0,
+    withoutHeader: 0,
+    incomplete: 0,
+    details: []
+  }
+
+  console.log(`🔍 扫描项目中的Markdown文档...`)
+  console.log(`📁 根目录: ${rootPath}`)
+  console.log(`📄 找到 ${markdownFiles.length} 个Markdown文件`)
+  console.log('─'.repeat(60))
+
+  markdownFiles.forEach(filePath => {
+    const check = checkDocumentTimestampHeader(filePath)
+    results.details.push({ file: filePath, ...check })
+
+    if (check.hasHeader) {
+      results.withHeader++
+    } else if (check.reason === '时间戳头部不完整') {
+      results.incomplete++
+    } else {
+      results.withoutHeader++
+    }
+
+    const status = check.hasHeader ? '✅' : '❌'
+    console.log(`${status} ${filePath} - ${check.reason}`)
+  })
+
+  console.log('─'.repeat(60))
+  console.log(`📊 统计结果:`)
+  console.log(`   ✅ 完整头部: ${results.withHeader} 个`)
+  console.log(`   ⚠️  不完整头部: ${results.incomplete} 个`)
+  console.log(`   ❌ 缺少头部: ${results.withoutHeader} 个`)
+  console.log(`   📄 总计: ${results.total} 个`)
+
+  return results
+}
+
+/**
+ * 自动修复文档头部
+ * @param {string} filePath - 文档文件路径
+ * @param {string} version - 文档版本 (可选)
+ * @param {string} createTimestamp - 创建时间戳 (可选)
+ */
+function autoFixDocumentHeader(filePath, version = 'v1.0.0', createTimestamp = 'T0.1') {
+  if (!fs.existsSync(filePath)) {
+    console.error(`文件不存在: ${filePath}`)
+    return false
+  }
+
+  const content = fs.readFileSync(filePath, 'utf8')
+  const lines = content.split('\n')
+
+  // 检查是否已有头部
+  const hasHeader = lines.slice(0, 10).some(line => line.includes('**文档版本**'))
+
+  if (hasHeader) {
+    // 更新现有头部
+    updateDocumentTimestamp(filePath)
+    return true
+  } else {
+    // 添加新头部
+    const timestamp = getCurrentTimestamp()
+    const nextReview = getNextReviewTimestamp(timestamp)
+
+    const header = `> **文档版本**：${version}  
+> **创建时间戳**：${createTimestamp}  
+> **最后更新**：${timestamp}  
+> **状态**：CURRENT  
+> **维护者**：InkDot开发团队  
+> **下次审查**：${nextReview}
+
+`
+
+    // 在标题后插入头部
+    const titleIndex = lines.findIndex(line => line.startsWith('# '))
+    if (titleIndex !== -1) {
+      lines.splice(titleIndex + 1, 0, header.trim())
+      fs.writeFileSync(filePath, lines.join('\n'))
+      console.log(`✅ 已添加文档头部: ${filePath}`)
+      return true
+    } else {
+      console.error(`❌ 无法找到文档标题: ${filePath}`)
+      return false
+    }
+  }
+}
+
+/**
  * 命令行工具主函数
  */
 function main() {
@@ -145,66 +335,135 @@ function main() {
   const command = args[0]
 
   switch (command) {
-  case 'current':
-  case 'now': {
-    const current = getCurrentTimestamp()
-    const info = formatTimestamp(current)
-    console.log(`📅 当前项目时间戳: ${current}`)
-    console.log(`📋 详细信息: ${info.description}`)
-    console.log(`🗓️  对应日期: ${info.date}`)
-    break
-  }
-
-  case 'convert': {
-    const timestamp = args[1]
-    if (!timestamp) {
-      console.error('❌ 请提供时间戳参数')
-      process.exit(1)
+    case 'current':
+    case 'now': {
+      const current = getCurrentTimestamp()
+      const info = formatTimestamp(current)
+      console.log(`📅 当前项目时间戳: ${current}`)
+      console.log(`📋 详细信息: ${info.description}`)
+      console.log(`🗓️  对应日期: ${info.date}`)
+      break
     }
-    try {
-      const converted = formatTimestamp(timestamp)
-      console.log(`📅 时间戳: ${converted.timestamp}`)
-      console.log(`📋 描述: ${converted.description}`)
-      console.log(`🗓️  日期: ${converted.date}`)
-    } catch (error) {
-      console.error(`❌ ${error.message}`)
-      process.exit(1)
+
+    case 'convert': {
+      const timestamp = args[1]
+      if (!timestamp) {
+        console.error('❌ 请提供时间戳参数')
+        process.exit(1)
+      }
+      try {
+        const converted = formatTimestamp(timestamp)
+        console.log(`📅 时间戳: ${converted.timestamp}`)
+        console.log(`📋 描述: ${converted.description}`)
+        console.log(`🗓️  日期: ${converted.date}`)
+      } catch (error) {
+        console.error(`❌ ${error.message}`)
+        process.exit(1)
+      }
+      break
     }
-    break
-  }
 
-  case 'next-review': {
-    const baseTimestamp = args[1] || getCurrentTimestamp()
-    const interval = parseInt(args[2]) || 30
-    const nextReview = getNextReviewTimestamp(baseTimestamp, interval)
-    console.log(`📅 基准时间戳: ${baseTimestamp}`)
-    console.log(`🔄 审查间隔: ${interval}天`)
-    console.log(`📋 下次审查: ${nextReview}`)
-    break
-  }
-
-  case 'update-doc': {
-    const docPath = args[1]
-    const newTimestamp = args[2]
-    if (!docPath) {
-      console.error('❌ 请提供文档路径')
-      process.exit(1)
+    case 'next-review': {
+      const baseTimestamp = args[1] || getCurrentTimestamp()
+      const interval = parseInt(args[2]) || 30
+      const nextReview = getNextReviewTimestamp(baseTimestamp, interval)
+      console.log(`📅 基准时间戳: ${baseTimestamp}`)
+      console.log(`🔄 审查间隔: ${interval}天`)
+      console.log(`📋 下次审查: ${nextReview}`)
+      break
     }
-    updateDocumentTimestamp(docPath, newTimestamp)
-    break
-  }
 
-  case 'header': {
-    const version = args[1] || 'v1.0.0'
-    const createTs = args[2] || 'T0'
-    const updateTs = args[3]
-    console.log(generateDocHeader(version, createTs, updateTs))
-    break
-  }
+    case 'update-doc': {
+      const docPath = args[1]
+      const newTimestamp = args[2]
+      if (!docPath) {
+        console.error('❌ 请提供文档路径')
+        process.exit(1)
+      }
+      updateDocumentTimestamp(docPath, newTimestamp)
+      break
+    }
 
-  case 'help':
-  default:
-    console.log(`
+    case 'header': {
+      const version = args[1] || 'v1.0.0'
+      const createTs = args[2] || 'T0'
+      const updateTs = args[3]
+      console.log(generateDocHeader(version, createTs, updateTs))
+      break
+    }
+
+    case 'scan':
+    case 'check': {
+      const rootPath = args[1] || '.'
+      scanDocumentStatus(rootPath)
+      break
+    }
+
+    case 'batch-update':
+    case 'batch': {
+      const timestamp = args[1] || getCurrentTimestamp()
+      const rootPath = args[2] || '.'
+      const markdownFiles = findAllMarkdownFiles(rootPath)
+
+      if (markdownFiles.length === 0) {
+        console.log('❌ 未找到任何Markdown文件')
+        break
+      }
+
+      batchUpdateDocumentTimestamps(markdownFiles, timestamp)
+      break
+    }
+
+    case 'fix-headers': {
+      const rootPath = args[1] || '.'
+      const version = args[2] || 'v1.0.0'
+      const createTimestamp = args[3] || 'T0.1'
+
+      const markdownFiles = findAllMarkdownFiles(rootPath)
+      let fixedCount = 0
+
+      console.log(`🔧 开始自动修复文档头部...`)
+      console.log(`📁 根目录: ${rootPath}`)
+      console.log(`📄 处理文件数量: ${markdownFiles.length}`)
+      console.log('─'.repeat(50))
+
+      markdownFiles.forEach((filePath, index) => {
+        try {
+          if (autoFixDocumentHeader(filePath, version, createTimestamp)) {
+            fixedCount++
+          }
+        } catch (error) {
+          console.error(`❌ [${index + 1}/${markdownFiles.length}] 修复失败: ${filePath} - ${error.message}`)
+        }
+      })
+
+      console.log('─'.repeat(50))
+      console.log(`✅ 自动修复完成: 成功修复 ${fixedCount} 个文档`)
+      break
+    }
+
+    case 'find-md': {
+      const rootPath = args[1] || '.'
+      const excludeDirs = args.slice(2) || ['node_modules', '.git', 'dist', 'build']
+
+      console.log(`🔍 查找Markdown文件...`)
+      console.log(`📁 根目录: ${rootPath}`)
+      console.log(`🚫 排除目录: ${excludeDirs.join(', ')}`)
+      console.log('─'.repeat(50))
+
+      const markdownFiles = findAllMarkdownFiles(rootPath, excludeDirs)
+      markdownFiles.forEach((file, index) => {
+        console.log(`${index + 1}. ${file}`)
+      })
+
+      console.log('─'.repeat(50))
+      console.log(`📄 总计找到 ${markdownFiles.length} 个Markdown文件`)
+      break
+    }
+
+    case 'help':
+    default:
+      console.log(`
 📋 InkDot 时间戳工具使用说明
 
 🎯 基本命令:
@@ -214,15 +473,26 @@ function main() {
   update-doc <path>         更新文档时间戳
   header <version> <create> 生成文档头部信息
 
+🔍 批量操作命令:
+  scan [path]               扫描并报告文档状态
+  batch-update [timestamp] [path]  批量更新时间戳
+  fix-headers [path] [version] [create]  自动修复文档头部
+  find-md [path] [exclude...]  查找所有Markdown文件
+
 📝 使用示例:
+  # 基本操作
   node timestamp-helper.js current
   node timestamp-helper.js convert T1.5
-  node timestamp-helper.js next-review T1.5 30
   node timestamp-helper.js update-doc docs/README.md
-  node timestamp-helper.js header v1.0.0 T0 T1.5
+  
+  # 批量操作
+  node timestamp-helper.js scan                    # 扫描所有文档状态
+  node timestamp-helper.js batch-update T0.3      # 批量更新时间戳到T0.3
+  node timestamp-helper.js fix-headers             # 自动修复所有文档头部
+  node timestamp-helper.js find-md src/           # 查找src目录下的Markdown文件
 
 🕐 时间戳格式:
-  T0      - 项目启动 (2024-12-20)
+  T0      - 项目启动 (${PROJECT_START_DATE.toISOString().split('T')[0]})
   T1      - 项目第1天
   T1.5    - 项目第1天第5小时
   T30     - 项目第30天 (1个月)
@@ -230,7 +500,7 @@ function main() {
 
 📋 项目基准时间: ${PROJECT_START_DATE.toISOString().split('T')[0]} (T0)
 `)
-    break
+      break
   }
 }
 
@@ -247,5 +517,10 @@ module.exports = {
   formatTimestamp,
   generateDocHeader,
   updateDocumentTimestamp,
+  batchUpdateDocumentTimestamps,
+  findAllMarkdownFiles,
+  checkDocumentTimestampHeader,
+  scanDocumentStatus,
+  autoFixDocumentHeader,
   PROJECT_START_DATE
 }
