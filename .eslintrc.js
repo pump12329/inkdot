@@ -26,13 +26,13 @@ module.exports = {
     'vue/no-v-html': 'warn',
     'vue/require-default-prop': 'off',
     'vue/require-explicit-emits': 'error',
-    
+
     // TypeScript 规则
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    
+
     // 通用规则
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

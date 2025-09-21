@@ -15,13 +15,13 @@ export function debounce<T extends (...args: any[]) => any>(
   wait: number
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout | null = null
-  
+
   return function executedFunction(...args: Parameters<T>) {
     const later = () => {
       timeout = null
       func(...args)
     }
-    
+
     if (timeout) {
       clearTimeout(timeout)
     }
@@ -37,7 +37,7 @@ export function throttle<T extends (...args: any[]) => any>(
   limit: number
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean
-  
+
   return function executedFunction(...args: Parameters<T>) {
     if (!inThrottle) {
       func.apply(this, args)
@@ -54,15 +54,15 @@ export function deepClone<T>(obj: T): T {
   if (obj === null || typeof obj !== 'object') {
     return obj
   }
-  
+
   if (obj instanceof Date) {
     return new Date(obj.getTime()) as T
   }
-  
+
   if (obj instanceof Array) {
     return obj.map(item => deepClone(item)) as T
   }
-  
+
   if (typeof obj === 'object') {
     const cloned = {} as T
     for (const key in obj) {
@@ -72,7 +72,7 @@ export function deepClone<T>(obj: T): T {
     }
     return cloned
   }
-  
+
   return obj
 }
 
@@ -81,23 +81,23 @@ export function deepClone<T>(obj: T): T {
  */
 export function isEqual(a: any, b: any): boolean {
   if (a === b) return true
-  
+
   if (a == null || b == null) return false
-  
+
   if (typeof a !== typeof b) return false
-  
+
   if (typeof a !== 'object') return false
-  
+
   const keysA = Object.keys(a)
   const keysB = Object.keys(b)
-  
+
   if (keysA.length !== keysB.length) return false
-  
+
   for (const key of keysA) {
     if (!keysB.includes(key)) return false
     if (!isEqual(a[key], b[key])) return false
   }
-  
+
   return true
 }
 
@@ -106,11 +106,11 @@ export function isEqual(a: any, b: any): boolean {
  */
 export function formatFileSize(bytes: number): string {
   if (bytes === 0) return '0 Bytes'
-  
+
   const k = 1024
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
-  
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
@@ -124,7 +124,7 @@ export function formatDate(date: Date, format = 'YYYY-MM-DD HH:mm:ss'): string {
   const hours = String(date.getHours()).padStart(2, '0')
   const minutes = String(date.getMinutes()).padStart(2, '0')
   const seconds = String(date.getSeconds()).padStart(2, '0')
-  
+
   return format
     .replace('YYYY', String(year))
     .replace('MM', month)
