@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from 'vitest'
-import { AIManager } from '../src/ai/ai-manager'
+import { describe, expect, it, vi } from 'vitest'
 import { CreativeAssistantImpl } from '../src/ai/agents/creative-assistant'
+import { AIManager } from '../src/ai/ai-manager'
 import { DeepSeekService } from '../src/ai/services/deepseek-service'
 
 // Mock fetch for AI service tests
@@ -10,7 +10,7 @@ describe('AI Manager', () => {
     it('should initialize with default services', () => {
         const manager = new AIManager()
         const providers = manager.getAvailableProviders()
-        
+
         expect(providers).toBeDefined()
         expect(Array.isArray(providers)).toBe(true)
     })
@@ -18,7 +18,7 @@ describe('AI Manager', () => {
     it('should get creative assistant', () => {
         const manager = new AIManager()
         const assistant = manager.getCreativeAssistant()
-        
+
         expect(assistant).toBeDefined()
         expect(assistant?.name).toBe('Creative Assistant')
     })
@@ -43,7 +43,7 @@ describe('Creative Assistant', () => {
         }
 
         const assistant = new CreativeAssistantImpl(config, mockService)
-        
+
         expect(assistant.name).toBe('Creative Assistant')
         expect(assistant.isReady()).toBe(true)
         expect(assistant.getConfig()).toEqual(config)
@@ -70,9 +70,9 @@ describe('Creative Assistant', () => {
         }
 
         const assistant = new CreativeAssistantImpl(config, mockService)
-        
+
         const result = await assistant.process('Test input')
-        
+
         expect(result).toBe('Test response')
         expect(mockService.generateContent).toHaveBeenCalledWith({
             prompt: 'Test input',
@@ -93,11 +93,11 @@ describe('DeepSeek Service', () => {
     it('should get models', async () => {
         const service = new DeepSeekService('sk-test-key')
         const models = await service.getModels()
-        
+
         expect(models).toBeDefined()
         expect(Array.isArray(models)).toBe(true)
         expect(models.length).toBeGreaterThan(0)
-        
+
         const chatModel = models.find(m => m.id === 'deepseek-chat')
         expect(chatModel).toBeDefined()
         expect(chatModel?.name).toBe('DeepSeek Chat')

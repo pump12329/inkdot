@@ -3,25 +3,35 @@ import type { AppConfig } from '@/types'
 // 应用配置
 export const appConfig: AppConfig = {
     api: {
-        baseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api',
+        baseUrl: (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3001/api',
         timeout: 10000,
         retries: 3
     },
     storage: {
         type: 'indexeddb',
-        maxSize: 50 * 1024 * 1024 // 50MB
+        maxSize: 50 * 1024 * 1024, // 50MB
+        prefix: (import.meta as any).env?.VITE_STORAGE_PREFIX || 'inkdot_'
     },
     features: {
-        ai: true,
+        ai: (import.meta as any).env?.VITE_ENABLE_AI_FEATURES === 'true',
         collaboration: false, // 第一阶段暂不启用
         plugins: true,
         export: true
+    },
+    app: {
+        title: (import.meta as any).env?.VITE_APP_TITLE || 'InkDot',
+        version: (import.meta as any).env?.VITE_APP_VERSION || '1.0.0',
+        description: (import.meta as any).env?.VITE_APP_DESCRIPTION || '创意创作思维导图平台'
+    },
+    debug: {
+        enabled: (import.meta as any).env?.VITE_DEBUG_MODE === 'true',
+        consoleLogs: (import.meta as any).env?.VITE_ENABLE_CONSOLE_LOGS === 'true'
     }
 }
 
 // 思维导图默认设置
 export const defaultMindMapSettings = {
-    theme: 'light' as const,
+    theme: ((import.meta as any).env?.VITE_DEFAULT_THEME || 'light') as 'light' | 'dark' | 'auto',
     layout: 'free' as const,
     zoom: 1,
     center: { x: 0, y: 0 },
@@ -32,18 +42,20 @@ export const defaultMindMapSettings = {
 // AI服务配置
 export const aiConfig = {
     deepseek: {
-        apiKey: import.meta.env.VITE_DEEPSEEK_API_KEY || '',
-        baseUrl: 'https://api.deepseek.com/v1',
+        apiKey: (import.meta as any).env?.VITE_DEEPSEEK_API_KEY || '',
+        baseUrl: (import.meta as any).env?.VITE_DEEPSEEK_BASE_URL || 'https://api.deepseek.com/v1',
         model: 'deepseek-chat',
         defaultTemperature: 0.7,
-        defaultMaxTokens: 2048
+        defaultMaxTokens: 2048,
+        enabled: (import.meta as any).env?.VITE_ENABLE_DEEPSEEK === 'true'
     },
     openrouter: {
-        apiKey: import.meta.env.VITE_OPENROUTER_API_KEY || '',
-        baseUrl: 'https://openrouter.ai/api/v1',
+        apiKey: (import.meta as any).env?.VITE_OPENROUTER_API_KEY || '',
+        baseUrl: (import.meta as any).env?.VITE_OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
         defaultModel: 'anthropic/claude-3-haiku',
         defaultTemperature: 0.7,
-        defaultMaxTokens: 2048
+        defaultMaxTokens: 2048,
+        enabled: (import.meta as any).env?.VITE_ENABLE_OPENROUTER === 'true'
     }
 }
 

@@ -39,8 +39,8 @@ export class CanvasRenderer {
         this.canvas.height = rect.height * dpr
 
         this.ctx.scale(dpr, dpr)
-        this.canvas.style.width = rect.width + 'px'
-        this.canvas.style.height = rect.height + 'px'
+        this.canvas.style.width = `${rect.width  }px`
+        this.canvas.style.height = `${rect.height  }px`
     }
 
     /**

@@ -110,9 +110,9 @@ function parseCommitMessage(commitLine) {
 
   return {
     hash: hash.substring(0, 7),
-    type: type,
+    type,
     description: description.trim(),
-    typeInfo: typeInfo
+    typeInfo
   };
 }
 

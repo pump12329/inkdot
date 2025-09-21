@@ -269,7 +269,7 @@ function scanProjectChanges() {
 
     changes.push({
       file: filePath,
-      status: status,
+      status,
       type: changeDescription.type,
       description: changeDescription.description,
       confidence: changeDescription.confidence,

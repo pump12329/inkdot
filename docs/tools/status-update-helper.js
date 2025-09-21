@@ -261,7 +261,7 @@ function generateStatusOverview(categorized) {
     content += '|---------|------|----------|------|\n';
 
     for (const doc of categorized.current) {
-      content += generateStatusTableRow(doc) + '\n';
+      content += `${generateStatusTableRow(doc)  }\n`;
     }
     content += '\n';
   }
@@ -273,7 +273,7 @@ function generateStatusOverview(categorized) {
     content += '|---------|------|----------|------|\n';
 
     for (const doc of categorized.draft) {
-      content += generateDraftTableRow(doc) + '\n';
+      content += `${generateDraftTableRow(doc)  }\n`;
     }
     content += '\n';
   }
@@ -285,7 +285,7 @@ function generateStatusOverview(categorized) {
     content += '|---------|------|----------|------|\n';
 
     for (const doc of categorized.outdated) {
-      content += generateOutdatedTableRow(doc) + '\n';
+      content += `${generateOutdatedTableRow(doc)  }\n`;
     }
     content += '\n';
   } else {
@@ -300,7 +300,7 @@ function generateStatusOverview(categorized) {
     content += '|---------|------|----------|------|\n';
 
     for (const doc of categorized.deprecated) {
-      content += generateDeprecatedTableRow(doc) + '\n';
+      content += `${generateDeprecatedTableRow(doc)  }\n`;
     }
     content += '\n';
   } else {
@@ -341,7 +341,7 @@ function updateChangelogStatusOverview() {
     // 替换状态总览部分
     const beforeStatus = changelogContent.substring(0, statusOverviewStart);
     const afterStatus = changelogContent.substring(statusOverviewEnd);
-    const newChangelog = beforeStatus + '## 📊 文档状态总览\n\n' + newStatusOverview + afterStatus;
+    const newChangelog = `${beforeStatus  }## 📊 文档状态总览\n\n${  newStatusOverview  }${afterStatus}`;
 
     // 写入文件
     fs.writeFileSync(CONFIG.changelogPath, newChangelog, 'utf8');
