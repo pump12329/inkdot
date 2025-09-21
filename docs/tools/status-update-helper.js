@@ -74,14 +74,14 @@ function getCurrentTimestamp() {
  */
 function findAllMarkdownFiles(dir = '.', excludeDirs = []) {
   const files = [];
-  
+
   try {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
       const relativePath = path.relative('.', fullPath);
-      
+
       // 跳过排除的目录
       if (entry.isDirectory()) {
         if (!excludeDirs.some(pattern => relativePath.includes(pattern.replace('**', '')))) {
@@ -94,7 +94,7 @@ function findAllMarkdownFiles(dir = '.', excludeDirs = []) {
   } catch (error) {
     console.error(`读取目录 ${dir} 失败:`, error.message);
   }
-  
+
   return files;
 }
 
@@ -105,7 +105,7 @@ function parseDocumentHeader(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
-    
+
     const header = {
       file: filePath,
       version: null,
@@ -116,11 +116,11 @@ function parseDocumentHeader(filePath) {
       nextReview: null,
       valid: false
     };
-    
+
     // 查找头部信息
     for (let i = 0; i < Math.min(10, lines.length); i++) {
       const line = lines[i].trim();
-      
+
       if (line.startsWith('> **文档版本**：')) {
         header.version = line.replace('> **文档版本**：', '').trim();
       } else if (line.startsWith('> **创建时间戳**：')) {
@@ -135,10 +135,10 @@ function parseDocumentHeader(filePath) {
         header.nextReview = line.replace('> **下次审查**：', '').trim();
       }
     }
-    
+
     // 检查是否包含必要的头部信息（创建时间戳是可选的）
     header.valid = !!(header.version && header.lastUpdate && header.status);
-    
+
     return header;
   } catch (error) {
     console.error(`解析文档 ${filePath} 头部失败:`, error.message);
@@ -155,15 +155,15 @@ function parseDocumentHeader(filePath) {
  */
 function scanDocumentStatus() {
   console.log('🔍 扫描项目文档状态...');
-  
+
   const mdFiles = findAllMarkdownFiles('.', ['node_modules', '.git', 'dist', 'build']);
   const documents = [];
-  
+
   for (const file of mdFiles) {
     const header = parseDocumentHeader(file);
     documents.push(header);
   }
-  
+
   // 按状态分类
   const categorized = {
     current: [],
@@ -172,13 +172,13 @@ function scanDocumentStatus() {
     deprecated: [],
     invalid: []
   };
-  
+
   for (const doc of documents) {
     if (!doc.valid) {
       categorized.invalid.push(doc);
       continue;
     }
-    
+
     const status = doc.status.toUpperCase();
     switch (status) {
       case 'CURRENT':
@@ -197,7 +197,7 @@ function scanDocumentStatus() {
         categorized.invalid.push(doc);
     }
   }
-  
+
   return { documents, categorized };
 }
 
@@ -208,7 +208,7 @@ function generateStatusTableRow(doc) {
   const fileName = path.basename(doc.file);
   const relativePath = path.dirname(doc.file);
   const displayPath = relativePath !== '.' ? `${relativePath}/${fileName}` : fileName;
-  
+
   return `| ${displayPath} | ${doc.version} | ${doc.lastUpdate} | ${CONFIG.documentCategories.current.icon} CURRENT |`;
 }
 
@@ -219,10 +219,10 @@ function generateDraftTableRow(doc) {
   const fileName = path.basename(doc.file);
   const relativePath = path.dirname(doc.file);
   const displayPath = relativePath !== '.' ? `${relativePath}/${fileName}` : fileName;
-  
+
   // 如果没有下次审查时间，使用默认值
   const nextReview = doc.nextReview || 'T30.0';
-  
+
   return `| ${displayPath} | ${doc.version} | ${nextReview} | ${CONFIG.documentCategories.draft.icon} DRAFT |`;
 }
 
@@ -233,7 +233,7 @@ function generateOutdatedTableRow(doc) {
   const fileName = path.basename(doc.file);
   const relativePath = path.dirname(doc.file);
   const displayPath = relativePath !== '.' ? `${relativePath}/${fileName}` : fileName;
-  
+
   return `| ${displayPath} | ${doc.version} | ${doc.lastUpdate} | ${CONFIG.documentCategories.outdated.icon} OUTDATED |`;
 }
 
@@ -244,7 +244,7 @@ function generateDeprecatedTableRow(doc) {
   const fileName = path.basename(doc.file);
   const relativePath = path.dirname(doc.file);
   const displayPath = relativePath !== '.' ? `${relativePath}/${fileName}` : fileName;
-  
+
   return `| ${displayPath} | ${doc.version} | ${doc.lastUpdate} | ${CONFIG.documentCategories.deprecated.icon} DEPRECATED |`;
 }
 
@@ -253,37 +253,37 @@ function generateDeprecatedTableRow(doc) {
  */
 function generateStatusOverview(categorized) {
   let content = '';
-  
+
   // 当前文档表格
   if (categorized.current.length > 0) {
     content += `### ${CONFIG.documentCategories.current.title}\n`;
     content += '| 文档名称 | 版本 | 最后更新 | 状态 |\n';
     content += '|---------|------|----------|------|\n';
-    
+
     for (const doc of categorized.current) {
       content += generateStatusTableRow(doc) + '\n';
     }
     content += '\n';
   }
-  
+
   // 开发中文档表格
   if (categorized.draft.length > 0) {
     content += `### ${CONFIG.documentCategories.draft.title}\n`;
     content += '| 文档名称 | 版本 | 预计完成 | 状态 |\n';
     content += '|---------|------|----------|------|\n';
-    
+
     for (const doc of categorized.draft) {
       content += generateDraftTableRow(doc) + '\n';
     }
     content += '\n';
   }
-  
+
   // 过时文档表格
   if (categorized.outdated.length > 0) {
     content += `### ${CONFIG.documentCategories.outdated.title}\n`;
     content += '| 文档名称 | 版本 | 最后更新 | 状态 |\n';
     content += '|---------|------|----------|------|\n';
-    
+
     for (const doc of categorized.outdated) {
       content += generateOutdatedTableRow(doc) + '\n';
     }
@@ -292,13 +292,13 @@ function generateStatusOverview(categorized) {
     content += `### ${CONFIG.documentCategories.outdated.title}\n`;
     content += '*当前无过时文档*\n\n';
   }
-  
+
   // 废弃文档表格
   if (categorized.deprecated.length > 0) {
     content += `### ${CONFIG.documentCategories.deprecated.title}\n`;
     content += '| 文档名称 | 版本 | 最后更新 | 状态 |\n';
     content += '|---------|------|----------|------|\n';
-    
+
     for (const doc of categorized.deprecated) {
       content += generateDeprecatedTableRow(doc) + '\n';
     }
@@ -307,7 +307,7 @@ function generateStatusOverview(categorized) {
     content += `### ${CONFIG.documentCategories.deprecated.title}\n`;
     content += '*当前无废弃文档*\n\n';
   }
-  
+
   return content;
 }
 
@@ -316,38 +316,38 @@ function generateStatusOverview(categorized) {
  */
 function updateChangelogStatusOverview() {
   console.log('📊 更新CHANGELOG文档状态总览...');
-  
+
   try {
     // 扫描文档状态
     const { categorized } = scanDocumentStatus();
-    
+
     // 生成新的状态总览
     const newStatusOverview = generateStatusOverview(categorized);
-    
+
     // 读取CHANGELOG文件
     const changelogContent = fs.readFileSync(CONFIG.changelogPath, 'utf8');
-    
+
     // 查找文档状态总览部分
     const statusOverviewStart = changelogContent.indexOf('## 📊 文档状态总览');
     if (statusOverviewStart === -1) {
       console.error('❌ 无法找到文档状态总览部分');
       return false;
     }
-    
+
     // 查找下一个主要部分
     const nextSectionMatch = changelogContent.match(/^## [^📊]/m);
     const statusOverviewEnd = nextSectionMatch ? nextSectionMatch.index : changelogContent.length;
-    
+
     // 替换状态总览部分
     const beforeStatus = changelogContent.substring(0, statusOverviewStart);
     const afterStatus = changelogContent.substring(statusOverviewEnd);
     const newChangelog = beforeStatus + '## 📊 文档状态总览\n\n' + newStatusOverview + afterStatus;
-    
+
     // 写入文件
     fs.writeFileSync(CONFIG.changelogPath, newChangelog, 'utf8');
-    
+
     console.log('✅ 文档状态总览已更新');
-    
+
     // 显示统计信息
     console.log('\n📈 更新统计:');
     console.log(`  🟢 当前文档: ${categorized.current.length} 个`);
@@ -355,9 +355,9 @@ function updateChangelogStatusOverview() {
     console.log(`  🟡 过时文档: ${categorized.outdated.length} 个`);
     console.log(`  🔴 废弃文档: ${categorized.deprecated.length} 个`);
     console.log(`  ❌ 无效文档: ${categorized.invalid.length} 个`);
-    
+
     return true;
-    
+
   } catch (error) {
     console.error('❌ 更新文档状态总览失败:', error.message);
     return false;
@@ -369,9 +369,9 @@ function updateChangelogStatusOverview() {
  */
 function checkDocumentStatusConsistency() {
   console.log('🔍 检查文档状态一致性...');
-  
+
   const { documents, categorized } = scanDocumentStatus();
-  
+
   console.log('\n📊 文档状态统计:');
   console.log(`  总计文档: ${documents.length} 个`);
   console.log(`  🟢 当前文档: ${categorized.current.length} 个`);
@@ -379,28 +379,28 @@ function checkDocumentStatusConsistency() {
   console.log(`  🟡 过时文档: ${categorized.outdated.length} 个`);
   console.log(`  🔴 废弃文档: ${categorized.deprecated.length} 个`);
   console.log(`  ❌ 无效文档: ${categorized.invalid.length} 个`);
-  
+
   if (categorized.invalid.length > 0) {
     console.log('\n⚠️ 无效文档列表:');
     for (const doc of categorized.invalid) {
       console.log(`  - ${doc.file}: ${doc.error || '缺少必要头部信息'}`);
     }
   }
-  
+
   if (categorized.outdated.length > 0) {
     console.log('\n🟡 过时文档列表:');
     for (const doc of categorized.outdated) {
       console.log(`  - ${doc.file} (${doc.version}, ${doc.lastUpdate})`);
     }
   }
-  
+
   if (categorized.deprecated.length > 0) {
     console.log('\n🔴 废弃文档列表:');
     for (const doc of categorized.deprecated) {
       console.log(`  - ${doc.file} (${doc.version}, ${doc.lastUpdate})`);
     }
   }
-  
+
   return { documents, categorized };
 }
 
@@ -445,20 +445,20 @@ InkDot 文档状态总览自动更新工具
 function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'update';
-  
+
   switch (command) {
     case 'update':
       updateChangelogStatusOverview();
       break;
-      
+
     case 'scan':
       scanDocumentStatus();
       break;
-      
+
     case 'check':
       checkDocumentStatusConsistency();
       break;
-      
+
     case 'help':
     default:
       showHelp();
