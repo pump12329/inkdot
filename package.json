@@ -36,9 +36,18 @@
         "status:help": "node docs/tools/status-update-helper.js help",
         "setup": "node scripts/setup-dev-environment.js",
         "setup:dev": "node scripts/setup-dev-environment.js",
+        "dev": "vite",
+        "build": "vue-tsc && vite build",
+        "preview": "vite preview",
         "type-check": "vue-tsc --noEmit",
+        "test": "vitest",
+        "test:ui": "vitest --ui",
+        "test:coverage": "vitest --coverage",
         "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-        "lint:fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+        "lint:fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "prepare": "husky install"
     },
     "keywords": [
         "mindmap",
@@ -50,11 +59,28 @@
     ],
     "author": "InkDot Team",
     "license": "MIT",
+    "dependencies": {
+        "vue": "^3.4.0",
+        "pinia": "^2.1.0",
+        "@vue/runtime-core": "^3.4.0"
+    },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^8.44.0",
         "@typescript-eslint/parser": "^8.44.0",
+        "@vue/eslint-config-typescript": "^13.0.0",
+        "@vue/tsconfig": "^0.5.0",
         "eslint": "^8.57.1",
-        "eslint-plugin-vue": "^10.4.0"
+        "eslint-plugin-vue": "^10.4.0",
+        "prettier": "^3.0.0",
+        "typescript": "^5.0.0",
+        "vite": "^5.0.0",
+        "@vitejs/plugin-vue": "^5.0.0",
+        "vue-tsc": "^2.0.0",
+        "vitest": "^2.0.0",
+        "@vue/test-utils": "^2.4.0",
+        "jsdom": "^24.0.0",
+        "husky": "^9.0.0",
+        "lint-staged": "^15.0.0"
     },
     "engines": {
         "node": ">=14.0.0"

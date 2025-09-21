@@ -2,54 +2,60 @@ module.exports = {
   root: true,
   env: {
     node: true,
-    es2022: true,
-    browser: true
+    browser: true,
+    es2022: true
   },
   extends: [
-    'eslint:recommended'
+    'eslint:recommended',
+    '@vue/eslint-config-typescript',
+    'plugin:vue/vue3-recommended'
   ],
-  parser: '@typescript-eslint/parser',
+  parser: 'vue-eslint-parser',
   parserOptions: {
     ecmaVersion: 2022,
-    sourceType: 'module',
-    project: './tsconfig.json'
+    parser: '@typescript-eslint/parser',
+    sourceType: 'module'
   },
   plugins: [
-    '@typescript-eslint'
+    '@typescript-eslint',
+    'vue'
   ],
   rules: {
-    // 基础规则
-    'no-console': 'warn',
-    'no-debugger': 'warn',
-    'no-unused-vars': 'warn',
-
-    // 代码风格
-    'quotes': ['error', 'single'],
-    'semi': ['error', 'never'],
-    'comma-dangle': ['error', 'never'],
-    'indent': ['error', 2],
-    'no-trailing-spaces': 'error',
-    'eol-last': 'error'
+    // Vue 3 特定规则
+    'vue/multi-word-component-names': 'off',
+    'vue/no-v-html': 'warn',
+    'vue/require-default-prop': 'off',
+    'vue/require-explicit-emits': 'error',
+    
+    // TypeScript 规则
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    
+    // 通用规则
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'prefer-const': 'error',
+    'no-var': 'error',
+    'object-shorthand': 'error',
+    'prefer-template': 'error'
   },
   overrides: [
     {
-      // Node.js工具文件
-      files: ['docs/tools/**/*.js', 'scripts/**/*.js'],
-      env: {
-        node: true,
-        browser: false
-      },
+      files: ['*.vue'],
       rules: {
-        'no-console': 'off' // 允许在工具文件中使用console
+        // Vue 文件特定规则
+        'vue/html-self-closing': ['error', {
+          'html': {
+            'void': 'always',
+            'normal': 'always',
+            'component': 'always'
+          },
+          'svg': 'always',
+          'math': 'always'
+        }]
       }
     }
-  ],
-  ignorePatterns: [
-    'node_modules/',
-    'dist/',
-    'build/',
-    '*.min.js',
-    'coverage/',
-    '.git/'
   ]
 }
