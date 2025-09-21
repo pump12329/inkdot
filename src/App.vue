@@ -11,7 +11,7 @@
                             v{{ appConfig.app.version }}
                         </span>
                     </div>
-                    
+
                     <nav class="flex space-x-4">
                         <Button variant="ghost" size="sm">新建</Button>
                         <Button variant="ghost" size="sm">打开</Button>
@@ -33,14 +33,10 @@
                         设置
                     </Button>
                 </div>
-                
+
                 <div class="flex items-center space-x-2">
                     <span class="text-sm text-gray-500">AI助手:</span>
-                    <Button 
-                        :variant="aiEnabled ? 'primary' : 'ghost'" 
-                        size="sm"
-                        @click="toggleAI"
-                    >
+                    <Button :variant="aiEnabled ? 'primary' : 'ghost'" size="sm" @click="toggleAI">
                         {{ aiEnabled ? '已启用' : '启用' }}
                     </Button>
                 </div>
@@ -52,28 +48,20 @@
                 <aside class="lg:col-span-1">
                     <div class="bg-white rounded-lg shadow-sm p-4">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">节点列表</h3>
-                        
+
                         <div class="space-y-2">
-                            <div 
-                                v-for="node in nodes" 
-                                :key="node.id"
+                            <div v-for="node in nodes" :key="node.id"
                                 class="p-2 rounded border cursor-pointer hover:bg-gray-50"
                                 :class="{ 'bg-blue-50 border-blue-200': selectedNodeId === node.id }"
-                                @click="selectNode(node.id)"
-                            >
+                                @click="selectNode(node.id)">
                                 <div class="text-sm font-medium">{{ node.content }}</div>
                                 <div class="text-xs text-gray-500">
                                     {{ new Date(node.createdAt).toLocaleDateString() }}
                                 </div>
                             </div>
                         </div>
-                        
-                        <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            class="w-full mt-4"
-                            @click="showCreateNodeModal = true"
-                        >
+
+                        <Button variant="ghost" size="sm" class="w-full mt-4" @click="showCreateNodeModal = true">
                             + 添加节点
                         </Button>
                     </div>
@@ -82,32 +70,18 @@
                 <!-- 主画布 -->
                 <div class="lg:col-span-3">
                     <div class="bg-white rounded-lg shadow-sm h-[600px]">
-                        <MindMapCanvas
-                            :nodes="nodes"
-                            :connections="connections"
-                            @node-create="handleNodeCreate"
-                            @node-select="handleNodeSelect"
-                            @canvas-click="handleCanvasClick"
-                        />
+                        <MindMapCanvas :nodes="nodes" :connections="connections" @node-create="handleNodeCreate"
+                            @node-select="handleNodeSelect" @canvas-click="handleCanvasClick" />
                     </div>
                 </div>
             </div>
         </main>
 
         <!-- 创建节点模态框 -->
-        <Modal
-            v-model="showCreateNodeModal"
-            title="创建新节点"
-            @close="showCreateNodeModal = false"
-        >
+        <Modal v-model="showCreateNodeModal" title="创建新节点" @close="showCreateNodeModal = false">
             <div class="space-y-4">
-                <Input
-                    v-model="newNodeContent"
-                    label="节点内容"
-                    placeholder="请输入节点内容"
-                    required
-                />
-                
+                <Input v-model="newNodeContent" label="节点内容" placeholder="请输入节点内容" required />
+
                 <div class="flex justify-end space-x-3">
                     <Button variant="ghost" @click="showCreateNodeModal = false">
                         取消
@@ -120,41 +94,30 @@
         </Modal>
 
         <!-- 设置模态框 -->
-        <Modal
-            v-model="showSettingsModal"
-            title="设置"
-            size="lg"
-            @close="showSettingsModal = false"
-        >
+        <Modal v-model="showSettingsModal" title="设置" size="lg" @close="showSettingsModal = false">
             <div class="space-y-6">
                 <div>
                     <h4 class="text-md font-medium text-gray-900 mb-3">AI设置</h4>
                     <div class="space-y-3">
                         <label class="flex items-center">
-                            <input
-                                type="checkbox"
-                                v-model="aiEnabled"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                            />
+                            <input type="checkbox" v-model="aiEnabled"
+                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
                             <span class="ml-2 text-sm text-gray-700">启用AI助手</span>
                         </label>
                     </div>
                 </div>
-                
+
                 <div>
                     <h4 class="text-md font-medium text-gray-900 mb-3">显示设置</h4>
                     <div class="space-y-3">
                         <label class="flex items-center">
-                            <input
-                                type="checkbox"
-                                v-model="showGrid"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                            />
+                            <input type="checkbox" v-model="showGrid"
+                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
                             <span class="ml-2 text-sm text-gray-700">显示网格</span>
                         </label>
                     </div>
                 </div>
-                
+
                 <div class="flex justify-end space-x-3">
                     <Button variant="ghost" @click="showSettingsModal = false">
                         关闭
@@ -166,12 +129,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { appConfig } from '@/config/app.config'
 import Button from '@/ui/components/Button.vue'
 import Input from '@/ui/components/Input.vue'
-import Modal from '@/ui/components/Modal.vue'
 import MindMapCanvas from '@/ui/components/MindMapCanvas.vue'
+import Modal from '@/ui/components/Modal.vue'
 
 // 状态管理
 const nodes = ref([
@@ -231,14 +194,14 @@ const handleCanvasClick = (position: { x: number; y: number }) => {
 
 const createNode = () => {
     if (!newNodeContent.value.trim()) return
-    
+
     const newNode = {
         id: Date.now().toString(),
         content: newNodeContent.value,
         position: { x: 400, y: 300 },
         createdAt: new Date()
     }
-    
+
     nodes.value.push(newNode)
     newNodeContent.value = ''
     showCreateNodeModal.value = false
