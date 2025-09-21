@@ -1,0 +1,363 @@
+# InkDot - Trae AI 项目开发规则
+
+## 项目概述
+InkDot 是一个基于思维导图的创意创作平台，集成 AI 功能，支持小说创作、跑团、文字冒险等多种创作模式。项目遵循极简主义设计原则，追求"少即是多"的开发理念。
+
+## 技术栈
+- **前端框架**: Vue 3 + TypeScript + Pinia + Vite
+- **后端服务**: Node.js + Express + Fastify
+- **AI 集成**: DeepSeek API + OpenRouter API + LangChain
+- **数据存储**: SQLite + JSON 文件 + 本地存储
+- **样式系统**: CSS + 自定义组件库（基于墨点Logo设计）
+- **测试框架**: Vitest + Vue Test Utils
+- **构建工具**: Vite + TypeScript
+
+## 核心开发规范
+
+### TypeScript 规范
+- 使用严格模式 `"strict": true`
+- 所有函数必须有明确的返回类型
+- 优先使用 `type` 而不是 `interface`，除非需要继承
+- 避免使用 `any` 类型，使用具体类型或泛型
+- 使用接口定义数据结构，保持类型安全
+
+```typescript
+// 推荐的类型定义方式
+type MindMapNode = {
+  id: string;
+  content: string;
+  position: { x: number; y: number };
+  connections: string[];
+}
+
+function createNode(data: Partial<MindMapNode>): MindMapNode {
+  return {
+    id: generateId(),
+    content: data.content || '',
+    position: data.position || { x: 0, y: 0 },
+    connections: data.connections || []
+  };
+}
+```
+
+### Vue 3 规范
+- **使用 Composition API**: 避免 Options API，保持代码简洁
+- **使用 `<script setup>` 语法**: 减少样板代码
+- **组件名使用 PascalCase**: 保持命名一致性
+- **Props 使用 defineProps，Emits 使用 defineEmits**: 明确的接口定义
+- **组件职责单一**: 每个组件只负责一个功能
+- **避免深层嵌套**: 保持组件结构扁平化
+
+```vue
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import type { MindMapNode } from '@/types'
+
+interface Props {
+  node: MindMapNode
+  editable?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  editable: false
+})
+
+const emit = defineEmits<{
+  update: [node: MindMapNode]
+  delete: [nodeId: string]
+}>()
+
+const isEditing = ref(false)
+const nodeContent = ref(props.node.content)
+</script>
+```
+
+### 文件命名规范
+- **组件文件**: PascalCase (`MindMapNode.vue`)
+- **工具函数**: camelCase (`nodeUtils.ts`)
+- **类型定义**: camelCase (`mindMapTypes.ts`)
+- **常量文件**: UPPER_CASE (`API_CONSTANTS.ts`)
+- **避免过长的文件名**: 保持简洁明了
+- **使用描述性名称**: 文件名应该清楚表达内容
+
+### 目录结构
+```
+src/
+├── components/          # 通用组件
+│   ├── ui/             # 基础UI组件
+│   ├── mindmap/        # 思维导图相关组件
+│   └── workspace/      # 工作区组件
+├── views/              # 页面组件
+├── stores/             # Pinia状态管理
+├── types/              # TypeScript类型定义
+├── utils/              # 工具函数
+├── services/           # API服务
+├── hooks/              # 组合式函数
+└── assets/             # 静态资源
+```
+
+## 极简主义设计原则
+
+### 代码极简主义
+- **简洁性优先**: 代码应该简洁明了，避免过度工程化
+- **功能单一**: 每个函数和组件只做一件事
+- **减少复杂性**: 优先选择简单的解决方案
+- **自文档化**: 代码本身就是最好的文档
+
+### 视觉极简主义
+- **留白原则**: 充分使用留白空间，避免界面拥挤
+- **色彩克制**: 主要使用黑白灰配色，点缀少量品牌色
+- **字体简洁**: 选择易读性强的无衬线字体
+- **图标简约**: 使用线条简洁的图标，避免复杂装饰
+
+```css
+/* 极简色彩系统 */
+:root {
+  --color-primary: #000000;      /* 主色：纯黑 */
+  --color-secondary: #666666;    /* 次要色：中性灰 */
+  --color-accent: #0066FF;       /* 强调色：品牌蓝 */
+  --color-background: #ffffff;   /* 背景色：纯白 */
+  --color-surface: #f8f9fa;      /* 表面色：浅灰 */
+  --color-text: #212529;         /* 文本色：深灰 */
+  --color-muted: #6c757d;        /* 静音色：中灰 */
+}
+```
+
+### 交互极简主义
+- **减少点击**: 每个功能最多3次点击到达
+- **智能默认**: 提供合理的默认设置和智能建议
+- **渐进披露**: 高级功能默认隐藏，按需显示
+- **一键操作**: 常用功能支持一键完成
+
+## AI 功能开发规范
+
+### AI 服务集成原则
+- **模型可自主选择**: 用户可在 DeepSeek API 与 OpenRouter 等模型间自由切换
+- **统一接口设计**: 所有 AI 服务需实现统一的接口规范
+- **智能默认配置**: 为用户预设合理参数，降低配置门槛
+- **渐进式功能**: 高级 AI 能力按需解锁，逐步引导用户体验
+- **成本透明**: API 调用费用实时监控，用户可见
+- **统一错误处理**: 所有错误反馈需标准化，提示清晰友好
+
+### AI 安全原则
+- **智能调用频率限制**: 避免过度使用
+- **内容过滤简化**: 只过滤明显的敏感内容
+- **成本监控透明**: 用户可见的API使用成本
+- **安全默认设置**: 默认启用安全功能
+
+## 状态管理规范
+
+### Pinia Store 设计原则
+- **按功能模块划分Store**: 避免单一庞大的Store
+- **使用组合式API风格**: 保持代码简洁和可读性
+- **智能数据持久化**: 只持久化必要的用户数据
+- **状态同步简化**: 避免复杂的状态同步逻辑
+
+```typescript
+// 推荐的 Store 设计
+export const useMindMapStore = defineStore('mindMap', () => {
+  const nodes = ref<MindMapNode[]>([])
+  const selectedNodeId = ref<string | null>(null)
+  
+  const selectedNode = computed(() => 
+    nodes.value.find(node => node.id === selectedNodeId.value)
+  )
+  
+  function addNode(node: MindMapNode) {
+    nodes.value.push(node)
+  }
+  
+  function updateNode(id: string, updates: Partial<MindMapNode>) {
+    const index = nodes.value.findIndex(node => node.id === id)
+    if (index !== -1) {
+      nodes.value[index] = { ...nodes.value[index], ...updates }
+    }
+  }
+  
+  return {
+    nodes: readonly(nodes),
+    selectedNodeId,
+    selectedNode,
+    addNode,
+    updateNode
+  }
+})
+```
+
+## 错误处理规范
+
+### 错误处理原则
+- **全局错误捕获**: 统一的错误处理机制
+- **用户友好提示**: 错误信息简洁明了，避免技术术语
+- **智能错误分类**: 区分用户错误和系统错误
+- **最小化干扰**: 错误处理不干扰用户的正常操作
+
+```typescript
+// 推荐的错误处理方式
+class AppError extends Error {
+  constructor(
+    message: string,
+    public code: string,
+    public userMessage: string
+  ) {
+    super(message)
+    this.name = 'AppError'
+  }
+}
+
+function handleError(error: Error) {
+  if (error instanceof AppError) {
+    showUserMessage(error.userMessage)
+  } else {
+    console.error('系统错误:', error)
+    showUserMessage('系统出现错误，请稍后重试')
+  }
+}
+```
+
+## 性能优化规范
+
+### 渲染优化原则
+- **虚拟滚动处理大量节点**: 保持界面流畅
+- **智能懒加载**: 按需加载节点和组件
+- **动画性能优化**: 使用 requestAnimationFrame，避免过度动画
+- **避免不必要的重新渲染**: 使用合适的响应式策略
+
+### 内存管理原则
+- **及时清理资源**: 事件监听器、定时器等
+- **智能数据缓存**: 只缓存必要的数据
+- **避免内存泄漏**: 特别是AI调用和长时间运行的功能
+
+## 测试规范
+
+### 单元测试原则
+- **使用 Vitest 进行单元测试**: 轻量级测试框架
+- **核心功能优先测试**: 重要工具函数和核心逻辑必须有测试
+- **测试覆盖率合理**: 目标80%，但不追求100%
+- **AI功能mock测试**: 避免真实API调用，提高测试稳定性
+
+```typescript
+// 测试示例
+import { mount } from '@vue/test-utils'
+import MindMapNode from '@/components/mindmap/MindMapNode.vue'
+
+describe('MindMapNode', () => {
+  it('应该正确渲染节点内容', () => {
+    const node = { id: '1', content: '测试节点', position: { x: 0, y: 0 } }
+    const wrapper = mount(MindMapNode, { props: { node } })
+    
+    expect(wrapper.text()).toContain('测试节点')
+  })
+})
+```
+
+## 时间戳系统规范
+
+### 时间戳系统
+- **基准时间**: 项目启动时间为 2025-09-21 00:00:00 UTC (T0)
+- **时间戳格式**: `T{天数}` 或 `T{天数}.{小时}`
+- **获取当前时间戳**: 使用 `npm run timestamp:current`
+- **文档更新**: 重要修改后必须更新时间戳
+
+### 时间戳工具使用
+```bash
+# 获取当前项目时间戳
+npm run timestamp:current
+
+# 更新文档时间戳
+npm run docs:update docs/README.md
+
+# 生成新文档头部信息
+npm run docs:header v1.0.0 T0.1
+```
+
+## Git 规范
+
+### 提交信息格式
+```
+type(scope): description
+
+类型:
+feat: 新功能
+fix: 修复bug
+docs: 文档更新 (包含时间戳更新)
+style: 代码格式
+refactor: 重构
+test: 测试
+chore: 构建工具
+timestamp: 时间戳系统更新
+
+示例:
+feat(mindmap): 添加节点拖拽功能
+fix(ai): 修复DeepSeek API调用错误
+docs(readme): 更新安装说明 T275.1
+```
+
+### 分支管理
+- `main`: 主分支，稳定版本
+- `develop`: 开发分支
+- `feature/*`: 功能分支
+- `docs/*`: 文档更新分支
+
+## Trae AI 特定指导
+
+### 工具使用最佳实践
+- **优先使用语义搜索**: 使用 `search_codebase` 工具快速定位相关代码
+- **批量文件查看**: 使用 `view_files` 工具同时查看多个相关文件
+- **精确编辑**: 使用 `edit_file_fast_apply` 进行高效的代码修改
+- **任务管理**: 使用 `todo_write` 工具管理复杂任务的进度
+
+### 代码修改指导
+- **理解现有模式**: 在修改代码前，先理解项目的现有代码模式和约定
+- **保持一致性**: 新代码应该与现有代码风格保持一致
+- **最小化修改**: 只修改必要的部分，避免不必要的重构
+- **测试验证**: 修改后确保相关功能正常工作
+
+### AI 辅助开发
+- **渐进式实现**: 先实现核心功能，再添加高级特性
+- **用户体验优先**: 界面简洁直观，操作流程简化
+- **性能与简洁平衡**: 在性能和代码简洁性之间找到平衡
+- **成本意识**: 监控AI API使用成本，保持透明
+
+### 代码审查原则
+- **遵循极简主义**: 检查代码是否符合极简主义原则
+- **类型安全**: 确保 TypeScript 类型定义正确
+- **性能考虑**: 评估代码对性能的影响
+- **用户体验**: 确保修改不会降低用户体验
+
+### 文档同步
+- **及时更新**: 代码修改后及时更新相关文档
+- **时间戳管理**: 使用项目的时间戳系统
+- **保持简洁**: 文档内容简洁明了，避免冗余
+
+## 开发注意事项
+
+### 极简主义原则
+1. **渐进式开发**: 先实现核心功能，再添加高级特性
+2. **用户体验优先**: 界面简洁直观，操作流程简化
+3. **功能按需启用**: 高级功能默认隐藏，按需显示
+4. **配置最小化**: 减少用户配置负担，智能默认设置
+
+### 安全考虑
+- **敏感数据加密存储**: 保护用户隐私
+- **API密钥安全管理**: 避免硬编码和泄露
+- **输入验证**: 验证必要的用户输入
+- **防止常见攻击**: XSS、注入攻击等
+
+### 文档管理
+- 所有文档必须使用时间戳系统
+- 重要变更后立即更新时间戳
+- 使用统一的文档模板和格式
+- 保持文档与代码同步
+
+### 项目特定注意事项
+- **思维导图核心**: 始终以思维导图功能为核心，其他功能为辅助
+- **创作体验**: 优化创作流程，减少干扰
+- **AI 集成**: AI 功能应该增强而不是替代用户的创造力
+- **跨平台兼容**: 确保在不同设备和浏览器上的一致体验
+
+---
+
+**记住**: 简单就是美，简洁就是力量。始终保持代码的简洁性和可读性，专注于用户体验和核心功能的实现。
+
+详细规范请参考：[项目规则文档](docs/development/project-rules.md)

@@ -1,0 +1,36 @@
+# InkDot Cursor AI 开发规则
+
+请参考项目文档：docs/development/project-rules.md
+
+## 快速参考
+
+### 项目信息
+- **项目名称**: InkDot - 创意创作思维导图平台
+- **技术栈**: Vue 3 + TypeScript + Pinia + Vite
+- **AI集成**: DeepSeek API + OpenRouter API
+
+### 核心规范
+- 使用 Composition API 和 `<script setup>` 语法
+- TypeScript 严格模式，明确返回类型
+- 组件名使用 PascalCase
+- 文件名：组件用 PascalCase，工具函数用 camelCase
+
+### 时间戳系统
+- 基准时间：T0 (2025-09-21)
+- 获取当前时间戳：`npm run timestamp:current`
+- 更新文档时间戳：`npm run docs:update <文档路径>`
+- 所有文档必须包含时间戳头部信息
+
+### 文档结构
+```
+docs/
+├── architecture/     # 架构设计
+├── development/      # 开发指南
+├── design/          # 设计规范
+├── api/             # API文档
+├── user-guide/      # 用户指南
+├── deployment/      # 部署文档
+└── tools/           # 项目工具
+```
+
+详细规范请查看：[项目规则文档](docs/development/project-rules.md)
