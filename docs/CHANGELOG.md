@@ -1,7 +1,7 @@
 # InkDot 文档变更日志
 > **文档版本**：v1.0.0  
 > **创建时间戳**：T0.1  
-> **最后更新**：T0.4  
+> **最后更新**：T0.5  
 > **状态**：CURRENT  
 > **维护者**：InkDot开发团队  
 > **下次审查**：T30.3
@@ -24,6 +24,30 @@
 ---
 
 ## 📅 变更记录
+
+### [v1.5.0] - T0.5
+
+#### 🆕 新增
+- **创建项目初期开发文档和自动化工具** - [f9470db]
+- **创建文档状态总览自动更新工具** - [47a1f36]
+- **创建自动变更条目工具** - [01abb49]
+- **创建CHANGELOG自动更新工具** - [bd1d899]
+- **改进时间戳工具支持批量化操作** - [8cce768]
+- **完善项目结构以符合架构文档** - [7a6762d]
+
+#### 📝 文档
+- **更新.cursorrules文件格式** - [06834c9]
+- **更新项目规则文档时间戳** - [e06e023]
+- **将核心SPA设计原则整合进项目规则** - [cbaf19f]
+- **更新极简主义设计指南加入单页面应用设计** - [4a3de06]
+- **添加项目开发规则文档** - [f3c0110]
+- **修复logo-specification.md格式** - [6075270]
+- **补充logo-specification.md联系方式更新** - [4950381]
+- **更新项目联系方式信息** - [6a95789]
+- **根据极简主义设计指南改进项目规则** - [5da9c05]
+- **创建极简主义设计指南** - [1009dc3]
+
+---
 
 ### [v1.4.0] - T0.4
 
@@ -133,22 +157,25 @@
 | CONTRIBUTING.md | v1.0.0 | T0.3 | 🟢 CURRENT |
 | PROJECT_STRUCTURE.md | v1.0.0 | T0.3 | 🟢 CURRENT |
 | README.md | v1.0.0 | T0.2 | 🟢 CURRENT |
-| docs/CHANGELOG.md | v1.0.0 | T0.4 | 🟢 CURRENT |
+| docs/CHANGELOG.md | v1.0.0 | T0.5 | 🟢 CURRENT |
 | docs/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
 | docs/TIMESTAMP_REFERENCE.md | v1.0.0 | T0.3 | 🟢 CURRENT |
 | docs/architecture/data-models.md | v1.0.0 | T0.3 | 🟢 CURRENT |
 | docs/architecture/system-architecture.md | v1.2.0 | T0.3 | 🟢 CURRENT |
 | docs/design/logo-specification.md | v1.0.0 | T0.3 | 🟢 CURRENT |
-| docs/design/minimalism-design-guide.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| docs/design/minimalism-design-guide.md | v1.1.0 | T0.4 | 🟢 CURRENT |
 | docs/development/coding-standards.md | v1.0.0 | T0.3 | 🟢 CURRENT |
 | docs/development/coding-templates.md | v1.0.0 | T0.3 | 🟢 CURRENT |
 | docs/development/development-plan.md | v1.1.0 | T0.3 | 🟢 CURRENT |
+| docs/development/initial-development-guide.md | v1.0.0 | T0.4 | 🟢 CURRENT |
 | docs/development/personal-dev-guide.md | v1.0.0 | T0.3 | 🟢 CURRENT |
-| docs/development/project-rules.md | v1.3.0 | T0.3 | 🟢 CURRENT |
+| docs/development/project-rules.md | v1.4.0 | T0.5 | 🟢 CURRENT |
+| docs/development/quick-start-guide.md | v1.0.0 | T0.4 | 🟢 CURRENT |
 | docs/development/quick-start.md | v1.0.0 | T0.3 | 🟢 CURRENT |
 | docs/tools/CHANGELOG_TOOL_README.md | v1.0.0 | T0.4 | 🟢 CURRENT |
 | docs/tools/CHANGE_ENTRY_TOOL_README.md | v1.0.0 | T0.4 | 🟢 CURRENT |
 | docs/tools/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| docs/tools/STATUS_UPDATE_TOOL_README.md | v1.0.0 | T0.4 | 🟢 CURRENT |
 | examples/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
 | src/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
 | src/ai/agents/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
