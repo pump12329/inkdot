@@ -83,7 +83,7 @@ function getGitCommits(since = null) {
     if (since) {
       cmd += ` --since="${since}"`;
     }
-    
+
     const output = execSync(cmd, { encoding: 'utf8' });
     return output.trim().split('\n').filter(line => line.trim());
   } catch (error) {
@@ -98,16 +98,16 @@ function getGitCommits(since = null) {
 function parseCommitMessage(commitLine) {
   const match = commitLine.match(/^([a-f0-9]{7})\s+(.+)$/);
   if (!match) return null;
-  
+
   const [, hash, message] = match;
-  
+
   // 解析提交类型和消息
   const typeMatch = message.match(/^([^:]+):\s*(.+)$/);
   if (!typeMatch) return null;
-  
+
   const [, type, description] = typeMatch;
   const typeInfo = COMMIT_TYPE_MAP[type] || { icon: '📝', title: '其他', category: 'other' };
-  
+
   return {
     hash: hash.substring(0, 7),
     type: type,
@@ -153,7 +153,7 @@ function getCurrentVersion(changelogContent) {
  */
 function getNextVersion(currentVersion, changeType = 'patch') {
   const [major, minor, patch] = currentVersion.split('.').map(Number);
-  
+
   switch (changeType) {
     case 'major':
       return `${major + 1}.0.0`;
@@ -172,7 +172,7 @@ function analyzeVersionType(commits) {
   let hasBreaking = false;
   let hasFeatures = false;
   let hasFixes = false;
-  
+
   for (const commit of commits) {
     if (commit.description.includes('BREAKING CHANGE') || commit.description.includes('!')) {
       hasBreaking = true;
@@ -184,7 +184,7 @@ function analyzeVersionType(commits) {
       hasFixes = true;
     }
   }
-  
+
   if (hasBreaking) return 'major';
   if (hasFeatures) return 'minor';
   if (hasFixes) return 'patch';
@@ -196,7 +196,7 @@ function analyzeVersionType(commits) {
  */
 function groupCommitsByType(commits) {
   const groups = {};
-  
+
   for (const commit of commits) {
     const category = commit.typeInfo.category;
     if (!groups[category]) {
@@ -204,7 +204,7 @@ function groupCommitsByType(commits) {
     }
     groups[category].push(commit);
   }
-  
+
   return groups;
 }
 
@@ -213,22 +213,22 @@ function groupCommitsByType(commits) {
  */
 function generateVersionEntry(version, timestamp, commitGroups) {
   let content = `### [v${version}] - ${timestamp}\n\n`;
-  
+
   // 按优先级排序类别
   const categoryOrder = ['features', 'bugfixes', 'documentation', 'refactoring', 'performance', 'testing', 'build', 'ci', 'maintenance', 'revert', 'other'];
-  
+
   for (const category of categoryOrder) {
     if (commitGroups[category] && commitGroups[category].length > 0) {
       const typeInfo = COMMIT_TYPE_MAP[commitGroups[category][0].type] || { icon: '📝', title: '其他' };
       content += `#### ${typeInfo.icon} ${typeInfo.title}\n`;
-      
+
       for (const commit of commitGroups[category]) {
         content += `- **${commit.description}** - [${commit.hash}]\n`;
       }
       content += '\n';
     }
   }
-  
+
   content += '---\n\n';
   return content;
 }
@@ -238,63 +238,63 @@ function generateVersionEntry(version, timestamp, commitGroups) {
  */
 function updateChangelog(options = {}) {
   console.log('🔄 开始更新CHANGELOG...');
-  
+
   // 获取提交记录
   const since = options.since || null;
   const rawCommits = getGitCommits(since);
-  
+
   if (rawCommits.length === 0) {
     console.log('📝 没有新的提交记录');
     return;
   }
-  
+
   // 解析提交记录
   const commits = rawCommits
     .map(parseCommitMessage)
     .filter(commit => commit && !CONFIG.excludePatterns.some(pattern => pattern.test(commit.description)))
     .slice(0, 20); // 限制条目数量
-  
+
   if (commits.length === 0) {
     console.log('📝 没有符合条件的提交记录');
     return;
   }
-  
+
   console.log(`📊 找到 ${commits.length} 条符合条件的提交记录`);
-  
+
   // 读取当前CHANGELOG
   const changelogContent = readChangelog();
   const currentVersion = getCurrentVersion(changelogContent);
-  
+
   // 确定新版本号
   const versionType = analyzeVersionType(commits);
   const newVersion = getNextVersion(currentVersion, versionType);
   const timestamp = getCurrentTimestamp();
-  
+
   console.log(`📈 版本更新: ${currentVersion} → ${newVersion} (${versionType})`);
-  
+
   // 生成新版本条目
   const commitGroups = groupCommitsByType(commits);
   const versionEntry = generateVersionEntry(newVersion, timestamp, commitGroups);
-  
+
   // 插入新版本条目到变更记录部分
   const changeRecordIndex = changelogContent.indexOf('## 📅 变更记录');
   if (changeRecordIndex === -1) {
     console.error('❌ 无法找到变更记录部分');
     return;
   }
-  
+
   const insertIndex = changeRecordIndex + '## 📅 变更记录\n\n'.length;
   const newChangelog = changelogContent.slice(0, insertIndex) + versionEntry + changelogContent.slice(insertIndex);
-  
+
   // 更新文档头部信息
   const updatedChangelog = newChangelog.replace(
     /^> \*\*最后更新\*\*：T[\d.]+/m,
     `> **最后更新**：${timestamp}`
   );
-  
+
   // 写入文件
   writeChangelog(updatedChangelog);
-  
+
   console.log('✅ CHANGELOG更新完成');
 }
 
@@ -303,25 +303,25 @@ function updateChangelog(options = {}) {
  */
 function addEntry(type, description, version = null) {
   console.log('➕ 手动添加CHANGELOG条目...');
-  
+
   const changelogContent = readChangelog();
   const currentVersion = version || getCurrentVersion(changelogContent);
   const timestamp = getCurrentTimestamp();
-  
+
   const entry = `- **${description}** - ${timestamp}\n`;
-  
+
   // 查找对应版本部分并添加条目
   const versionPattern = new RegExp(`(### \\[v${currentVersion.replace(/\./g, '\\.')}\\] - [^\\n]+\\n\\n)`);
   const match = changelogContent.match(versionPattern);
-  
+
   if (!match) {
     console.error('❌ 未找到对应版本部分');
     return;
   }
-  
+
   const insertIndex = match.index + match[0].length;
   const newChangelog = changelogContent.slice(0, insertIndex) + entry + changelogContent.slice(insertIndex);
-  
+
   writeChangelog(newChangelog);
   console.log('✅ 条目添加完成');
 }
@@ -331,15 +331,15 @@ function addEntry(type, description, version = null) {
  */
 function showStatus() {
   console.log('📊 CHANGELOG当前状态:');
-  
+
   const changelogContent = readChangelog();
   const currentVersion = getCurrentVersion(changelogContent);
   const timestamp = getCurrentTimestamp();
-  
+
   console.log(`📋 当前版本: v${currentVersion}`);
   console.log(`⏰ 当前时间戳: ${timestamp}`);
   console.log(`📁 CHANGELOG路径: ${CONFIG.changelogPath}`);
-  
+
   // 显示最近的提交记录
   const recentCommits = getGitCommits().slice(0, 5);
   console.log('\n📝 最近5条提交记录:');
@@ -353,17 +353,17 @@ function showStatus() {
  */
 function updateDocumentStatusTable() {
   console.log('📊 更新文档状态表...');
-  
+
   const changelogContent = readChangelog();
   const timestamp = getCurrentTimestamp();
-  
+
   // 查找文档状态表部分
   const statusTableIndex = changelogContent.indexOf('### 🟢 当前文档 (CURRENT)');
   if (statusTableIndex === -1) {
     console.log('⚠️ 未找到文档状态表');
     return;
   }
-  
+
   // 这里可以添加自动扫描文档并更新状态表的逻辑
   console.log('✅ 文档状态表更新完成');
 }
@@ -374,13 +374,13 @@ function updateDocumentStatusTable() {
 function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'update';
-  
+
   switch (command) {
     case 'update':
       const since = args.includes('--since') ? args[args.indexOf('--since') + 1] : null;
       updateChangelog({ since });
       break;
-      
+
     case 'add':
       if (args.length < 3) {
         console.log('用法: node changelog-helper.js add <type> <description> [version]');
@@ -392,17 +392,17 @@ function main() {
       const version = args[3] || null;
       addEntry(type, description, version);
       break;
-      
+
     case 'version':
       const versionType = args[1] || 'patch';
       console.log(`📈 版本类型: ${versionType}`);
       // 这里可以实现版本号管理逻辑
       break;
-      
+
     case 'status':
       showStatus();
       break;
-      
+
     case 'help':
     default:
       console.log(`
