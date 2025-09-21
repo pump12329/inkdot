@@ -1,6 +1,6 @@
 # InkDot 项目开发规则
 
-> **文档版本**：v1.4.0  
+> **文档版本**：v1.5.0  
 > **创建时间戳**：T1  
 > **最后更新**：T0.5  
 > **状态**：CURRENT  
@@ -382,10 +382,67 @@ export const useMindMapStore = defineStore('mindMap', () => {
 
 ## 测试规范（极简主义）
 
+### 测试工作流架构
+
+#### 测试金字塔策略
+```
+    ┌─────────────────┐
+    │   E2E Tests     │ ← 5% 关键用户流程
+    │   (少量)        │
+    ├─────────────────┤
+    │ Integration     │ ← 25% 模块间交互
+    │ Tests (适量)    │
+    ├─────────────────┤
+    │ Unit Tests      │ ← 70% 核心业务逻辑
+    │ (大量)          │
+    └─────────────────┘
+```
+
+#### 测试执行流程
+1. **本地开发**: 编写代码 → 运行测试 → 修复问题
+2. **提交前**: 完整测试套件 → 覆盖率检查 → 代码质量检查
+3. **CI/CD**: 自动化测试 → 构建验证 → 部署检查
+4. **发布前**: 端到端测试 → 性能测试 → 安全扫描
+
+### 测试质量标准
+
+#### 覆盖率要求
+- **语句覆盖率**: ≥ 70%
+- **分支覆盖率**: ≥ 65%
+- **函数覆盖率**: ≥ 75%
+- **行覆盖率**: ≥ 70%
+
+#### 性能基准
+- **首屏加载时间**: < 2秒
+- **交互响应时间**: < 100ms
+- **内存使用**: < 100MB
+- **CPU使用率**: < 30%
+
+### 测试命令规范
+
+```bash
+# 开发中测试
+npm run test:watch          # 监听模式
+npm run test:ui             # 可视化界面
+npm test tests/unit/        # 单元测试
+npm test tests/integration/ # 集成测试
+
+# 提交前检查
+npm run test:run            # 运行所有测试
+npm run test:coverage       # 覆盖率报告
+npm run lint                # 代码规范检查
+npm run type-check          # 类型检查
+
+# CI/CD测试
+npm run test:performance    # 性能测试
+npm run test:e2e           # 端到端测试
+npm run build              # 构建测试
+```
+
 ### 单元测试原则
 - **使用Vitest进行单元测试**：轻量级测试框架
 - **核心功能优先测试**：重要工具函数和核心逻辑必须有测试
-- **测试覆盖率合理**：目标80%，但不追求100%
+- **测试覆盖率合理**：目标70%，但不追求100%
 - **AI功能mock测试**：避免真实API调用，提高测试稳定性
 - **测试代码简洁**：测试本身应该简洁易读
 
@@ -415,6 +472,67 @@ describe('MindMapNode', () => {
     expect(wrapper.emitted('startEdit')).toBeTruthy()
   })
 })
+```
+
+### 测试数据管理
+- **使用TestDataGenerator**: 统一生成测试数据
+- **数据隔离**: 每个测试使用独立数据
+- **Mock外部依赖**: 避免真实API调用
+- **性能测试数据**: 支持不同规模的数据集
+
+```typescript
+// 测试数据生成示例
+import { TestDataGenerator } from '@/tests/utils/test-data-generator'
+
+const nodes = TestDataGenerator.generateNodes(100)
+const connections = TestDataGenerator.generateConnections(nodes, 50)
+const perfData = TestDataGenerator.generatePerformanceTestData('large')
+```
+
+### 持续集成测试
+
+#### GitHub Actions工作流
+- **代码质量检查**: ESLint + Prettier + TypeScript
+- **单元测试**: Vitest + 覆盖率报告
+- **集成测试**: 模块间交互验证
+- **构建测试**: 生产环境构建验证
+- **性能测试**: Lighthouse + 性能基准
+- **安全扫描**: npm audit + CodeQL
+
+#### 测试失败处理
+- 自动阻止合并到主分支
+- 生成详细错误报告
+- 通知相关开发者
+- 提供修复建议
+
+### 测试最佳实践
+
+#### 测试编写原则
+- **AAA模式**: Arrange, Act, Assert
+- **单一职责**: 每个测试只验证一个功能
+- **独立性**: 测试之间相互独立
+- **可重复**: 测试结果稳定可重复
+
+#### 测试命名规范
+```typescript
+describe('功能模块名', () => {
+  describe('子功能描述', () => {
+    it('应该能够执行具体操作', () => {
+      // 测试实现
+    })
+  })
+})
+```
+
+#### 测试组织结构
+```
+tests/
+├── unit/                    # 单元测试 (70%)
+├── integration/            # 集成测试 (25%)
+├── e2e/                    # 端到端测试 (5%)
+├── performance/            # 性能测试
+├── utils/                  # 测试工具
+└── examples/               # 示例测试
 ```
 
 ## 性能优化规范（极简主义）

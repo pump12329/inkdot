@@ -7,7 +7,43 @@ export default defineConfig({
     test: {
         globals: true,
         environment: 'jsdom',
-        setupFiles: ['./tests/setup.ts']
+        setupFiles: ['./tests/setup.ts'],
+        coverage: {
+            provider: 'v8',
+            reporter: ['text', 'json', 'html', 'lcov'],
+            exclude: [
+                'node_modules/',
+                'tests/',
+                'dist/',
+                '**/*.d.ts',
+                'src/main.ts',
+                'src/vite-env.d.ts',
+                'docs/',
+                'examples/',
+                'scripts/',
+                'tools/'
+            ],
+            thresholds: {
+                global: {
+                    branches: 70,
+                    functions: 70,
+                    lines: 70,
+                    statements: 70
+                }
+            }
+        },
+        testTimeout: 10000,
+        hookTimeout: 10000,
+        include: ['tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+        exclude: [
+            'node_modules',
+            'dist',
+            '.idea',
+            '.git',
+            '.cache'
+        ],
+        watch: false,
+        passWithNoTests: true
     },
     resolve: {
         alias: {
