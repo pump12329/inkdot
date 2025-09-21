@@ -21,7 +21,14 @@
         "changelog:add": "node docs/tools/changelog-helper.js add",
         "changelog:version": "node docs/tools/changelog-helper.js version",
         "changelog:status": "node docs/tools/changelog-helper.js status",
-        "changelog:help": "node docs/tools/changelog-helper.js help"
+        "changelog:help": "node docs/tools/changelog-helper.js help",
+        "change": "node docs/tools/change-entry-helper.js",
+        "change:auto": "node docs/tools/change-entry-helper.js auto",
+        "change:detect": "node docs/tools/change-entry-helper.js detect",
+        "change:add": "node docs/tools/change-entry-helper.js add",
+        "change:scan": "node docs/tools/change-entry-helper.js scan",
+        "change:interactive": "node docs/tools/change-entry-helper.js interactive",
+        "change:help": "node docs/tools/change-entry-helper.js help"
     },
     "keywords": [
         "mindmap",
