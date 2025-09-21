@@ -146,28 +146,28 @@ function getRecentCommits(count = 5) {
 function detectFileChangeType(filePath) {
   const ext = path.extname(filePath).toLowerCase();
   const dir = path.dirname(filePath);
-  
+
   // 根据文件路径和扩展名判断变更类型
   if (filePath.includes('docs/') || ext === '.md') {
     return 'documentation';
   }
-  
+
   if (filePath.includes('test') || ext.includes('test') || ext.includes('spec')) {
     return 'test';
   }
-  
+
   if (['.css', '.scss', '.less'].includes(ext)) {
     return 'style';
   }
-  
+
   if (['.json', '.yml', '.yaml', '.toml'].includes(ext)) {
     return 'build';
   }
-  
+
   if (['.vue', '.ts', '.js'].includes(ext) && filePath.includes('src/')) {
     return 'feature';
   }
-  
+
   return 'improvement';
 }
 
@@ -177,13 +177,13 @@ function detectFileChangeType(filePath) {
 function analyzeChangeContent(filePath, diffContent) {
   const changeType = detectFileChangeType(filePath);
   const fileName = path.basename(filePath);
-  
+
   // 简单的关键词分析
   const keywords = CONFIG.changeTypes[changeType]?.keywords || [];
-  const foundKeywords = keywords.filter(keyword => 
+  const foundKeywords = keywords.filter(keyword =>
     diffContent.toLowerCase().includes(keyword.toLowerCase())
   );
-  
+
   return {
     type: changeType,
     fileName,
@@ -198,9 +198,9 @@ function analyzeChangeContent(filePath, diffContent) {
 function generateChangeDescription(changeAnalysis) {
   const { type, fileName, keywords } = changeAnalysis;
   const typeInfo = CONFIG.changeTypes[type];
-  
+
   let description = '';
-  
+
   // 根据变更类型生成描述
   switch (type) {
     case 'feature':
@@ -230,13 +230,13 @@ function generateChangeDescription(changeAnalysis) {
     default:
       description = `更新${fileName}`;
   }
-  
+
   // 如果有关键词，尝试生成更具体的描述
   if (keywords.length > 0) {
     const mainKeyword = keywords[0];
     description = description.replace(/更新|添加|修复|改进/, mainKeyword);
   }
-  
+
   return {
     description,
     type,
@@ -250,23 +250,23 @@ function generateChangeDescription(changeAnalysis) {
  */
 function scanProjectChanges() {
   console.log('🔍 扫描项目变更...');
-  
+
   const gitStatus = getGitStatus();
   const changes = [];
-  
+
   for (const statusLine of gitStatus) {
     const [status, filePath] = statusLine.split(/\s+/, 2);
-    
+
     if (!filePath) continue;
-    
+
     // 跳过不需要的文件
     if (filePath.includes('node_modules/') || filePath.includes('.git/')) {
       continue;
     }
-    
+
     const changeAnalysis = analyzeChangeContent(filePath, '');
     const changeDescription = generateChangeDescription(changeAnalysis);
-    
+
     changes.push({
       file: filePath,
       status: status,
@@ -276,7 +276,7 @@ function scanProjectChanges() {
       typeInfo: changeDescription.typeInfo
     });
   }
-  
+
   return changes;
 }
 
@@ -285,17 +285,17 @@ function scanProjectChanges() {
  */
 function autoDetectChanges() {
   console.log('🤖 自动检测变更类型...');
-  
+
   const changes = scanProjectChanges();
-  
+
   if (changes.length === 0) {
     console.log('📝 未检测到变更');
     return [];
   }
-  
+
   // 按类型分组
   const groupedChanges = {};
-  
+
   for (const change of changes) {
     const type = change.type;
     if (!groupedChanges[type]) {
@@ -303,18 +303,18 @@ function autoDetectChanges() {
     }
     groupedChanges[type].push(change);
   }
-  
+
   // 生成汇总报告
   console.log('\n📊 变更检测结果:');
   for (const [type, typeChanges] of Object.entries(groupedChanges)) {
     const typeInfo = CONFIG.changeTypes[type];
     console.log(`\n${typeInfo.icon} ${typeInfo.title} (${typeChanges.length}项):`);
-    
+
     for (const change of typeChanges) {
       console.log(`  - ${change.description} (${change.file})`);
     }
   }
-  
+
   return groupedChanges;
 }
 
@@ -323,34 +323,34 @@ function autoDetectChanges() {
  */
 function addChangeEntryToChangelog(changeType, description, files = []) {
   console.log(`➕ 添加变更条目: ${description}`);
-  
+
   try {
     const changelogContent = fs.readFileSync(CONFIG.changelogPath, 'utf8');
     const timestamp = getCurrentTimestamp();
-    
+
     // 查找当前版本部分
     const versionMatch = changelogContent.match(/### \[v(\d+\.\d+\.\d+)\]/);
     if (!versionMatch) {
       console.error('❌ 无法找到当前版本');
       return false;
     }
-    
+
     const currentVersion = versionMatch[1];
     const versionPattern = new RegExp(`(### \\[v${currentVersion.replace(/\./g, '\\.')}\\] - [^\\n]+\\n\\n)`);
     const versionMatch2 = changelogContent.match(versionPattern);
-    
+
     if (!versionMatch2) {
       console.error('❌ 无法找到版本部分');
       return false;
     }
-    
+
     const typeInfo = CONFIG.changeTypes[changeType];
     const entry = `- **${description}** - ${timestamp}\n`;
-    
+
     // 查找对应类型部分
     const typePattern = new RegExp(`(#### ${typeInfo.icon} ${typeInfo.title}\\n)`);
     const typeMatch = changelogContent.match(typePattern);
-    
+
     if (typeMatch) {
       // 在现有类型部分添加条目
       const insertIndex = typeMatch.index + typeMatch[0].length;
@@ -363,10 +363,10 @@ function addChangeEntryToChangelog(changeType, description, files = []) {
       const newChangelog = changelogContent.slice(0, versionInsertIndex) + newTypeSection + changelogContent.slice(versionInsertIndex);
       fs.writeFileSync(CONFIG.changelogPath, newChangelog, 'utf8');
     }
-    
+
     console.log('✅ 变更条目已添加到CHANGELOG');
     return true;
-    
+
   } catch (error) {
     console.error('❌ 添加变更条目失败:', error.message);
     return false;
@@ -378,31 +378,31 @@ function addChangeEntryToChangelog(changeType, description, files = []) {
  */
 function autoAddChangeEntries() {
   console.log('🚀 自动添加变更条目...');
-  
+
   const groupedChanges = autoDetectChanges();
-  
+
   if (Object.keys(groupedChanges).length === 0) {
     console.log('📝 没有变更需要添加');
     return;
   }
-  
+
   let addedCount = 0;
-  
+
   for (const [changeType, changes] of Object.entries(groupedChanges)) {
     const typeInfo = CONFIG.changeTypes[changeType];
-    
+
     // 生成汇总描述
     const fileCount = changes.length;
-    const summaryDescription = fileCount > 1 
+    const summaryDescription = fileCount > 1
       ? `${typeInfo.title} (${fileCount}个文件)`
       : changes[0].description;
-    
+
     // 添加条目
     if (addChangeEntryToChangelog(changeType, summaryDescription, changes.map(c => c.file))) {
       addedCount++;
     }
   }
-  
+
   console.log(`\n✅ 成功添加 ${addedCount} 个变更条目`);
 }
 
@@ -411,13 +411,13 @@ function autoAddChangeEntries() {
  */
 function manualAddChangeEntry(type, description, files = []) {
   console.log(`➕ 手动添加变更条目...`);
-  
+
   if (!CONFIG.changeTypes[type]) {
     console.error(`❌ 不支持的变更类型: ${type}`);
     console.log('支持的类型:', Object.keys(CONFIG.changeTypes).join(', '));
     return false;
   }
-  
+
   return addChangeEntryToChangelog(type, description, files);
 }
 
@@ -426,16 +426,16 @@ function manualAddChangeEntry(type, description, files = []) {
  */
 function interactiveAddChangeEntry() {
   console.log('🎯 交互式添加变更条目...\n');
-  
+
   // 显示可用类型
   console.log('可用的变更类型:');
   for (const [type, info] of Object.entries(CONFIG.changeTypes)) {
     console.log(`  ${type}: ${info.icon} ${info.title}`);
   }
-  
+
   console.log('\n请选择变更类型和描述 (示例: feature "添加用户登录功能")');
   console.log('输入 "exit" 退出');
-  
+
   // 这里可以添加更复杂的交互逻辑
   console.log('💡 提示: 使用 --type 和 --description 参数进行非交互式添加');
 }
@@ -487,7 +487,7 @@ InkDot 自动变更条目工具
 function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'auto';
-  
+
   // 解析参数
   const options = {};
   for (let i = 1; i < args.length; i += 2) {
@@ -495,16 +495,16 @@ function main() {
       options[args[i].substring(2)] = args[i + 1];
     }
   }
-  
+
   switch (command) {
     case 'auto':
       autoAddChangeEntries();
       break;
-      
+
     case 'detect':
       autoDetectChanges();
       break;
-      
+
     case 'add':
       if (!options.type || !options.description) {
         console.error('❌ 需要指定 --type 和 --description 参数');
@@ -514,15 +514,15 @@ function main() {
       const files = options.files ? options.files.split(',') : [];
       manualAddChangeEntry(options.type, options.description, files);
       break;
-      
+
     case 'scan':
       scanProjectChanges();
       break;
-      
+
     case 'interactive':
       interactiveAddChangeEntry();
       break;
-      
+
     case 'help':
     default:
       showHelp();

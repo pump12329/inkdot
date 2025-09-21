@@ -129,21 +129,33 @@
 ### 🟢 当前文档 (CURRENT)
 | 文档名称 | 版本 | 最后更新 | 状态 |
 |---------|------|----------|------|
-| system-architecture.md | v1.2.0 | T0.1 | 🟢 CURRENT |
-| data-models.md | v1.0.0 | T0.1 | 🟢 CURRENT |
-| development-plan.md | v1.1.0 | T0.1 | 🟢 CURRENT |
-| project-rules.md | v1.1.0 | T0.1 | 🟢 CURRENT |
-| coding-standards.md | v1.0.0 | T0.1 | 🟢 CURRENT |
-| logo-specification.md | v1.0.0 | T0.1 | 🟢 CURRENT |
-| TIMESTAMP_REFERENCE.md | v1.1.0 | T0.1 | 🟢 CURRENT |
-| tools/README.md | v1.0.0 | T0.1 | 🟢 CURRENT |
-
-### 🚧 开发中文档 (DRAFT)
-| 文档名称 | 预计版本 | 预计完成 | 状态 |
-|---------|----------|----------|------|
-| api-reference.md | v1.0.0 | T5 | 🚧 DRAFT |
-| ui-design.md | v1.0.0 | T8 | 🚧 DRAFT |
-| user-manual.md | v1.0.0 | T16 | 🚧 DRAFT |
+| ARCHITECTURE_IMPLEMENTATION.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| CONTRIBUTING.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| PROJECT_STRUCTURE.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| README.md | v1.0.0 | T0.2 | 🟢 CURRENT |
+| docs/CHANGELOG.md | v1.0.0 | T0.4 | 🟢 CURRENT |
+| docs/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| docs/TIMESTAMP_REFERENCE.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| docs/architecture/data-models.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| docs/architecture/system-architecture.md | v1.2.0 | T0.3 | 🟢 CURRENT |
+| docs/design/logo-specification.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| docs/design/minimalism-design-guide.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| docs/development/coding-standards.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| docs/development/coding-templates.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| docs/development/development-plan.md | v1.1.0 | T0.3 | 🟢 CURRENT |
+| docs/development/personal-dev-guide.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| docs/development/project-rules.md | v1.3.0 | T0.3 | 🟢 CURRENT |
+| docs/development/quick-start.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| docs/tools/CHANGELOG_TOOL_README.md | v1.0.0 | T0.4 | 🟢 CURRENT |
+| docs/tools/CHANGE_ENTRY_TOOL_README.md | v1.0.0 | T0.4 | 🟢 CURRENT |
+| docs/tools/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| examples/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| src/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| src/ai/agents/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| src/core/mindmap/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| src/core/workspace/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| src/plugins/sdk/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
+| src/services/api/README.md | v1.0.0 | T0.3 | 🟢 CURRENT |
 
 ### 🟡 计划更新文档 (OUTDATED)
 *当前无过时文档*
@@ -151,63 +163,3 @@
 ### 🔴 已废弃文档 (DEPRECATED)
 *当前无废弃文档*
 
----
-
-## 🔄 文档维护流程
-
-### 1. 版本更新规则
-- **重大变更**：主版本号 +1，次版本号归零
-- **功能更新**：次版本号 +1，修订号归零
-- **错误修复**：修订号 +1
-
-### 2. 状态变更流程
-```
-🚧 DRAFT → 🟢 CURRENT → 🟡 OUTDATED → 🔴 DEPRECATED
-```
-
-### 3. 更新检查清单
-- [ ] 更新文档版本号
-- [ ] 记录变更内容
-- [ ] 更新最后修改时间
-- [ ] 检查相关文档链接
-- [ ] 更新CHANGELOG.md
-- [ ] 更新README.md状态表
-
-### 4. 废弃文档处理
-1. 标记为 🔴 DEPRECATED
-2. 添加废弃说明和替代文档链接
-3. 保留6个月后删除
-4. 在CHANGELOG中记录废弃原因
-
----
-
-## 📋 文档审查计划
-
-### 月度审查 (每月1日)
-- 检查所有文档的时效性
-- 更新过时内容
-- 标记需要废弃的文档
-
-### 季度审查 (每季度第一个月15日)
-- 全面review文档架构
-- 评估文档使用情况
-- 规划新文档需求
-
-### 年度审查 (每年1月)
-- 重大版本更新
-- 文档架构重构
-- 长期规划调整
-
----
-
-## 📞 维护联系
-
-**文档维护负责人**：InkDot开发团队  
-**更新频率**：实时更新  
-**审查周期**：月度/季度/年度  
-
----
-
-**变更日志版本**：v1.1.0  
-**最后更新**：T0.1  
-**下次审查**：T30.1

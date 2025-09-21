@@ -28,7 +28,12 @@
         "change:add": "node docs/tools/change-entry-helper.js add",
         "change:scan": "node docs/tools/change-entry-helper.js scan",
         "change:interactive": "node docs/tools/change-entry-helper.js interactive",
-        "change:help": "node docs/tools/change-entry-helper.js help"
+        "change:help": "node docs/tools/change-entry-helper.js help",
+        "status": "node docs/tools/status-update-helper.js",
+        "status:update": "node docs/tools/status-update-helper.js update",
+        "status:scan": "node docs/tools/status-update-helper.js scan",
+        "status:check": "node docs/tools/status-update-helper.js check",
+        "status:help": "node docs/tools/status-update-helper.js help"
     },
     "keywords": [
         "mindmap",
