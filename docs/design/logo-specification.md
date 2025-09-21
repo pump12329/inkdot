@@ -643,8 +643,4 @@ logo-animations.css     - 动画效果CSS
 - **技术支持**：linhuinan542@gmail.com
 - **项目Issues**：[GitHub Issues](https://github.com/pump12329/inkdot/issues)
 
----
 
-*最后更新: 2024年1月*
-*版本: v1.0.0*
-*创建者: AI设计助手*
