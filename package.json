@@ -15,7 +15,13 @@
         "docs:header": "node docs/tools/timestamp-helper.js header",
         "docs:scan": "node docs/tools/timestamp-helper.js scan",
         "docs:batch": "node docs/tools/timestamp-helper.js batch-update",
-        "docs:fix": "node docs/tools/timestamp-helper.js fix-headers"
+        "docs:fix": "node docs/tools/timestamp-helper.js fix-headers",
+        "changelog": "node docs/tools/changelog-helper.js",
+        "changelog:update": "node docs/tools/changelog-helper.js update",
+        "changelog:add": "node docs/tools/changelog-helper.js add",
+        "changelog:version": "node docs/tools/changelog-helper.js version",
+        "changelog:status": "node docs/tools/changelog-helper.js status",
+        "changelog:help": "node docs/tools/changelog-helper.js help"
     },
     "keywords": [
         "mindmap",
