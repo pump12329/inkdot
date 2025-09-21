@@ -33,7 +33,12 @@
         "status:update": "node docs/tools/status-update-helper.js update",
         "status:scan": "node docs/tools/status-update-helper.js scan",
         "status:check": "node docs/tools/status-update-helper.js check",
-        "status:help": "node docs/tools/status-update-helper.js help"
+        "status:help": "node docs/tools/status-update-helper.js help",
+        "setup": "node scripts/setup-dev-environment.js",
+        "setup:dev": "node scripts/setup-dev-environment.js",
+        "type-check": "vue-tsc --noEmit",
+        "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+        "lint:fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
     },
     "keywords": [
         "mindmap",
