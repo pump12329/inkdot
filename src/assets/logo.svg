@@ -1,0 +1,45 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 中心点渐变 -->
+    <radialGradient id="centerGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- 连接线渐变 -->
+    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 连接线组 -->
+  <g id="connections" stroke="url(#lineGradient)" stroke-width="2" fill="none">
+    <line x1="60" y1="60" x2="60" y2="24" />           <!-- 上 -->
+    <line x1="60" y1="60" x2="85.5" y2="34.5" />       <!-- 右上 -->
+    <line x1="60" y1="60" x2="96" y2="60" />            <!-- 右 -->
+    <line x1="60" y1="60" x2="85.5" y2="85.5" />       <!-- 右下 -->
+    <line x1="60" y1="60" x2="60" y2="96" />            <!-- 下 -->
+    <line x1="60" y1="60" x2="34.5" y2="85.5" />       <!-- 左下 -->
+    <line x1="60" y1="60" x2="24" y2="60" />            <!-- 左 -->
+    <line x1="60" y1="60" x2="34.5" y2="34.5" />       <!-- 左上 -->
+  </g>
+  
+  <!-- 墨点组 -->
+  <g id="dots">
+    <!-- 外围墨点 -->
+    <circle cx="60" cy="24" r="5" fill="#333333" />     <!-- 上 -->
+    <circle cx="85.5" cy="34.5" r="5" fill="#333333" /> <!-- 右上 -->
+    <circle cx="96" cy="60" r="5" fill="#333333" />     <!-- 右 -->
+    <circle cx="85.5" cy="85.5" r="5" fill="#333333" /> <!-- 右下 -->
+    <circle cx="60" cy="96" r="5" fill="#333333" />     <!-- 下 -->
+    <circle cx="34.5" cy="85.5" r="5" fill="#333333" /> <!-- 左下 -->
+    <circle cx="24" cy="60" r="5" fill="#333333" />     <!-- 左 -->
+    <circle cx="34.5" cy="34.5" r="5" fill="#333333" /> <!-- 左上 -->
+    
+    <!-- 中心墨点 -->
+    <circle cx="60" cy="60" r="9" fill="url(#centerGradient)" />
+  </g>
+</svg>

@@ -1,0 +1,32 @@
+{
+  "recommendations": [
+    // Vue 3 开发
+    "vue.volar",
+    "johnsoncodehk.volar",
+    // TypeScript 支持
+    "ms-vscode.vscode-typescript-next",
+    // 代码质量
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    // 样式支持
+    "bradlc.vscode-tailwindcss",
+    "mrcrowl.easy-less",
+    // Git 支持
+    "eamodio.gitlens",
+    "github.vscode-pull-request-github",
+    // 文档支持
+    "yzhang.markdown-all-in-one",
+    "redhat.vscode-yaml",
+    // 项目管理
+    "christian-kohler.npm-intellisense",
+    "rangav.vscode-thunder-client",
+    // 容器和部署
+    "ms-azuretools.vscode-docker",
+    "ms-azuretools.vscode-containers",
+    // 开发工具
+    "ritwickdey.liveserver",
+    "editorconfig.editorconfig",
+    // AI 助手
+    "saoudrizwan.claude-dev"
+  ]
+}

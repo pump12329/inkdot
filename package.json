@@ -1,0 +1,36 @@
+{
+    "name": "inkdot",
+    "version": "1.0.0",
+    "description": "InkDot - 创意创作思维导图平台",
+    "main": "index.js",
+    "scripts": {
+        "timestamp": "node docs/tools/timestamp-helper.js",
+        "timestamp:current": "node docs/tools/timestamp-helper.js current",
+        "timestamp:help": "node docs/tools/timestamp-helper.js help",
+        "docs:update": "node docs/tools/timestamp-helper.js update-doc",
+        "docs:header": "node docs/tools/timestamp-helper.js header"
+    },
+    "keywords": [
+        "mindmap",
+        "ai",
+        "creative",
+        "writing",
+        "vue3",
+        "typescript"
+    ],
+    "author": "InkDot Team",
+    "license": "MIT",
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^8.44.0",
+        "@typescript-eslint/parser": "^8.44.0",
+        "eslint": "^8.57.1",
+        "eslint-plugin-vue": "^10.4.0"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "directories": {
+        "doc": "docs",
+        "example": "examples"
+    }
+}

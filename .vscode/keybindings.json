@@ -1,0 +1,102 @@
+[
+  // 快速打开终端
+  {
+    "key": "ctrl+shift+`",
+    "command": "workbench.action.terminal.new"
+  },
+  // 快速打开命令面板
+  {
+    "key": "ctrl+shift+p",
+    "command": "workbench.action.showCommands"
+  },
+  // 快速打开文件
+  {
+    "key": "ctrl+p",
+    "command": "workbench.action.quickOpen"
+  },
+  // 快速打开符号
+  {
+    "key": "ctrl+shift+o",
+    "command": "workbench.action.gotoSymbol"
+  },
+  // 切换侧边栏
+  {
+    "key": "ctrl+b",
+    "command": "workbench.action.toggleSidebarVisibility"
+  },
+  // 切换面板
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.togglePanel"
+  },
+  // 格式化文档
+  {
+    "key": "shift+alt+f",
+    "command": "editor.action.formatDocument"
+  },
+  // 重命名符号
+  {
+    "key": "f2",
+    "command": "editor.action.rename"
+  },
+  // 快速修复
+  {
+    "key": "ctrl+.",
+    "command": "editor.action.quickFix"
+  },
+  // 切换注释
+  {
+    "key": "ctrl+/",
+    "command": "editor.action.commentLine"
+  },
+  // 复制行
+  {
+    "key": "shift+alt+down",
+    "command": "editor.action.copyLinesDownAction"
+  },
+  // 移动行
+  {
+    "key": "alt+down",
+    "command": "editor.action.moveLinesDownAction"
+  },
+  // 选择当前行
+  {
+    "key": "ctrl+l",
+    "command": "expandLineSelection"
+  },
+  // 删除行
+  {
+    "key": "ctrl+shift+k",
+    "command": "editor.action.deleteLines"
+  },
+  // 跳转到定义
+  {
+    "key": "f12",
+    "command": "editor.action.revealDefinition"
+  },
+  // 跳转到引用
+  {
+    "key": "shift+f12",
+    "command": "editor.action.goToReferences"
+  },
+  // 切换文件
+  {
+    "key": "ctrl+tab",
+    "command": "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
+  },
+  // 关闭当前标签
+  {
+    "key": "ctrl+w",
+    "command": "workbench.action.closeActiveEditor"
+  },
+  // 保存文件
+  {
+    "key": "ctrl+s",
+    "command": "workbench.action.files.save"
+  },
+  // 保存所有文件
+  {
+    "key": "ctrl+shift+s",
+    "command": "workbench.action.files.saveAll"
+  }
+]

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>墨点 Logo - Vue 演示</title>
+    <link rel="stylesheet" href="../src/assets/logo.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #000;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+        }
+
+        .section {
+            margin-bottom: 60px;
+            padding: 30px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background: #fafbfc;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .logo-item {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-item h3 {
+            margin: 15px 0 10px 0;
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        .logo-item p {
+            margin: 0;
+            color: #777;
+            font-size: 0.9em;
+        }
+
+        .animation-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .animation-item {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+        }
+
+        .animation-item h4 {
+            margin: 0 0 15px 0;
+            color: #555;
+            font-size: 1em;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 0 10px;
+            background: #0066FF;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0052CC;
+        }
+
+        .btn.secondary {
+            background: #6c757d;
+        }
+
+        .btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .interactive-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .interactive-item {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+        }
+
+        .interactive-item h4 {
+            margin: 0 0 15px 0;
+            color: #555;
+            font-size: 1em;
+        }
+
+        .clickable-logo {
+            cursor: pointer;
+        }
+
+        .clickable-logo:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>墨点 Logo - Vue 组件演示</h1>
+        <div id="app"></div>
+    </div>
+
+    <script>
+        const { createApp, ref, computed } = Vue;
+
+        // InkDotLogo Vue 组件
+        const InkDotLogo = {
+            name: 'InkDotLogo',
+            props: {
+                size: {
+                    type: [String, Number],
+                    default: 120,
+                    validator: (value) => {
+                        const num = parseInt(value);
+                        return num >= 32 && num <= 500;
+                    }
+                },
+                variant: {
+                    type: String,
+                    default: 'lg',
+                    validator: (value) => ['xs', 'sm', 'md', 'lg', 'xl'].includes(value)
+                },
+                animation: {
+                    type: String,
+                    default: '',
+                    validator: (value) => ['', 'birth', 'loading', 'glow', 'pulse'].includes(value)
+                },
+                clickable: {
+                    type: Boolean,
+                    default: false
+                },
+                customClass: {
+                    type: String,
+                    default: ''
+                },
+                hoverable: {
+                    type: Boolean,
+                    default: true
+                }
+            },
+            data() {
+                return {
+                    instanceId: Math.random().toString(36).substr(2, 9)
+                }
+            },
+            computed: {
+                logoClasses() {
+                    const classes = ['logo'];
+
+                    if (this.variant !== 'lg') {
+                        classes.push(`logo-${this.variant}`);
+                    }
+
+                    if (this.animation) {
+                        classes.push(`animate-${this.animation}`);
+                    }
+
+                    if (this.customClass) {
+                        classes.push(this.customClass);
+                    }
+
+                    if (this.clickable) {
+                        classes.push('clickable');
+                    }
+
+                    if (this.hoverable) {
+                        classes.push('hoverable');
+                    }
+
+                    return classes.join(' ');
+                }
+            },
+            methods: {
+                handleClick(event) {
+                    if (this.clickable) {
+                        this.$emit('click', event);
+                    }
+                }
+            },
+            template: `
+                <svg 
+                    :class="logoClasses" 
+                    :width="size" 
+                    :height="size" 
+                    viewBox="0 0 120 120" 
+                    xmlns="http://www.w3.org/2000/svg"
+                    @click="handleClick"
+                >
+                    <defs>
+                        <radialGradient :id="\`centerGradient-\${instanceId}\`" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
+                            <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
+                        </radialGradient>
+                        
+                        <linearGradient :id="\`lineGradient-\${instanceId}\`" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <g id="connections" :stroke="\`url(#lineGradient-\${instanceId})\`" stroke-width="2" fill="none">
+                        <line x1="60" y1="60" x2="60" y2="24" />
+                        <line x1="60" y1="60" x2="85.5" y2="34.5" />
+                        <line x1="60" y1="60" x2="96" y2="60" />
+                        <line x1="60" y1="60" x2="85.5" y2="85.5" />
+                        <line x1="60" y1="60" x2="60" y2="96" />
+                        <line x1="60" y1="60" x2="34.5" y2="85.5" />
+                        <line x1="60" y1="60" x2="24" y2="60" />
+                        <line x1="60" y1="60" x2="34.5" y2="34.5" />
+                    </g>
+                    
+                    <g id="dots">
+                        <circle cx="60" cy="24" r="5" fill="#333333" />
+                        <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
+                        <circle cx="96" cy="60" r="5" fill="#333333" />
+                        <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
+                        <circle cx="60" cy="96" r="5" fill="#333333" />
+                        <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
+                        <circle cx="24" cy="60" r="5" fill="#333333" />
+                        <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
+                        <circle cx="60" cy="60" r="9" :fill="\`url(#centerGradient-\${instanceId})\`" />
+                    </g>
+                </svg>
+            `
+        };
+
+        // 主应用组件
+        const App = {
+            components: {
+                InkDotLogo
+            },
+            setup() {
+                const clickCount = ref(0);
+                const currentAnimation = ref('');
+
+                const handleLogoClick = () => {
+                    clickCount.value++;
+                };
+
+                const restartAnimations = () => {
+                    currentAnimation.value = '';
+                    setTimeout(() => {
+                        currentAnimation.value = 'birth';
+                    }, 100);
+                };
+
+                const toggleAnimation = (animation) => {
+                    currentAnimation.value = currentAnimation.value === animation ? '' : animation;
+                };
+
+                return {
+                    clickCount,
+                    currentAnimation,
+                    handleLogoClick,
+                    restartAnimations,
+                    toggleAnimation
+                };
+            },
+            template: `
+                <div>
+                    <!-- 基础展示 -->
+                    <div class="section">
+                        <h2>基础展示</h2>
+                        <div class="logo-grid">
+                            <div class="logo-item">
+                                <InkDotLogo variant="xl" :size="200" />
+                                <h3>超大尺寸 (200px)</h3>
+                                <p>网站头部、宣传海报</p>
+                            </div>
+                            <div class="logo-item">
+                                <InkDotLogo variant="lg" :size="120" />
+                                <h3>标准尺寸 (120px)</h3>
+                                <p>标准Logo、文档封面</p>
+                            </div>
+                            <div class="logo-item">
+                                <InkDotLogo variant="md" :size="80" />
+                                <h3>中等尺寸 (80px)</h3>
+                                <p>应用图标、按钮</p>
+                            </div>
+                            <div class="logo-item">
+                                <InkDotLogo variant="sm" :size="48" />
+                                <h3>小尺寸 (48px)</h3>
+                                <p>菜单图标、标签页</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 动画效果 -->
+                    <div class="section">
+                        <h2>动画效果</h2>
+                        <div class="animation-demo">
+                            <div class="animation-item">
+                                <InkDotLogo 
+                                    variant="lg" 
+                                    :animation="currentAnimation === 'birth' ? 'birth' : ''"
+                                    :size="120"
+                                />
+                                <h4>星云诞生</h4>
+                                <button class="btn" @click="() => toggleAnimation('birth')">播放动画</button>
+                            </div>
+                            <div class="animation-item">
+                                <InkDotLogo 
+                                    variant="lg" 
+                                    :animation="currentAnimation === 'loading' ? 'loading' : ''"
+                                    :size="120"
+                                />
+                                <h4>星云旋转</h4>
+                                <button class="btn" @click="() => toggleAnimation('loading')">播放动画</button>
+                            </div>
+                            <div class="animation-item">
+                                <InkDotLogo 
+                                    variant="lg" 
+                                    :animation="currentAnimation === 'glow' ? 'glow' : ''"
+                                    :size="120"
+                                />
+                                <h4>连接线发光</h4>
+                                <button class="btn" @click="() => toggleAnimation('glow')">播放动画</button>
+                            </div>
+                            <div class="animation-item">
+                                <InkDotLogo 
+                                    variant="lg" 
+                                    :animation="currentAnimation === 'pulse' ? 'pulse' : ''"
+                                    :size="120"
+                                />
+                                <h4>墨点脉动</h4>
+                                <button class="btn" @click="() => toggleAnimation('pulse')">播放动画</button>
+                            </div>
+                        </div>
+                        <div class="controls">
+                            <button class="btn" @click="restartAnimations">重新播放所有动画</button>
+                            <button class="btn secondary" @click="currentAnimation = ''">停止所有动画</button>
+                        </div>
+                    </div>
+
+                    <!-- 交互演示 -->
+                    <div class="section">
+                        <h2>交互演示</h2>
+                        <div class="interactive-demo">
+                            <div class="interactive-item">
+                                <InkDotLogo 
+                                    variant="lg" 
+                                    :clickable="true"
+                                    @click="handleLogoClick"
+                                    :size="120"
+                                />
+                                <h4>可点击Logo</h4>
+                                <p>点击次数: {{ clickCount }}</p>
+                            </div>
+                            <div class="interactive-item">
+                                <InkDotLogo 
+                                    variant="lg" 
+                                    :hoverable="true"
+                                    :size="120"
+                                />
+                                <h4>悬停效果</h4>
+                                <p>鼠标悬停查看效果</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 使用示例 -->
+                    <div class="section">
+                        <h2>Vue 使用示例</h2>
+                        <div class="code-block">
+                            <pre><code>&lt;!-- 基础使用 --&gt;
+&lt;InkDotLogo :size="120" variant="lg" /&gt;
+
+&lt;!-- 带动画效果 --&gt;
+&lt;InkDotLogo 
+  :size="120" 
+  variant="lg" 
+  animation="birth" 
+/&gt;
+
+&lt;!-- 可点击 --&gt;
+&lt;InkDotLogo 
+  :size="120" 
+  variant="lg" 
+  :clickable="true"
+  @click="handleClick"
+/&gt;
+
+&lt;!-- 自定义样式 --&gt;
+&lt;InkDotLogo 
+  :size="120" 
+  variant="lg" 
+  custom-class="my-logo"
+  :hoverable="false"
+/&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        // 创建并挂载应用
+        createApp(App).mount('#app');
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,363 @@
+/* 墨点 Logo 样式文件 */
+
+/* CSS变量定义 */
+:root {
+    --ink-black: #000000;
+    /* 中心墨点 */
+    --ink-gray: #333333;
+    /* 外围墨点 */
+    --connection-blue: #0066FF;
+    /* 连接线主色 */
+    --accent-cyan: #00FFFF;
+    /* 强调色 */
+    --bg-white: #FFFFFF;
+    /* 背景色 */
+    --text-gray: #666666;
+    /* 辅助文字 */
+}
+
+/* 基础Logo样式 */
+.logo {
+    width: 120px;
+    height: 120px;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+/* 尺寸变体类 */
+.logo-xl {
+    width: 200px;
+    height: 200px;
+}
+
+.logo-lg {
+    width: 120px;
+    height: 120px;
+}
+
+.logo-md {
+    width: 80px;
+    height: 80px;
+}
+
+.logo-sm {
+    width: 48px;
+    height: 48px;
+}
+
+.logo-xs {
+    width: 32px;
+    height: 32px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .logo {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+/* 启动动画 "星云诞生" */
+@keyframes nebulaBirth {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    25% {
+        transform: scale(0.3) rotate(90deg);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(0.7) rotate(180deg);
+        opacity: 0.7;
+    }
+
+    75% {
+        transform: scale(1.1) rotate(270deg);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(1) rotate(360deg);
+        opacity: 1;
+    }
+}
+
+.animate-birth {
+    animation: nebulaBirth 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* 悬停动画 "星云脉动" */
+@keyframes nebulaPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+        filter: brightness(1.2);
+    }
+}
+
+.logo:hover {
+    animation: nebulaPulse 2s ease-in-out infinite;
+}
+
+/* 加载动画 "星云旋转" */
+@keyframes nebulaRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-loading {
+    animation: nebulaRotate 2s linear infinite;
+}
+
+/* 发光动画 */
+@keyframes lineGlow {
+
+    0%,
+    100% {
+        stroke-width: 2px;
+        filter: drop-shadow(0 0 0 transparent);
+    }
+
+    50% {
+        stroke-width: 3px;
+        filter: drop-shadow(0 0 8px #00FFFF);
+    }
+}
+
+.animate-glow #connections line {
+    animation: lineGlow 3s ease-in-out infinite;
+}
+
+/* 脉动动画 */
+@keyframes dotFlicker {
+
+    0%,
+    90%,
+    100% {
+        opacity: 1;
+    }
+
+    45%,
+    55% {
+        opacity: 0.4;
+    }
+}
+
+.animate-pulse #dots circle:nth-child(odd) {
+    animation: dotFlicker 1.5s ease-in-out infinite;
+}
+
+.animate-pulse #dots circle:nth-child(even) {
+    animation: dotFlicker 1.5s ease-in-out infinite 0.75s;
+}
+
+/* 点击动画 */
+@keyframes nebulaExpand {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.5);
+    }
+
+    100% {
+        transform: scale(1.2);
+    }
+}
+
+.logo:active {
+    animation: nebulaExpand 0.3s ease-out;
+}
+
+/* 加载动画中的墨点闪烁 */
+.animate-loading #dots circle:nth-child(odd) {
+    animation: dotFlicker 1.5s ease-in-out infinite;
+}
+
+.animate-loading #dots circle:nth-child(even) {
+    animation: dotFlicker 1.5s ease-in-out infinite 0.75s;
+}
+
+/* 连接线发光效果 */
+@keyframes lineGlow {
+
+    0%,
+    100% {
+        stroke-width: 2px;
+        filter: drop-shadow(0 0 0 transparent);
+    }
+
+    50% {
+        stroke-width: 3px;
+        filter: drop-shadow(0 0 8px #00FFFF);
+    }
+}
+
+.animate-glow #connections line {
+    animation: lineGlow 3s ease-in-out infinite;
+}
+
+/* 中心墨点径向渐变 */
+.center-gradient {
+    background: radial-gradient(circle at center,
+            #000000 0%,
+            #333333 70%,
+            #666666 100%);
+}
+
+/* 连接线渐变 */
+.line-gradient {
+    background: linear-gradient(var(--direction),
+            #0066FF 0%,
+            #00FFFF 50%,
+            #0066FF 100%);
+}
+
+/* 反色版本（用于黑色背景） */
+.logo-inverse {
+    filter: invert(1);
+}
+
+/* 白色描边版本 */
+.logo-outline-white {
+    stroke: #ffffff;
+    fill: none;
+}
+
+/* 简化版本（极小尺寸） */
+.logo-simplified {
+    /* 只显示中心点和上下左右4个点 */
+    /* 具体样式在需要时添加 */
+}
+
+/* 纯黑版本（单色印刷） */
+.logo-black {
+    fill: #000000;
+    stroke: #000000;
+}
+
+/* Logo容器样式 */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.brand-name {
+    font-size: 28px;
+    font-weight: 600;
+    color: #000000;
+    margin: 0;
+}
+
+/* 启动页样式 */
+.splash-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.splash-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.splash-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0;
+    text-align: center;
+}
+
+.splash-subtitle {
+    font-size: 18px;
+    color: #666666;
+    margin: 0;
+    text-align: center;
+}
+
+/* App图标样式 */
+.app-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    padding: 8px;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* 页脚Logo样式 */
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.copyright {
+    font-size: 14px;
+    color: #666666;
+}
+
+/* 社交媒体头像样式 */
+.social-avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 视频水印样式 */
+.video-watermark {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 64px;
+    height: 64px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.video-watermark:hover {
+    opacity: 1;
+}
+
+/* 打印样式 */
+@media print {
+    .logo {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
