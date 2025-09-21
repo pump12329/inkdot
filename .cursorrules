@@ -20,7 +20,7 @@
 - 获取当前时间戳：`npm run timestamp:current`
 - 更新文档时间戳：`npm run docs:update <文档路径>`
 - 所有文档必须包含时间戳头部信息
-按流程更新时间戳和CHANGELOG
+- 按流程更新时间戳和CHANGELOG
 
 ### 文档结构
 ```
