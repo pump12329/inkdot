@@ -1,38 +1,21 @@
 <template>
     <Teleport to="body">
-        <Transition
-            name="modal"
-            enter-active-class="transition-opacity duration-300"
-            enter-from-class="opacity-0"
-            enter-to-class="opacity-100"
-            leave-active-class="transition-opacity duration-200"
-            leave-from-class="opacity-100"
-            leave-to-class="opacity-0"
-        >
-            <div
-                v-if="modelValue"
-                class="fixed inset-0 z-50 overflow-y-auto"
-                @click="handleBackdropClick"
-            >
+        <Transition name="modal" enter-active-class="transition-opacity duration-300" enter-from-class="opacity-0"
+            enter-to-class="opacity-100" leave-active-class="transition-opacity duration-200"
+            leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="modelValue" class="fixed inset-0 z-50 overflow-y-auto" @click="handleBackdropClick">
                 <!-- 背景遮罩 -->
                 <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
-                
+
                 <!-- 模态框容器 -->
                 <div class="flex min-h-full items-center justify-center p-4">
-                    <Transition
-                        name="modal-content"
-                        enter-active-class="transition-all duration-300"
+                    <Transition name="modal-content" enter-active-class="transition-all duration-300"
                         enter-from-class="opacity-0 scale-95 translate-y-4"
                         enter-to-class="opacity-100 scale-100 translate-y-0"
                         leave-active-class="transition-all duration-200"
                         leave-from-class="opacity-100 scale-100 translate-y-0"
-                        leave-to-class="opacity-0 scale-95 translate-y-4"
-                    >
-                        <div
-                            v-if="modelValue"
-                            :class="modalClasses"
-                            @click.stop
-                        >
+                        leave-to-class="opacity-0 scale-95 translate-y-4">
+                        <div v-if="modelValue" :class="modalClasses" @click.stop>
                             <!-- 头部 -->
                             <div v-if="title || $slots.header" class="modal-header">
                                 <slot name="header">
@@ -40,24 +23,20 @@
                                         {{ title }}
                                     </h3>
                                 </slot>
-                                
-                                <button
-                                    v-if="closable"
-                                    type="button"
-                                    class="close-button"
-                                    @click="handleClose"
-                                >
+
+                                <button v-if="closable" type="button" class="close-button" @click="handleClose">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
                             </div>
-                            
+
                             <!-- 内容 -->
                             <div class="modal-content">
                                 <slot />
                             </div>
-                            
+
                             <!-- 底部 -->
                             <div v-if="$slots.footer" class="modal-footer">
                                 <slot name="footer" />

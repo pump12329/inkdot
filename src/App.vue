@@ -8,7 +8,7 @@
                             {{ appConfig.app.title }}
                         </h1>
                         <span class="ml-2 text-sm text-gray-500">
-                            v{{ appConfig.app.version }}
+                            v1.0.0
                         </span>
                     </div>
 

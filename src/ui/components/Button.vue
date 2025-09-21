@@ -1,10 +1,5 @@
 <template>
-    <button
-        :class="buttonClasses"
-        :disabled="disabled"
-        :type="type"
-        @click="handleClick"
-    >
+    <button :class="buttonClasses" :disabled="disabled" :type="type" @click="handleClick">
         <slot name="icon" />
         <span v-if="$slots.default" :class="textClasses">
             <slot />

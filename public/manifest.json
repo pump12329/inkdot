@@ -1,0 +1,21 @@
+{
+  "name": "InkDot - 创意创作思维导图平台",
+  "short_name": "InkDot",
+  "description": "AI驱动的智能创作平台，基于思维导图的创意写作工具",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#007acc",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "education", "utilities"],
+  "lang": "zh-CN",
+  "dir": "ltr"
+}

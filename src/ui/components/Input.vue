@@ -4,60 +4,43 @@
             {{ label }}
             <span v-if="required" class="text-red-500 ml-1">*</span>
         </label>
-        
+
         <div class="relative">
-            <input
-                :id="inputId"
-                ref="inputRef"
-                :type="type"
-                :value="modelValue"
-                :placeholder="placeholder"
-                :disabled="disabled"
-                :readonly="readonly"
-                :maxlength="maxlength"
-                :min="min"
-                :max="max"
-                :step="step"
-                :class="inputClasses"
-                @input="handleInput"
-                @focus="handleFocus"
-                @blur="handleBlur"
-                @keydown="handleKeydown"
-            />
-            
+            <input :id="inputId" ref="inputRef" :type="type" :value="modelValue" :placeholder="placeholder"
+                :disabled="disabled" :readonly="readonly" :maxlength="maxlength" :min="min" :max="max" :step="step"
+                :class="inputClasses" @input="handleInput" @focus="handleFocus" @blur="handleBlur"
+                @keydown="handleKeydown" />
+
             <!-- 前置图标 -->
             <div v-if="$slots.prefix" class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <slot name="prefix" />
             </div>
-            
+
             <!-- 后置图标 -->
             <div v-if="$slots.suffix" class="absolute inset-y-0 right-0 pr-3 flex items-center">
                 <slot name="suffix" />
             </div>
-            
+
             <!-- 清除按钮 -->
-            <button
-                v-if="clearable && modelValue && !disabled && !readonly"
-                type="button"
+            <button v-if="clearable && modelValue && !disabled && !readonly" type="button"
                 class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
-                @click="handleClear"
-            >
+                @click="handleClear">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
-        
+
         <!-- 帮助文本 -->
         <p v-if="helpText" class="mt-1 text-sm text-gray-500">
             {{ helpText }}
         </p>
-        
+
         <!-- 错误信息 -->
         <p v-if="error" class="mt-1 text-sm text-red-600">
             {{ error }}
         </p>
-        
+
         <!-- 字符计数 -->
         <p v-if="showCount && maxlength" class="mt-1 text-sm text-gray-500 text-right">
             {{ (modelValue || '').length }}/{{ maxlength }}

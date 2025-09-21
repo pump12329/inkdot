@@ -1,221 +1,252 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>InkDot - 创意创作思维导图平台</title>
-    <meta name="description" content="InkDot是一个基于思维导图的创意创作平台，集成AI功能，支持智能写作和创意生成。">
-    <meta name="keywords" content="思维导图,AI创作,创意写作,智能助手,思维导图工具">
-    <meta name="author" content="InkDot Team">
-    
+    <meta
+      name="description"
+      content="InkDot是一个基于思维导图的创意创作平台，集成AI功能，支持智能写作和创意生成。"
+    />
+    <meta
+      name="keywords"
+      content="思维导图,AI创作,创意写作,智能助手,思维导图工具"
+    />
+    <meta name="author" content="InkDot Team" />
+
     <!-- 图标 -->
-    <link rel="icon" type="image/svg+xml" href="/src/assets/logo.svg">
-    
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+    <link rel="alternate icon" href="/assets/logo.svg" />
+    <link rel="apple-touch-icon" href="/assets/logo.svg" />
+    <link rel="manifest" href="/manifest.json" />
+
     <!-- 预加载关键资源 -->
-    <link rel="preconnect" href="https://api.deepseek.com">
-    <link rel="preconnect" href="https://openrouter.ai">
-    
+    <link rel="preconnect" href="https://api.deepseek.com" />
+    <link rel="preconnect" href="https://openrouter.ai" />
+
     <!-- 样式 -->
     <style>
-        /* 加载动画 */
-        .loading-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-        }
+      /* 加载动画 */
+      .loading-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      }
 
-        .loading-logo {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 24px;
-            animation: logoFloat 2s ease-in-out infinite;
-        }
+      .loading-logo {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 24px;
+        animation: logoFloat 2s ease-in-out infinite;
+      }
 
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+      @keyframes logoFloat {
+        0%,
+        100% {
+          transform: translateY(0px);
         }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
 
-        .loading-text {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 16px;
-            font-weight: 500;
-        }
+      .loading-text {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 16px;
+        font-weight: 500;
+      }
 
-        .loading-spinner {
-            width: 32px;
-            height: 32px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #007acc;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+      .loading-spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #007acc;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
-        .loading-progress {
-            width: 200px;
-            height: 4px;
-            background: #f0f0f0;
-            border-radius: 2px;
-            margin-top: 16px;
-            overflow: hidden;
-        }
+      .loading-progress {
+        width: 200px;
+        height: 4px;
+        background: #f0f0f0;
+        border-radius: 2px;
+        margin-top: 16px;
+        overflow: hidden;
+      }
 
-        .loading-progress-bar {
-            height: 100%;
-            background: #007acc;
-            border-radius: 2px;
-            animation: progress 2s ease-in-out infinite;
-        }
+      .loading-progress-bar {
+        height: 100%;
+        background: #007acc;
+        border-radius: 2px;
+        animation: progress 2s ease-in-out infinite;
+      }
 
-        @keyframes progress {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
+      @keyframes progress {
+        0% {
+          width: 0%;
         }
+        50% {
+          width: 70%;
+        }
+        100% {
+          width: 100%;
+        }
+      }
 
-        /* 隐藏加载动画 */
-        .loading-container.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
+      /* 隐藏加载动画 */
+      .loading-container.hidden {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+      }
 
-        /* 基础样式重置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      /* 基础样式重置 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        html, body {
-            height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-                sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+      html,
+      body {
+        height: 100%;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
 
-        #app {
-            height: 100%;
-        }
+      #app {
+        height: 100%;
+      }
 
-        /* 错误页面样式 */
-        .error-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
-        }
+      /* 错误页面样式 */
+      .error-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        text-align: center;
+      }
 
-        .error-icon {
-            width: 64px;
-            height: 64px;
-            margin-bottom: 16px;
-            color: #dc3545;
-        }
+      .error-icon {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 16px;
+        color: #dc3545;
+      }
 
-        .error-title {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
+      .error-title {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
 
-        .error-message {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 24px;
-            max-width: 400px;
-            line-height: 1.5;
-        }
+      .error-message {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 24px;
+        max-width: 400px;
+        line-height: 1.5;
+      }
 
-        .error-button {
-            display: inline-flex;
-            align-items: center;
-            padding: 12px 24px;
-            background: #007acc;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
+      .error-button {
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 24px;
+        background: #007acc;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: background-color 0.2s;
+      }
 
-        .error-button:hover {
-            background: #005a9e;
-        }
+      .error-button:hover {
+        background: #005a9e;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- 加载动画 -->
     <div id="loading" class="loading-container">
-        <svg class="loading-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <radialGradient id="centerGradient" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-                    <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
-                </radialGradient>
-                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
-                </linearGradient>
-            </defs>
-            
-            <g stroke="url(#lineGradient)" stroke-width="2" fill="none">
-                <line x1="60" y1="60" x2="60" y2="24" />
-                <line x1="60" y1="60" x2="85.5" y2="34.5" />
-                <line x1="60" y1="60" x2="96" y2="60" />
-                <line x1="60" y1="60" x2="85.5" y2="85.5" />
-                <line x1="60" y1="60" x2="60" y2="96" />
-                <line x1="60" y1="60" x2="34.5" y2="85.5" />
-                <line x1="60" y1="60" x2="24" y2="60" />
-                <line x1="60" y1="60" x2="34.5" y2="34.5" />
-            </g>
-            
-            <g>
-                <circle cx="60" cy="24" r="5" fill="#333333" />
-                <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
-                <circle cx="96" cy="60" r="5" fill="#333333" />
-                <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
-                <circle cx="60" cy="96" r="5" fill="#333333" />
-                <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
-                <circle cx="24" cy="60" r="5" fill="#333333" />
-                <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
-                <circle cx="60" cy="60" r="9" fill="url(#centerGradient)" />
-            </g>
-        </svg>
-        
-        <div class="loading-text">InkDot 正在加载...</div>
-        <div class="loading-spinner"></div>
-        <div class="loading-progress">
-            <div class="loading-progress-bar"></div>
-        </div>
+      <svg
+        class="loading-logo"
+        viewBox="0 0 120 120"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <radialGradient id="centerGradient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style="stop-color: #000000; stop-opacity: 1" />
+            <stop offset="70%" style="stop-color: #333333; stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: #666666; stop-opacity: 1" />
+          </radialGradient>
+          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color: #0066ff; stop-opacity: 1" />
+            <stop offset="50%" style="stop-color: #00ffff; stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: #0066ff; stop-opacity: 1" />
+          </linearGradient>
+        </defs>
+
+        <g stroke="url(#lineGradient)" stroke-width="2" fill="none">
+          <line x1="60" y1="60" x2="60" y2="24" />
+          <line x1="60" y1="60" x2="85.5" y2="34.5" />
+          <line x1="60" y1="60" x2="96" y2="60" />
+          <line x1="60" y1="60" x2="85.5" y2="85.5" />
+          <line x1="60" y1="60" x2="60" y2="96" />
+          <line x1="60" y1="60" x2="34.5" y2="85.5" />
+          <line x1="60" y1="60" x2="24" y2="60" />
+          <line x1="60" y1="60" x2="34.5" y2="34.5" />
+        </g>
+
+        <g>
+          <circle cx="60" cy="24" r="5" fill="#333333" />
+          <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
+          <circle cx="96" cy="60" r="5" fill="#333333" />
+          <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
+          <circle cx="60" cy="96" r="5" fill="#333333" />
+          <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
+          <circle cx="24" cy="60" r="5" fill="#333333" />
+          <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
+          <circle cx="60" cy="60" r="9" fill="url(#centerGradient)" />
+        </g>
+      </svg>
+
+      <div class="loading-text">InkDot 正在加载...</div>
+      <div class="loading-spinner"></div>
+      <div class="loading-progress">
+        <div class="loading-progress-bar"></div>
+      </div>
     </div>
 
     <!-- Vue应用挂载点 -->
@@ -223,21 +254,21 @@
 
     <!-- 错误处理脚本 -->
     <script>
-        // 全局错误处理
-        window.addEventListener('error', function(e) {
-            console.error('Application error:', e.error);
-            showError('应用加载失败', '请刷新页面重试');
-        });
+      // 全局错误处理
+      window.addEventListener('error', function (e) {
+        console.error('Application error:', e.error)
+        showError('应用加载失败', '请刷新页面重试')
+      })
 
-        window.addEventListener('unhandledrejection', function(e) {
-            console.error('Unhandled promise rejection:', e.reason);
-            showError('应用加载失败', '请检查网络连接后刷新页面');
-        });
+      window.addEventListener('unhandledrejection', function (e) {
+        console.error('Unhandled promise rejection:', e.reason)
+        showError('应用加载失败', '请检查网络连接后刷新页面')
+      })
 
-        function showError(title, message) {
-            const loading = document.getElementById('loading');
-            if (loading) {
-                loading.innerHTML = `
+      function showError(title, message) {
+        const loading = document.getElementById('loading')
+        if (loading) {
+          loading.innerHTML = `
                     <div class="error-container">
                         <svg class="error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
@@ -246,30 +277,30 @@
                         <p class="error-message">${message}</p>
                         <a href="javascript:location.reload()" class="error-button">刷新页面</a>
                     </div>
-                `;
-            }
+                `
         }
+      }
 
-        // 隐藏加载动画
-        function hideLoading() {
-            const loading = document.getElementById('loading');
-            if (loading) {
-                loading.classList.add('hidden');
-                setTimeout(() => {
-                    loading.style.display = 'none';
-                }, 500);
-            }
+      // 隐藏加载动画
+      function hideLoading() {
+        const loading = document.getElementById('loading')
+        if (loading) {
+          loading.classList.add('hidden')
+          setTimeout(() => {
+            loading.style.display = 'none'
+          }, 500)
         }
+      }
 
-        // 当Vue应用加载完成后隐藏加载动画
-        window.addEventListener('DOMContentLoaded', function() {
-            // 设置最大加载时间
-            setTimeout(() => {
-                hideLoading();
-            }, 3000);
-        });
+      // 当Vue应用加载完成后隐藏加载动画
+      window.addEventListener('DOMContentLoaded', function () {
+        // 设置最大加载时间
+        setTimeout(() => {
+          hideLoading()
+        }, 3000)
+      })
     </script>
 
     <!-- Vite脚本会自动注入这里 -->
-</body>
+  </body>
 </html>
