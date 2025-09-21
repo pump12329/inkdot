@@ -65,7 +65,7 @@ export class TestDataGenerator {
     const connections: MindMapConnection[] = []
     
     for (let i = 0; i < count; i++) {
-      let fromIndex = Math.floor(Math.random() * nodes.length)
+      const fromIndex = Math.floor(Math.random() * nodes.length)
       let toIndex = Math.floor(Math.random() * nodes.length)
       
       // 避免自连接
@@ -313,8 +313,7 @@ export class TestHelpers {
   static simulateClick(element: HTMLElement): void {
     const event = new MouseEvent('click', {
       bubbles: true,
-      cancelable: true,
-      view: window
+      cancelable: true
     })
     element.dispatchEvent(event)
   }
@@ -339,33 +338,35 @@ export class TestHelpers {
     canvas.width = width
     canvas.height = height
     
-    // 模拟getContext方法
-    canvas.getContext = jest.fn().mockReturnValue({
-      fillRect: jest.fn(),
-      clearRect: jest.fn(),
-      getImageData: jest.fn().mockReturnValue({ data: new Array(4) }),
-      putImageData: jest.fn(),
-      createImageData: jest.fn().mockReturnValue({ data: new Array(4) }),
-      setTransform: jest.fn(),
-      drawImage: jest.fn(),
-      save: jest.fn(),
-      fillText: jest.fn(),
-      restore: jest.fn(),
-      beginPath: jest.fn(),
-      moveTo: jest.fn(),
-      lineTo: jest.fn(),
-      closePath: jest.fn(),
-      stroke: jest.fn(),
-      translate: jest.fn(),
-      scale: jest.fn(),
-      rotate: jest.fn(),
-      arc: jest.fn(),
-      fill: jest.fn(),
-      measureText: jest.fn().mockReturnValue({ width: 0 }),
-      transform: jest.fn(),
-      rect: jest.fn(),
-      clip: jest.fn(),
-    })
+    // 模拟getContext方法 - 使用简单的mock对象
+    const mockContext = {
+      fillRect: () => {},
+      clearRect: () => {},
+      getImageData: () => ({ data: new Array(4) }),
+      putImageData: () => {},
+      createImageData: () => ({ data: new Array(4) }),
+      setTransform: () => {},
+      drawImage: () => {},
+      save: () => {},
+      fillText: () => {},
+      restore: () => {},
+      beginPath: () => {},
+      moveTo: () => {},
+      lineTo: () => {},
+      closePath: () => {},
+      stroke: () => {},
+      translate: () => {},
+      scale: () => {},
+      rotate: () => {},
+      arc: () => {},
+      fill: () => {},
+      measureText: () => ({ width: 0 }),
+      transform: () => {},
+      rect: () => {},
+      clip: () => {},
+    }
+    
+    canvas.getContext = () => mockContext as any
     
     return canvas
   }

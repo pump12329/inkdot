@@ -2,9 +2,9 @@ name: 测试和代码质量检查
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -12,126 +12,126 @@ jobs:
   lint:
     name: 代码质量检查
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 设置Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: 安装依赖
-      run: npm ci
-      
-    - name: 运行ESLint
-      run: npm run lint
-      
-    - name: 运行Prettier检查
-      run: npm run format:check
-      
-    - name: 运行TypeScript类型检查
-      run: npm run type-check
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 运行ESLint
+        run: npm run lint
+
+      - name: 运行Prettier检查
+        run: npm run format:check
+
+      - name: 运行TypeScript类型检查
+        run: npm run type-check
 
   # 单元测试
   unit-tests:
     name: 单元测试
     runs-on: ubuntu-latest
     needs: lint
-    
+
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 设置Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: 安装依赖
-      run: npm ci
-      
-    - name: 运行单元测试
-      run: npm test
-      
-    - name: 生成测试覆盖率报告
-      run: npm run test:coverage
-      
-    - name: 上传覆盖率报告到Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        file: ./coverage/lcov.info
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 运行单元测试
+        run: npm test
+
+      - name: 生成测试覆盖率报告
+        run: npm run test:coverage
+
+      - name: 上传覆盖率报告到Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
 
   # 集成测试
   integration-tests:
     name: 集成测试
     runs-on: ubuntu-latest
     needs: unit-tests
-    
+
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 设置Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: 安装依赖
-      run: npm ci
-      
-    - name: 设置测试环境变量
-      run: |
-        echo "VITE_DEEPSEEK_API_KEY=test-key" >> .env
-        echo "VITE_OPENROUTER_API_KEY=test-key" >> .env
-        echo "VITE_APP_ENV=test" >> .env
-        
-    - name: 运行集成测试
-      run: npm test tests/integration/
-      
-    - name: 运行AI功能测试
-      run: npm test tests/ai.test.ts
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 设置测试环境变量
+        run: |
+          echo "VITE_DEEPSEEK_API_KEY=test-key" >> .env
+          echo "VITE_OPENROUTER_API_KEY=test-key" >> .env
+          echo "VITE_APP_ENV=test" >> .env
+
+      - name: 运行集成测试
+        run: npm test tests/integration/
+
+      - name: 运行AI功能测试
+        run: npm test tests/ai.test.ts
 
   # 构建测试
   build-test:
     name: 构建测试
     runs-on: ubuntu-latest
     needs: integration-tests
-    
+
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 设置Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: 安装依赖
-      run: npm ci
-      
-    - name: 运行生产构建
-      run: npm run build
-      
-    - name: 验证构建产物
-      run: |
-        ls -la dist/
-        test -f dist/index.html
-        test -f dist/assets/*.js
-        
-    - name: 上传构建产物
-      uses: actions/upload-artifact@v4
-      with:
-        name: dist
-        path: dist/
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 运行生产构建
+        run: npm run build
+
+      - name: 验证构建产物
+        run: |
+          ls -la dist/
+          test -f dist/index.html
+          test -f dist/assets/*.js
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
 
   # 性能测试
   performance-test:
@@ -139,98 +139,105 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-test
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 设置Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: 安装依赖
-      run: npm ci
-      
-    - name: 下载构建产物
-      uses: actions/download-artifact@v4
-      with:
-        name: dist
-        path: dist/
-        
-    - name: 启动开发服务器
-      run: |
-        npm run preview &
-        sleep 10
-        
-    - name: 运行性能测试
-      run: npm run test:performance
-      
-    - name: 生成性能报告
-      run: |
-        mkdir -p reports
-        npx lighthouse http://localhost:4173 --output html --output-path ./reports/lighthouse.html --chrome-flags="--headless"
-        
-    - name: 上传性能报告
-      uses: actions/upload-artifact@v4
-      with:
-        name: performance-report
-        path: reports/
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: 启动开发服务器
+        run: |
+          npm run preview &
+          sleep 10
+
+      - name: 运行性能测试
+        run: npm run test:performance
+
+      - name: 生成性能报告
+        run: |
+          mkdir -p reports
+          npx lighthouse http://localhost:4173 --output html --output-path ./reports/lighthouse.html --chrome-flags="--headless"
+
+      - name: 上传性能报告
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-report
+          path: reports/
 
   # 安全扫描
   security-scan:
     name: 安全扫描
     runs-on: ubuntu-latest
     needs: lint
-    
+
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 设置Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: 安装依赖
-      run: npm ci
-      
-    - name: 运行安全审计
-      run: npm audit --audit-level moderate
-      
-    - name: 运行CodeQL分析
-      uses: github/codeql-action/init@v3
-      with:
-        languages: javascript
-        
-    - name: 自动构建
-      run: npm run build
-      
-    - name: 执行CodeQL分析
-      uses: github/codeql-action/analyze@v3
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 运行安全审计
+        run: npm audit --audit-level moderate
+
+      - name: 运行CodeQL分析
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+
+      - name: 自动构建
+        run: npm run build
+
+      - name: 执行CodeQL分析
+        uses: github/codeql-action/analyze@v3
 
   # 测试结果汇总
   test-summary:
     name: 测试结果汇总
     runs-on: ubuntu-latest
-    needs: [unit-tests, integration-tests, build-test, performance-test, security-scan]
+    needs:
+      [
+        unit-tests,
+        integration-tests,
+        build-test,
+        performance-test,
+        security-scan
+      ]
     if: always()
-    
+
     steps:
-    - name: 生成测试报告
-      run: |
-        echo "# 测试结果汇总" > test-summary.md
-        echo "## 测试状态" >> test-summary.md
-        echo "- 单元测试: ${{ needs.unit-tests.result }}" >> test-summary.md
-        echo "- 集成测试: ${{ needs.integration-tests.result }}" >> test-summary.md
-        echo "- 构建测试: ${{ needs.build-test.result }}" >> test-summary.md
-        echo "- 性能测试: ${{ needs.performance-test.result }}" >> test-summary.md
-        echo "- 安全扫描: ${{ needs.security-scan.result }}" >> test-summary.md
-        
-    - name: 上传测试报告
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-summary
-        path: test-summary.md
+      - name: 生成测试报告
+        run: |
+          echo "# 测试结果汇总" > test-summary.md
+          echo "## 测试状态" >> test-summary.md
+          echo "- 单元测试: ${{ needs.unit-tests.result }}" >> test-summary.md
+          echo "- 集成测试: ${{ needs.integration-tests.result }}" >> test-summary.md
+          echo "- 构建测试: ${{ needs.build-test.result }}" >> test-summary.md
+          echo "- 性能测试: ${{ needs.performance-test.result }}" >> test-summary.md
+          echo "- 安全扫描: ${{ needs.security-scan.result }}" >> test-summary.md
+
+      - name: 上传测试报告
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-summary
+          path: test-summary.md
