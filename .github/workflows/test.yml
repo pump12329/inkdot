@@ -55,7 +55,7 @@ jobs:
         run: npm ci
 
       - name: 运行单元测试
-        run: npm test
+        run: npm run test
 
       - name: 生成测试覆盖率报告
         run: npm run test:coverage
@@ -94,10 +94,10 @@ jobs:
           echo "VITE_APP_ENV=test" >> .env
 
       - name: 运行集成测试
-        run: npm test tests/integration/
+        run: npm run test tests/data-management.test.ts
 
       - name: 运行AI功能测试
-        run: npm test tests/ai.test.ts
+        run: npm run test tests/ai.test.ts
 
   # 构建测试
   build-test:
@@ -161,11 +161,11 @@ jobs:
 
       - name: 启动开发服务器
         run: |
-          npm run preview &
+          npx vite preview --port 4173 &
           sleep 10
 
       - name: 运行性能测试
-        run: npm run test:performance
+        run: npm run test tests/workflow.test.ts
 
       - name: 生成性能报告
         run: |
@@ -215,14 +215,7 @@ jobs:
   test-summary:
     name: 测试结果汇总
     runs-on: ubuntu-latest
-    needs:
-      [
-        unit-tests,
-        integration-tests,
-        build-test,
-        performance-test,
-        security-scan
-      ]
+    needs: [unit-tests, integration-tests, build-test, performance-test, security-scan]
     if: always()
 
     steps:

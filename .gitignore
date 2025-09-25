@@ -34,8 +34,8 @@ pids/
 coverage/
 .nyc_output/
 
-# 依赖锁定文件
-package-lock.json
+# 依赖锁定文件（保留package-lock.json用于CI/CD）
+# package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
