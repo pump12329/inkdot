@@ -1,237 +1,369 @@
-// 基础类型定义
-export interface BaseEntity {
-  id: string
-  createdAt: Date
-  updatedAt: Date
-}
+/**
+ * 基础类型定义
+ */
 
-// 思维导图相关类型
-export interface MindMapNode extends BaseEntity {
-  content: string
-  position: Position
-  children: string[]
-  parent?: string
-  metadata: NodeMetadata
-  style?: NodeStyle
-}
-
+// 位置坐标
 export interface Position {
-  x: number
-  y: number
+  x: number;
+  y: number;
 }
 
-export interface NodeMetadata {
-  tags?: string[]
-  priority?: number
-  notes?: string
-  [key: string]: any
+// 尺寸
+export interface Size {
+  width: number;
+  height: number;
 }
 
+// 颜色
+export interface Color {
+  r: number;
+  g: number;
+  b: number;
+  a?: number;
+}
+
+/**
+ * 思维导图相关类型
+ */
+
+// 思维导图节点
+export interface MindMapNode {
+  id: string;
+  content: string;
+  position: Position;
+  connections: string[];
+  style?: NodeStyle;
+  metadata?: Record<string, unknown>;
+}
+
+// 节点样式
 export interface NodeStyle {
-  color?: string
-  backgroundColor?: string
-  fontSize?: number
-  fontWeight?: string
-  shape?: 'rectangle' | 'circle' | 'diamond' | 'ellipse'
+  backgroundColor?: string;
+  textColor?: string;
+  borderColor?: string;
+  borderWidth?: number;
+  fontSize?: number;
+  fontWeight?: 'normal' | 'bold';
+  borderRadius?: number;
+  padding?: number;
 }
 
-export interface MindMapConnection {
-  id: string
-  from: string
-  to: string
-  type: 'parent-child' | 'related' | 'dependency'
-  style?: ConnectionStyle
+// 节点连接
+export interface NodeConnection {
+  id: string;
+  fromNodeId: string;
+  toNodeId: string;
+  style?: ConnectionStyle;
+  label?: string;
 }
 
+// 连接样式
 export interface ConnectionStyle {
-  color?: string
-  width?: number
-  dashArray?: string
-  arrowType?: 'none' | 'arrow' | 'diamond'
+  color?: string;
+  width?: number;
+  style?: 'solid' | 'dashed' | 'dotted';
+  arrowStyle?: 'none' | 'arrow' | 'circle';
 }
 
-export interface MindMap {
-  id: string
-  title: string
-  description?: string
-  nodes: Record<string, MindMapNode>
-  connections: MindMapConnection[]
-  settings: MindMapSettings
-  createdAt: Date
-  updatedAt: Date
+/**
+ * 项目相关类型
+ */
+
+// 项目基础信息
+export interface Project {
+  id: string;
+  name: string;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  tags?: string[];
+  isTemplate?: boolean;
 }
 
-export interface MindMapSettings {
-  theme: 'light' | 'dark' | 'auto'
-  layout: 'free' | 'hierarchical' | 'radial'
-  zoom: number
-  center: Position
-  showGrid: boolean
-  snapToGrid: boolean
+// 完整项目数据
+export interface ProjectData extends Project {
+  nodes: MindMapNode[];
+  connections: NodeConnection[];
+  settings?: ProjectSettings;
 }
 
-// AI相关类型
-export interface AIService {
-  generateContent(prompt: string, context: any): Promise<string>
-  analyzeStructure(data: any): Promise<AnalysisResult>
-  suggestImprovements(content: string): Promise<Suggestion[]>
-}
-
-export interface AnalysisResult {
-  score: number
-  suggestions: string[]
-  strengths: string[]
-  weaknesses: string[]
-}
-
-export interface Suggestion {
-  type: 'content' | 'structure' | 'style'
-  message: string
-  priority: 'low' | 'medium' | 'high'
-  actionable: boolean
-}
-
-export interface AIAgent {
-  id: string
-  name: string
-  description: string
-  capabilities: string[]
-  config: AgentConfig
-}
-
-export interface AgentConfig {
-  model: string
-  temperature: number
-  maxTokens: number
-  systemPrompt: string
-  parameters: Record<string, any>
-}
-
-// 用户和权限类型
-export interface User extends BaseEntity {
-  username: string
-  email: string
-  preferences: UserPreferences
-  permissions: Permission[]
-}
-
-export interface UserPreferences {
-  theme: 'light' | 'dark' | 'auto'
-  language: string
-  autoSave: boolean
-  notifications: NotificationSettings
-}
-
-export interface NotificationSettings {
-  email: boolean
-  push: boolean
-  sound: boolean
-}
-
-export interface Permission {
-  resource: string
-  actions: string[]
-}
-
-// 项目相关类型
-export interface Project extends BaseEntity {
-  name: string
-  description?: string
-  mindMaps: string[]
-  settings: ProjectSettings
-  collaborators: string[]
-}
-
+// 项目设置
 export interface ProjectSettings {
-  autoSave: boolean
-  versionControl: boolean
-  sharing: SharingSettings
+  canvasSize?: Size;
+  defaultNodeStyle?: NodeStyle;
+  defaultConnectionStyle?: ConnectionStyle;
+  gridEnabled?: boolean;
+  snapToGrid?: boolean;
+  theme?: 'light' | 'dark' | 'auto';
 }
 
-export interface SharingSettings {
-  public: boolean
-  allowEdit: boolean
-  allowComment: boolean
-  expiresAt?: Date
+// 项目元数据
+export interface ProjectMetadata {
+  version: string;
+  lastSavedBy?: string;
+  nodeCount: number;
+  connectionCount: number;
+  exportedAt: Date;
 }
 
-// 插件系统类型
-export interface Plugin {
-  id: string
-  name: string
-  version: string
-  description: string
-  author: string
-  enabled: boolean
-  config: PluginConfig
-  hooks: PluginHooks
+/**
+ * 用户交互类型
+ */
+
+// 鼠标事件类型
+export type MouseEventType = 'click' | 'doubleclick' | 'rightclick' | 'drag' | 'drop';
+
+// 键盘事件类型
+export type KeyboardEventType = 'keydown' | 'keyup' | 'keypress';
+
+// 画布操作类型
+export type CanvasAction =
+  | 'select'
+  | 'create'
+  | 'edit'
+  | 'delete'
+  | 'connect'
+  | 'move'
+  | 'zoom'
+  | 'pan';
+
+/**
+ * 导入导出类型
+ */
+
+// 导出格式
+export type ExportFormat = 'json' | 'png' | 'svg' | 'pdf' | 'txt' | 'markdown';
+
+// 导入格式
+export type ImportFormat = 'json' | 'txt' | 'markdown';
+
+// 导出选项
+export interface ExportOptions {
+  format: ExportFormat;
+  includeMetadata?: boolean;
+  compression?: boolean;
+  quality?: number; // for image formats
+  paperSize?: 'A4' | 'A3' | 'letter' | 'custom'; // for PDF
+  customSize?: Size; // for custom paper size
 }
 
-export interface PluginConfig {
-  settings: Record<string, any>
-  permissions: string[]
+// 导入选项
+export interface ImportOptions {
+  format: ImportFormat;
+  mergeWithExisting?: boolean;
+  preserveIds?: boolean;
+  defaultPosition?: Position;
 }
 
-export interface PluginHooks {
-  onNodeCreate?: (node: MindMapNode) => void
-  onNodeUpdate?: (node: MindMapNode) => void
-  onNodeDelete?: (nodeId: string) => void
-  onMapSave?: (map: MindMap) => void
+/**
+ * 搜索和过滤类型
+ */
+
+// 搜索条件
+export interface SearchCriteria {
+  query: string;
+  caseSensitive?: boolean;
+  wholeWord?: boolean;
+  includeConnections?: boolean;
+  tags?: string[];
 }
 
-// 事件系统类型
-export interface Event {
-  type: string
-  payload: any
-  timestamp: Date
-  source: string
+// 搜索结果
+export interface SearchResult {
+  type: 'node' | 'connection';
+  id: string;
+  content: string;
+  matches: SearchMatch[];
 }
 
-export interface EventHandler {
-  (event: Event): void | Promise<void>
+// 搜索匹配
+export interface SearchMatch {
+  start: number;
+  end: number;
+  text: string;
 }
 
-// 工具类型
+/**
+ * 历史和撤销类型
+ */
+
+// 操作类型
+export type OperationType =
+  | 'create_node'
+  | 'update_node'
+  | 'delete_node'
+  | 'create_connection'
+  | 'delete_connection'
+  | 'move_node'
+  | 'batch_operation';
+
+// 历史记录
+export interface HistoryEntry {
+  id: string;
+  type: OperationType;
+  timestamp: Date;
+  data: Record<string, unknown>;
+  description?: string;
+}
+
+/**
+ * 错误处理类型
+ */
+
+// 应用错误
+export interface AppError {
+  code: string;
+  message: string;
+  details?: Record<string, unknown>;
+  timestamp: Date;
+  severity: 'info' | 'warning' | 'error' | 'critical';
+}
+
+// API错误响应
+export interface ApiErrorResponse {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    details?: Record<string, unknown>;
+  };
+  requestId?: string;
+}
+
+// API成功响应
+export interface ApiSuccessResponse<T = unknown> {
+  success: true;
+  data: T;
+  meta?: {
+    total?: number;
+    page?: number;
+    limit?: number;
+  };
+  requestId?: string;
+}
+
+// API响应联合类型
+export type ApiResponse<T = unknown> = ApiSuccessResponse<T> | ApiErrorResponse;
+
+/**
+ * 工具函数类型
+ */
+
+// 防抖函数类型
+export type DebouncedFunction<T extends (...args: never[]) => unknown> = {
+  (...args: Parameters<T>): void;
+  cancel: () => void;
+  flush: () => void;
+};
+
+// 事件监听器类型
+export type EventListener<T = Event> = (event: T) => void;
+
+// 验证器函数类型
+export type Validator<T> = (value: T) => boolean | string;
+
+// 转换器函数类型
+export type Transformer<T, U> = (value: T) => U;
+
+/**
+ * 组件属性类型
+ */
+
+// 按钮变体
+export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
+
+// 按钮尺寸
+export type ButtonSize = 'small' | 'medium' | 'large';
+
+// 输入框类型
+export type InputType = 'text' | 'password' | 'email' | 'number' | 'tel' | 'url' | 'search';
+
+// 对话框类型
+export type DialogType = 'info' | 'warning' | 'error' | 'confirm';
+
+/**
+ * 主题相关类型
+ */
+
+// 主题配置
+export interface ThemeConfig {
+  name: string;
+  colors: {
+    primary: string;
+    secondary: string;
+    background: string;
+    surface: string;
+    text: string;
+    textSecondary: string;
+    border: string;
+    success: string;
+    warning: string;
+    error: string;
+    info: string;
+  };
+  spacing: {
+    xs: string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+  };
+  borderRadius: {
+    sm: string;
+    md: string;
+    lg: string;
+  };
+  shadows: {
+    sm: string;
+    md: string;
+    lg: string;
+  };
+  typography: {
+    fontFamily: string;
+    fontSize: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+    };
+    fontWeight: {
+      normal: number;
+      medium: number;
+      bold: number;
+    };
+  };
+}
+
+// 预设主题
+export type PresetTheme = 'light' | 'dark' | 'high-contrast' | 'colorful';
+
+/**
+ * 实用工具类型
+ */
+
+// 深度只读
+export type DeepReadonly<T> = {
+  readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
+};
+
+// 深度可选
 export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
-}
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
 
-export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+// 选择必需的属性
+export type RequiredPick<T, K extends keyof T> = Required<Pick<T, K>> & Omit<T, K>;
 
-export type Required<T, K extends keyof T> = T & { [P in K]-?: T[P] }
+// 可选的省略
+export type OptionalOmit<T, K extends keyof T> = Partial<Pick<T, K>> & Omit<T, K>;
 
-// API响应类型
-export interface ApiResponse<T = any> {
-  success: boolean
-  data?: T
-  error?: string
-  message?: string
-}
+// 非空类型
+export type NonNullable<T> = T extends null | undefined ? never : T;
 
-export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  pagination: {
-    page: number
-    limit: number
-    total: number
-    pages: number
-  }
-}
+// 数组元素类型
+export type ArrayElement<T> = T extends (infer U)[] ? U : never;
 
-// 配置类型
-export interface AppConfig {
-  api: {
-    baseUrl: string
-    timeout: number
-    retries: number
-  }
-  storage: {
-    type: 'local' | 'indexeddb' | 'websql'
-    maxSize: number
-  }
-  features: {
-    ai: boolean
-    collaboration: boolean
-    plugins: boolean
-    export: boolean
-  }
-}
+// 函数返回类型的Promise包装
+export type PromiseReturnType<T extends (...args: never[]) => unknown> =
+  ReturnType<T> extends Promise<infer U> ? U : ReturnType<T>;

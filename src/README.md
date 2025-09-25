@@ -35,27 +35,32 @@ src/
 ## 🎯 核心组件
 
 ### InkDotLogo 组件
+
 - **Vue版本**: `components/InkDotLogo.vue`
 - **React版本**: `components/InkDotLogo.tsx`
 - **JSX版本**: `components/InkDotLogo.jsx`
 
 ### 类型定义
+
 - **核心类型**: `types/index.ts`
 - 包含所有项目相关的TypeScript接口
 
 ## 🚀 开发指南
 
 ### 组件开发
+
 1. 在 `components/` 目录创建新组件
 2. 在 `components/index.ts` 中导出
 3. 添加相应的类型定义到 `types/`
 
 ### 工具函数
+
 1. 在 `utils/` 目录创建工具函数
 2. 使用TypeScript严格模式
 3. 添加完整的类型注解
 
 ### 状态管理
+
 1. 使用Pinia进行状态管理
 2. 在 `stores/` 目录创建store
 3. 遵循Vue 3 Composition API规范

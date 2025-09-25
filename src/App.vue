@@ -1,213 +1,460 @@
 <template>
-    <div id="app" class="min-h-screen bg-gray-50">
-        <header class="bg-white shadow-sm border-b">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center py-4">
-                    <div class="flex items-center">
-                        <h1 class="text-xl font-semibold text-gray-900">
-                            {{ appConfig.app.title }}
-                        </h1>
-                        <span class="ml-2 text-sm text-gray-500">
-                            v1.0.0
-                        </span>
-                    </div>
+  <div id="app" class="app">
+    <!-- 极简头部 -->
+    <header class="header">
+      <div class="header-content" :class="{ modified: isProjectModified }">
+        <h1 class="title">InkDot</h1>
+        <div v-if="currentProject" class="project-info">
+          <span class="project-name">{{ currentProject.name }}</span>
+          <span v-if="isProjectModified" class="modified-indicator">*</span>
+        </div>
+      </div>
+    </header>
 
-                    <nav class="flex space-x-4">
-                        <Button variant="ghost" size="sm">新建</Button>
-                        <Button variant="ghost" size="sm">打开</Button>
-                        <Button variant="ghost" size="sm">保存</Button>
-                        <Button variant="ghost" size="sm">导出</Button>
-                    </nav>
-                </div>
-            </div>
-        </header>
+    <!-- 主要内容区域 -->
+    <main class="main-content">
+      <!-- 工具栏 -->
+      <div class="toolbar">
+        <button type="button" class="btn btn-primary" @click="createNewProject">新建项目</button>
+        <button type="button" class="btn btn-secondary" :disabled="!canSave" @click="saveProject">
+          保存
+        </button>
+        <button type="button" class="btn btn-secondary" @click="loadProject">加载项目</button>
+      </div>
 
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <!-- 工具栏 -->
-            <div class="mb-6 flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <Button variant="primary" @click="showCreateNodeModal = true">
-                        添加节点
-                    </Button>
-                    <Button variant="outline" @click="showSettingsModal = true">
-                        设置
-                    </Button>
-                </div>
+      <!-- 思维导图画布 -->
+      <div class="canvas-container">
+        <canvas
+          ref="canvasRef"
+          class="mindmap-canvas"
+          @click="handleCanvasClick"
+          @mousedown="handleMouseDown"
+          @mousemove="handleMouseMove"
+          @mouseup="handleMouseUp"
+        />
+      </div>
 
-                <div class="flex items-center space-x-2">
-                    <span class="text-sm text-gray-500">AI助手:</span>
-                    <Button :variant="aiEnabled ? 'primary' : 'ghost'" size="sm" @click="toggleAI">
-                        {{ aiEnabled ? '已启用' : '启用' }}
-                    </Button>
-                </div>
-            </div>
+      <!-- 侧边栏 -->
+      <aside v-show="showSidebar" class="sidebar">
+        <div class="sidebar-header">
+          <h3>节点属性</h3>
+          <button type="button" class="btn-close" @click="closeSidebar">×</button>
+        </div>
+        <div v-if="selectedNode" class="node-properties">
+          <div class="property-group">
+            <label for="node-content">内容：</label>
+            <input
+              id="node-content"
+              v-model="selectedNode.content"
+              type="text"
+              class="input-text"
+              @input="updateNode"
+            />
+          </div>
+        </div>
+      </aside>
+    </main>
 
-            <!-- 主内容区域 -->
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <!-- 侧边栏 -->
-                <aside class="lg:col-span-1">
-                    <div class="bg-white rounded-lg shadow-sm p-4">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">节点列表</h3>
-
-                        <div class="space-y-2">
-                            <div v-for="node in nodes" :key="node.id"
-                                class="p-2 rounded border cursor-pointer hover:bg-gray-50"
-                                :class="{ 'bg-blue-50 border-blue-200': selectedNodeId === node.id }"
-                                @click="selectNode(node.id)">
-                                <div class="text-sm font-medium">{{ node.content }}</div>
-                                <div class="text-xs text-gray-500">
-                                    {{ new Date(node.createdAt).toLocaleDateString() }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <Button variant="ghost" size="sm" class="w-full mt-4" @click="showCreateNodeModal = true">
-                            + 添加节点
-                        </Button>
-                    </div>
-                </aside>
-
-                <!-- 主画布 -->
-                <div class="lg:col-span-3">
-                    <div class="bg-white rounded-lg shadow-sm h-[600px]">
-                        <MindMapCanvas :nodes="nodes" :connections="connections" @node-create="handleNodeCreate"
-                            @node-select="handleNodeSelect" @canvas-click="handleCanvasClick" />
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- 创建节点模态框 -->
-        <Modal v-model="showCreateNodeModal" title="创建新节点" @close="showCreateNodeModal = false">
-            <div class="space-y-4">
-                <Input v-model="newNodeContent" label="节点内容" placeholder="请输入节点内容" required />
-
-                <div class="flex justify-end space-x-3">
-                    <Button variant="ghost" @click="showCreateNodeModal = false">
-                        取消
-                    </Button>
-                    <Button variant="primary" @click="createNode">
-                        创建
-                    </Button>
-                </div>
-            </div>
-        </Modal>
-
-        <!-- 设置模态框 -->
-        <Modal v-model="showSettingsModal" title="设置" size="lg" @close="showSettingsModal = false">
-            <div class="space-y-6">
-                <div>
-                    <h4 class="text-md font-medium text-gray-900 mb-3">AI设置</h4>
-                    <div class="space-y-3">
-                        <label class="flex items-center">
-                            <input type="checkbox" v-model="aiEnabled"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                            <span class="ml-2 text-sm text-gray-700">启用AI助手</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-md font-medium text-gray-900 mb-3">显示设置</h4>
-                    <div class="space-y-3">
-                        <label class="flex items-center">
-                            <input type="checkbox" v-model="showGrid"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                            <span class="ml-2 text-sm text-gray-700">显示网格</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="flex justify-end space-x-3">
-                    <Button variant="ghost" @click="showSettingsModal = false">
-                        关闭
-                    </Button>
-                </div>
-            </div>
-        </Modal>
-    </div>
+    <!-- 状态栏 -->
+    <footer class="status-bar">
+      <span class="status-text">节点数: {{ nodes.length }} | 连接数: {{ connections.length }}</span>
+    </footer>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { appConfig } from '@/config/app.config'
-import Button from '@/ui/components/Button.vue'
-import Input from '@/ui/components/Input.vue'
-import MindMapCanvas from '@/ui/components/MindMapCanvas.vue'
-import Modal from '@/ui/components/Modal.vue'
+import { ref, computed, onMounted, nextTick } from 'vue';
+import { useMindMapStore } from '@/stores/mindmap';
+import type { MindMapNode, Position } from '@/types';
 
-// 状态管理
-const nodes = ref([
-    {
-        id: '1',
-        content: '中心主题',
-        position: { x: 400, y: 300 },
-        createdAt: new Date(),
-        children: ['2', '3']
-    },
-    {
-        id: '2',
-        content: '子主题 1',
-        position: { x: 200, y: 200 },
-        createdAt: new Date(),
-        parent: '1'
-    },
-    {
-        id: '3',
-        content: '子主题 2',
-        position: { x: 600, y: 200 },
-        createdAt: new Date(),
-        parent: '1'
-    }
-])
+// Store
+const store = useMindMapStore();
 
-const connections = ref([
-    { id: '1', from: '1', to: '2', type: 'related' },
-    { id: '2', from: '1', to: '3', type: 'related' }
-])
+// 响应式数据
+const canvasRef = ref<HTMLCanvasElement | null>(null);
+const showSidebar = ref(false);
+const isDragging = ref(false);
+const dragOffset = ref<Position>({ x: 0, y: 0 });
 
-const selectedNodeId = ref<string | null>(null)
-const aiEnabled = ref(appConfig.features.ai)
-const showGrid = ref(true)
-
-// 模态框状态
-const showCreateNodeModal = ref(false)
-const showSettingsModal = ref(false)
-const newNodeContent = ref('')
+// 计算属性
+const nodes = computed(() => store.nodes);
+const connections = computed(() => store.connections);
+const selectedNode = computed(() => store.selectedNode);
+const currentProject = computed(() => store.currentProject);
+const isProjectModified = computed(() => store.isModified);
+const canSave = computed(() => isProjectModified.value && nodes.value.length > 0);
 
 // 方法
-const selectNode = (nodeId: string) => {
-    selectedNodeId.value = nodeId
+function createNewProject(): void {
+  store.createNewProject();
 }
 
-const handleNodeCreate = (node: any) => {
-    nodes.value.push(node)
+function saveProject(): void {
+  if (canSave.value) {
+    store.saveCurrentProject();
+  }
 }
 
-const handleNodeSelect = (nodeId: string) => {
-    selectedNodeId.value = nodeId
+function loadProject(): void {
+  // 这里可以打开文件选择器或项目列表
+  console.log('加载项目功能待实现');
 }
 
-const handleCanvasClick = (position: { x: number; y: number }) => {
-    selectedNodeId.value = null
+function handleCanvasClick(event: MouseEvent): void {
+  if (!canvasRef.value) return;
+
+  const rect = canvasRef.value.getBoundingClientRect();
+  const position: Position = {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
+
+  // 检查是否点击了现有节点
+  const clickedNode = findNodeAtPosition(position);
+
+  if (clickedNode) {
+    store.selectNode(clickedNode.id);
+    showSidebar.value = true;
+  } else {
+    // 创建新节点
+    const newNode: Omit<MindMapNode, 'id'> = {
+      content: '新节点',
+      position,
+      connections: []
+    };
+    store.addNode(newNode);
+  }
 }
 
-const createNode = () => {
-    if (!newNodeContent.value.trim()) return
+function handleMouseDown(event: MouseEvent): void {
+  if (!canvasRef.value) return;
 
-    const newNode = {
-        id: Date.now().toString(),
-        content: newNodeContent.value,
-        position: { x: 400, y: 300 },
-        createdAt: new Date()
+  const rect = canvasRef.value.getBoundingClientRect();
+  const position: Position = {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
+
+  const clickedNode = findNodeAtPosition(position);
+  if (clickedNode) {
+    isDragging.value = true;
+    dragOffset.value = {
+      x: position.x - clickedNode.position.x,
+      y: position.y - clickedNode.position.y
+    };
+    store.selectNode(clickedNode.id);
+  }
+}
+
+function handleMouseMove(event: MouseEvent): void {
+  if (!isDragging.value || !selectedNode.value || !canvasRef.value) return;
+
+  const rect = canvasRef.value.getBoundingClientRect();
+  const newPosition: Position = {
+    x: event.clientX - rect.left - dragOffset.value.x,
+    y: event.clientY - rect.top - dragOffset.value.y
+  };
+
+  store.updateNodePosition(selectedNode.value.id, newPosition);
+  drawCanvas();
+}
+
+function handleMouseUp(): void {
+  isDragging.value = false;
+}
+
+function updateNode(): void {
+  if (selectedNode.value) {
+    store.updateNode(selectedNode.value.id, { content: selectedNode.value.content });
+    drawCanvas();
+  }
+}
+
+function closeSidebar(): void {
+  showSidebar.value = false;
+  store.clearSelection();
+}
+
+function findNodeAtPosition(position: Position): MindMapNode | null {
+  for (const node of nodes.value) {
+    const distance = Math.sqrt(
+      Math.pow(position.x - node.position.x, 2) + Math.pow(position.y - node.position.y, 2)
+    );
+    if (distance <= 30) {
+      // 节点半径
+      return node;
+    }
+  }
+  return null;
+}
+
+function drawCanvas(): void {
+  if (!canvasRef.value) return;
+
+  const ctx = canvasRef.value.getContext('2d');
+  if (!ctx) return;
+
+  // 清空画布
+  ctx.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height);
+
+  // 绘制连接线
+  ctx.strokeStyle = '#ddd';
+  ctx.lineWidth = 2;
+  connections.value.forEach(connection => {
+    const fromNode = nodes.value.find(n => n.id === connection.fromNodeId);
+    const toNode = nodes.value.find(n => n.id === connection.toNodeId);
+
+    if (fromNode && toNode) {
+      ctx.beginPath();
+      ctx.moveTo(fromNode.position.x, fromNode.position.y);
+      ctx.lineTo(toNode.position.x, toNode.position.y);
+      ctx.stroke();
+    }
+  });
+
+  // 绘制节点
+  nodes.value.forEach(node => {
+    ctx.beginPath();
+    ctx.arc(node.position.x, node.position.y, 30, 0, 2 * Math.PI);
+
+    // 节点样式
+    if (selectedNode.value?.id === node.id) {
+      ctx.fillStyle = '#007bff';
+      ctx.strokeStyle = '#0056b3';
+    } else {
+      ctx.fillStyle = '#f8f9fa';
+      ctx.strokeStyle = '#dee2e6';
     }
 
-    nodes.value.push(newNode)
-    newNodeContent.value = ''
-    showCreateNodeModal.value = false
+    ctx.lineWidth = 2;
+    ctx.fill();
+    ctx.stroke();
+
+    // 绘制文本
+    ctx.fillStyle = '#333';
+    ctx.font = '14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(
+      node.content.length > 8 ? node.content.substring(0, 8) + '...' : node.content,
+      node.position.x,
+      node.position.y
+    );
+  });
 }
 
-const toggleAI = () => {
-    aiEnabled.value = !aiEnabled.value
+function resizeCanvas(): void {
+  if (!canvasRef.value) return;
+
+  const container = canvasRef.value.parentElement;
+  if (container) {
+    canvasRef.value.width = container.clientWidth;
+    canvasRef.value.height = container.clientHeight;
+    drawCanvas();
+  }
 }
+
+// 生命周期
+onMounted(async () => {
+  await nextTick();
+  resizeCanvas();
+
+  // 监听窗口大小变化
+  window.addEventListener('resize', resizeCanvas);
+
+  // 初始化示例数据
+  if (nodes.value.length === 0) {
+    store.addNode({
+      content: '中心节点',
+      position: { x: 400, y: 300 },
+      connections: []
+    });
+  }
+});
 </script>
+
+<style scoped>
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.header {
+  background: #fff;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-content.modified {
+  color: #dc3545;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.project-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.project-name {
+  font-weight: 500;
+}
+
+.modified-indicator {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  position: relative;
+}
+
+.toolbar {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background: #f8f9fa;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: #fff;
+  border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background: #545b62;
+  border-color: #545b62;
+}
+
+.canvas-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.mindmap-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.sidebar {
+  width: 300px;
+  background: #f8f9fa;
+  border-left: 1px solid #dee2e6;
+  padding: 1rem;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6c757d;
+}
+
+.btn-close:hover {
+  color: #495057;
+}
+
+.property-group {
+  margin-bottom: 1rem;
+}
+
+.property-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.input-text {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.input-text:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.status-bar {
+  background: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+  padding: 0.5rem 1rem;
+}
+
+.status-text {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+</style>
