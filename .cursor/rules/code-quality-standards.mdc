@@ -1,0 +1,368 @@
+---
+alwaysApply: true
+---
+
+# 代码质量标准
+
+## ESLint规范遵循
+
+### 全局变量使用规范
+
+- **浏览器环境**：`console`, `localStorage`, `window`, `document` 等浏览器API可正常使用
+- **Node.js环境**：`global`, `process`, `__dirname`, `setTimeout`, `clearTimeout` 等Node.js API需要正确声明
+- **TypeScript类型**：`NodeJS`, `HTMLElement`, `Event` 等需要明确类型导入
+
+### 正确的全局变量声明示例
+
+```typescript
+// 浏览器环境 - 直接使用
+console.log('浏览器环境下可直接使用');
+localStorage.setItem('key', 'value');
+
+// Node.js环境 - 需要类型声明
+declare global {
+  var global: any;
+  var process: any;
+}
+
+// 或使用明确的类型导入
+import type { NodeJS } from 'node:types';
+```
+
+### 避免any类型
+
+- **明确类型定义**：优先使用具体的接口和类型
+- **泛型使用**：当类型不确定时使用泛型
+- **unknown替代**：当真的不知道类型时使用`unknown`而不是`any`
+
+```typescript
+// ❌ 错误 - 使用any
+function processData(data: any): any {
+  return data;
+}
+
+// ✅ 正确 - 使用泛型
+function processData<T>(data: T): T {
+  return data;
+}
+
+// ✅ 正确 - 明确类型
+interface UserData {
+  id: string;
+  name: string;
+}
+
+function processUserData(data: UserData): UserData {
+  return data;
+}
+
+// ✅ 正确 - 使用unknown
+function processUnknownData(data: unknown): string {
+  if (typeof data === 'string') {
+    return data;
+  }
+  return String(data);
+}
+```
+
+### 未使用变量处理
+
+- **移除未使用变量**：清理不再需要的变量和导入
+- **使用下划线前缀**：对于必须保留但未使用的变量使用`_`前缀
+- **错误处理参数**：即使不使用错误参数也要明确声明
+
+```typescript
+// ❌ 错误 - 未使用的变量
+const unusedVariable = 'value';
+import { UnusedImport } from './module';
+
+// ✅ 正确 - 移除未使用变量或使用下划线前缀
+const _requiredButUnused = 'value'; // 必须保留但未使用
+
+// ✅ 正确 - 错误处理
+try {
+  // some code
+} catch (_error) {
+  // 使用下划线前缀表示未使用
+  // 即使不处理错误也要声明参数
+  console.log('操作失败');
+}
+```
+
+### Switch语句规范
+
+- **使用花括号包装case块**：避免词法声明错误
+- **明确的case作用域**：每个case都应该有自己的作用域
+
+```typescript
+// ❌ 错误 - case块中的词法声明
+switch (type) {
+  case 'A':
+    const result = processA();
+    break;
+  case 'B':
+    const result = processB(); // 错误：重复声明
+    break;
+}
+
+// ✅ 正确 - 使用花括号创建作用域
+switch (type) {
+  case 'A': {
+    const result = processA();
+    return result;
+  }
+  case 'B': {
+    const result = processB();
+    return result;
+  }
+  default: {
+    throw new Error('Unknown type');
+  }
+}
+```
+
+### 对象属性访问规范
+
+- **使用Object.prototype.hasOwnProperty.call()**：避免直接访问原型方法
+- **使用in操作符**：检查属性存在性的安全方式
+
+```typescript
+// ❌ 错误 - 直接访问原型方法
+if (obj.hasOwnProperty('prop')) {
+  // ...
+}
+
+// ✅ 正确 - 使用call方法
+if (Object.prototype.hasOwnProperty.call(obj, 'prop')) {
+  // ...
+}
+
+// ✅ 更好 - 使用in操作符或Object.hasOwn
+if ('prop' in obj) {
+  // ...
+}
+
+// ✅ 现代方法 - Object.hasOwn (ES2022)
+if (Object.hasOwn(obj, 'prop')) {
+  // ...
+}
+```
+
+### 正则表达式规范
+
+- **Unicode标志**：处理Unicode字符时使用`u`标志
+- **避免误导性字符类**：注意代理对的正确处理
+
+```typescript
+// ❌ 错误 - 没有Unicode标志处理中文字符
+const pattern = /[一-龯]/;
+
+// ✅ 正确 - 使用Unicode标志
+const pattern = /[一-龯]/u;
+
+// ✅ 正确 - 处理emoji和特殊字符
+const emojiPattern = /[\u{1F600}-\u{1F64F}]/u;
+```
+
+## Vue组件代码质量
+
+### Composition API最佳实践
+
+```vue
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
+import type { MindMapNode } from '@/types';
+
+// ✅ 明确的Props类型定义
+interface Props {
+  node: MindMapNode;
+  editable?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  editable: false
+});
+
+// ✅ 明确的Emits类型定义
+const emit = defineEmits<{
+  update: [node: MindMapNode];
+  delete: [nodeId: string];
+}>();
+
+// ✅ 响应式状态明确类型
+const isEditing = ref<boolean>(false);
+const nodeContent = ref<string>(props.node.content);
+
+// ✅ 计算属性明确返回类型
+const isValid = computed<boolean>(() => {
+  return nodeContent.value.trim().length > 0;
+});
+
+// ✅ 函数明确参数和返回类型
+function handleEdit(): void {
+  isEditing.value = true;
+}
+
+function handleSave(): void {
+  if (isValid.value) {
+    emit('update', {
+      ...props.node,
+      content: nodeContent.value
+    });
+    isEditing.value = false;
+  }
+}
+
+// ✅ 生命周期钩子
+onMounted((): void => {
+  console.log('组件已挂载');
+});
+</script>
+```
+
+### 错误处理标准
+
+```typescript
+// ✅ 标准错误处理模式
+async function loadData(): Promise<UserData | null> {
+  try {
+    const response = await fetch('/api/data');
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    return (await response.json()) as UserData;
+  } catch (error) {
+    console.error('加载数据失败:', error);
+    // 根据错误类型进行不同处理
+    if (error instanceof TypeError) {
+      console.error('网络错误或数据格式错误');
+    }
+    return null;
+  }
+}
+```
+
+## TypeScript严格模式规范
+
+### 类型安全检查
+
+```typescript
+// ✅ 严格的空值检查
+function processUserName(name: string | null | undefined): string {
+  // 明确处理null和undefined
+  if (name == null) {
+    return '未知用户';
+  }
+  return name.trim();
+}
+
+// ✅ 类型守卫使用
+function isString(value: unknown): value is string {
+  return typeof value === 'string';
+}
+
+function processValue(value: unknown): string {
+  if (isString(value)) {
+    return value.toUpperCase(); // TypeScript知道这里value是string
+  }
+  return String(value);
+}
+```
+
+### 函数重载和泛型
+
+```typescript
+// ✅ 函数重载明确类型
+function createElement(tag: 'div'): HTMLDivElement;
+function createElement(tag: 'span'): HTMLSpanElement;
+function createElement(tag: string): HTMLElement;
+function createElement(tag: string): HTMLElement {
+  return document.createElement(tag);
+}
+
+// ✅ 泛型约束
+interface Identifiable {
+  id: string;
+}
+
+function findById<T extends Identifiable>(items: T[], id: string): T | undefined {
+  return items.find(item => item.id === id);
+}
+```
+
+## 代码清理检查清单
+
+### 提交前检查
+
+- [ ] 移除所有`console.log`（除非是错误日志）
+- [ ] 移除未使用的导入和变量
+- [ ] 所有函数都有明确的类型注解
+- [ ] 没有使用`any`类型
+- [ ] Switch语句使用正确的作用域
+- [ ] 正则表达式使用适当的标志
+- [ ] 错误处理使用try-catch
+- [ ] 异步操作正确处理Promise
+
+### 自动化检查
+
+```bash
+# 运行完整检查
+npm run lint          # ESLint检查
+npm run type-check     # TypeScript类型检查
+npm run format:check   # Prettier格式检查
+
+# 自动修复
+npm run lint:fix       # 自动修复ESLint问题
+npm run format         # 自动格式化代码
+```
+
+## 生产环境代码标准
+
+### 调试代码清理
+
+```typescript
+// ❌ 生产环境中不应该存在
+console.log('调试信息');
+debugger;
+// TODO: 临时代码
+
+// ✅ 生产环境友好的日志
+if (process.env.NODE_ENV === 'development') {
+  console.log('开发环境调试信息');
+}
+
+// ✅ 结构化错误处理
+try {
+  // 业务逻辑
+} catch (error) {
+  // 记录错误但不暴露敏感信息
+  console.error('操作失败', {
+    message: error instanceof Error ? error.message : '未知错误',
+    timestamp: new Date().toISOString()
+  });
+  // 用户友好的错误提示
+  showUserMessage('操作失败，请稍后重试');
+}
+```
+
+### 性能考虑
+
+```typescript
+// ✅ 避免不必要的计算
+const memoizedComputation = useMemo(() => {
+  return expensiveComputation(data);
+}, [data]);
+
+// ✅ 正确的依赖管理
+useEffect(() => {
+  const controller = new AbortController();
+
+  fetchData(controller.signal).then(handleData).catch(handleError);
+
+  return () => {
+    controller.abort();
+  };
+}, []);
+```
+
+记住：**代码质量比功能数量更重要**。始终优先保证代码的可读性、可维护性和类型安全性。

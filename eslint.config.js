@@ -25,7 +25,18 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.es2022
+        ...globals.es2022,
+        // 测试环境全局变量
+        vi: 'readonly',
+        vitest: 'readonly',
+        describe: 'readonly',
+        it: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly'
       },
       ecmaVersion: 2022,
       sourceType: 'module'
@@ -55,9 +66,12 @@ export default [
       // General JavaScript rules
       'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-      'no-unused-vars': 'warn',
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       'prefer-const': 'error',
-      'no-var': 'error'
+      'no-var': 'error',
+      'no-case-declarations': 'error',
+      'no-prototype-builtins': 'error',
+      'no-misleading-character-class': 'error'
     }
   },
 
@@ -71,6 +85,22 @@ export default [
         ecmaVersion: 2022,
         sourceType: 'module',
         extraFileExtensions: ['.vue']
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.es2022,
+        // 测试环境全局变量
+        vi: 'readonly',
+        vitest: 'readonly',
+        describe: 'readonly',
+        it: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly'
       }
     },
     plugins: {
@@ -79,11 +109,21 @@ export default [
     },
     rules: {
       // TypeScript rules
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true
+        }
+      ],
       '@typescript-eslint/no-explicit-any': 'warn',
 
       // Disable conflicting rules
       'no-unused-vars': 'off', // Use TypeScript version instead
+      'no-case-declarations': 'error',
+      'no-prototype-builtins': 'error',
+      'no-misleading-character-class': 'error',
 
       // Prettier rules for TypeScript
       'prettier/prettier': [
