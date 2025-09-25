@@ -1,268 +1,269 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>墨点 Logo - Vue 演示</title>
-    <link rel="stylesheet" href="../src/assets/logo.css">
+    <link rel="stylesheet" href="../src/assets/logo.css" />
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background: #f8f9fa;
-        }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+          'Microsoft YaHei', sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        background: #f8f9fa;
+      }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
 
-        h1 {
-            text-align: center;
-            color: #000;
-            margin-bottom: 40px;
-            font-size: 2.5em;
-        }
+      h1 {
+        text-align: center;
+        color: #000;
+        margin-bottom: 40px;
+        font-size: 2.5em;
+      }
 
-        .section {
-            margin-bottom: 60px;
-            padding: 30px;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            background: #fafbfc;
-        }
+      .section {
+        margin-bottom: 60px;
+        padding: 30px;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        background: #fafbfc;
+      }
 
-        .section h2 {
-            color: #333;
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-        }
+      .section h2 {
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+      }
 
-        .logo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin: 20px 0;
-        }
+      .logo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        margin: 20px 0;
+      }
 
-        .logo-item {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+      .logo-item {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
 
-        .logo-item h3 {
-            margin: 15px 0 10px 0;
-            color: #555;
-            font-size: 1.1em;
-        }
+      .logo-item h3 {
+        margin: 15px 0 10px 0;
+        color: #555;
+        font-size: 1.1em;
+      }
 
-        .logo-item p {
-            margin: 0;
-            color: #777;
-            font-size: 0.9em;
-        }
+      .logo-item p {
+        margin: 0;
+        color: #777;
+        font-size: 0.9em;
+      }
 
-        .animation-demo {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-        }
+      .animation-demo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+      }
 
-        .animation-item {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            min-width: 150px;
-        }
+      .animation-item {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        min-width: 150px;
+      }
 
-        .animation-item h4 {
-            margin: 0 0 15px 0;
-            color: #555;
-            font-size: 1em;
-        }
+      .animation-item h4 {
+        margin: 0 0 15px 0;
+        color: #555;
+        font-size: 1em;
+      }
 
-        .controls {
-            text-align: center;
-            margin: 30px 0;
-        }
+      .controls {
+        text-align: center;
+        margin: 30px 0;
+      }
 
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            margin: 0 10px;
-            background: #0066FF;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s ease;
-        }
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0 10px;
+        background: #0066ff;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s ease;
+      }
 
-        .btn:hover {
-            background: #0052CC;
-        }
+      .btn:hover {
+        background: #0052cc;
+      }
 
-        .btn.secondary {
-            background: #6c757d;
-        }
+      .btn.secondary {
+        background: #6c757d;
+      }
 
-        .btn.secondary:hover {
-            background: #5a6268;
-        }
+      .btn.secondary:hover {
+        background: #5a6268;
+      }
 
-        .code-block {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 6px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
+      .code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+        overflow-x: auto;
+      }
 
-        .code-block pre {
-            margin: 0;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 14px;
-            line-height: 1.4;
-        }
+      .code-block pre {
+        margin: 0;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 14px;
+        line-height: 1.4;
+      }
 
-        .interactive-demo {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-        }
+      .interactive-demo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+      }
 
-        .interactive-item {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            min-width: 200px;
-        }
+      .interactive-item {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        min-width: 200px;
+      }
 
-        .interactive-item h4 {
-            margin: 0 0 15px 0;
-            color: #555;
-            font-size: 1em;
-        }
+      .interactive-item h4 {
+        margin: 0 0 15px 0;
+        color: #555;
+        font-size: 1em;
+      }
 
-        .clickable-logo {
-            cursor: pointer;
-        }
+      .clickable-logo {
+        cursor: pointer;
+      }
 
-        .clickable-logo:hover {
-            transform: scale(1.05);
-        }
+      .clickable-logo:hover {
+        transform: scale(1.05);
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <h1>墨点 Logo - Vue 组件演示</h1>
-        <div id="app"></div>
+      <h1>墨点 Logo - Vue 组件演示</h1>
+      <div id="app"></div>
     </div>
 
     <script>
-        const { createApp, ref, computed } = Vue;
+      const { createApp, ref, computed } = Vue;
 
-        // InkDotLogo Vue 组件
-        const InkDotLogo = {
-            name: 'InkDotLogo',
-            props: {
-                size: {
-                    type: [String, Number],
-                    default: 120,
-                    validator: (value) => {
-                        const num = parseInt(value);
-                        return num >= 32 && num <= 500;
-                    }
-                },
-                variant: {
-                    type: String,
-                    default: 'lg',
-                    validator: (value) => ['xs', 'sm', 'md', 'lg', 'xl'].includes(value)
-                },
-                animation: {
-                    type: String,
-                    default: '',
-                    validator: (value) => ['', 'birth', 'loading', 'glow', 'pulse'].includes(value)
-                },
-                clickable: {
-                    type: Boolean,
-                    default: false
-                },
-                customClass: {
-                    type: String,
-                    default: ''
-                },
-                hoverable: {
-                    type: Boolean,
-                    default: true
-                }
-            },
-            data() {
-                return {
-                    instanceId: Math.random().toString(36).substr(2, 9)
-                }
-            },
-            computed: {
-                logoClasses() {
-                    const classes = ['logo'];
+      // InkDotLogo Vue 组件
+      const InkDotLogo = {
+        name: 'InkDotLogo',
+        props: {
+          size: {
+            type: [String, Number],
+            default: 120,
+            validator: value => {
+              const num = parseInt(value);
+              return num >= 32 && num <= 500;
+            }
+          },
+          variant: {
+            type: String,
+            default: 'lg',
+            validator: value => ['xs', 'sm', 'md', 'lg', 'xl'].includes(value)
+          },
+          animation: {
+            type: String,
+            default: '',
+            validator: value => ['', 'birth', 'loading', 'glow', 'pulse'].includes(value)
+          },
+          clickable: {
+            type: Boolean,
+            default: false
+          },
+          customClass: {
+            type: String,
+            default: ''
+          },
+          hoverable: {
+            type: Boolean,
+            default: true
+          }
+        },
+        data() {
+          return {
+            instanceId: Math.random().toString(36).substr(2, 9)
+          };
+        },
+        computed: {
+          logoClasses() {
+            const classes = ['logo'];
 
-                    if (this.variant !== 'lg') {
-                        classes.push(`logo-${this.variant}`);
-                    }
+            if (this.variant !== 'lg') {
+              classes.push(`logo-${this.variant}`);
+            }
 
-                    if (this.animation) {
-                        classes.push(`animate-${this.animation}`);
-                    }
+            if (this.animation) {
+              classes.push(`animate-${this.animation}`);
+            }
 
-                    if (this.customClass) {
-                        classes.push(this.customClass);
-                    }
+            if (this.customClass) {
+              classes.push(this.customClass);
+            }
 
-                    if (this.clickable) {
-                        classes.push('clickable');
-                    }
+            if (this.clickable) {
+              classes.push('clickable');
+            }
 
-                    if (this.hoverable) {
-                        classes.push('hoverable');
-                    }
+            if (this.hoverable) {
+              classes.push('hoverable');
+            }
 
-                    return classes.join(' ');
-                }
-            },
-            methods: {
-                handleClick(event) {
-                    if (this.clickable) {
-                        this.$emit('click', event);
-                    }
-                }
-            },
-            template: `
+            return classes.join(' ');
+          }
+        },
+        methods: {
+          handleClick(event) {
+            if (this.clickable) {
+              this.$emit('click', event);
+            }
+          }
+        },
+        template: `
                 <svg 
                     :class="logoClasses" 
                     :width="size" 
@@ -309,41 +310,41 @@
                     </g>
                 </svg>
             `
-        };
+      };
 
-        // 主应用组件
-        const App = {
-            components: {
-                InkDotLogo
-            },
-            setup() {
-                const clickCount = ref(0);
-                const currentAnimation = ref('');
+      // 主应用组件
+      const App = {
+        components: {
+          InkDotLogo
+        },
+        setup() {
+          const clickCount = ref(0);
+          const currentAnimation = ref('');
 
-                const handleLogoClick = () => {
-                    clickCount.value++;
-                };
+          const handleLogoClick = () => {
+            clickCount.value++;
+          };
 
-                const restartAnimations = () => {
-                    currentAnimation.value = '';
-                    setTimeout(() => {
-                        currentAnimation.value = 'birth';
-                    }, 100);
-                };
+          const restartAnimations = () => {
+            currentAnimation.value = '';
+            setTimeout(() => {
+              currentAnimation.value = 'birth';
+            }, 100);
+          };
 
-                const toggleAnimation = (animation) => {
-                    currentAnimation.value = currentAnimation.value === animation ? '' : animation;
-                };
+          const toggleAnimation = animation => {
+            currentAnimation.value = currentAnimation.value === animation ? '' : animation;
+          };
 
-                return {
-                    clickCount,
-                    currentAnimation,
-                    handleLogoClick,
-                    restartAnimations,
-                    toggleAnimation
-                };
-            },
-            template: `
+          return {
+            clickCount,
+            currentAnimation,
+            handleLogoClick,
+            restartAnimations,
+            toggleAnimation
+          };
+        },
+        template: `
                 <div>
                     <!-- 基础展示 -->
                     <div class="section">
@@ -478,11 +479,10 @@
                     </div>
                 </div>
             `
-        };
+      };
 
-        // 创建并挂载应用
-        createApp(App).mount('#app');
+      // 创建并挂载应用
+      createApp(App).mount('#app');
     </script>
-</body>
-
+  </body>
 </html>

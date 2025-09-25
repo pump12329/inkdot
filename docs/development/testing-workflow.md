@@ -4,7 +4,7 @@
 **创建时间戳**: T0.5  
 **最后更新**: T0.5  
 **状态**: 🟢 CURRENT  
-**下次审查**: T7.5  
+**下次审查**: T7.5
 
 ---
 
@@ -52,6 +52,7 @@
 ### 1. 本地开发测试
 
 #### 开发前准备
+
 ```bash
 # 安装依赖
 npm install
@@ -63,6 +64,7 @@ npm run type-check
 ```
 
 #### 开发中测试
+
 ```bash
 # 监听模式运行测试
 npm run test:watch
@@ -75,6 +77,7 @@ npm run test:ui
 ```
 
 #### 提交前检查
+
 ```bash
 # 运行所有测试
 npm run test:run
@@ -91,6 +94,7 @@ npm run build
 #### GitHub Actions工作流
 
 **触发条件:**
+
 - 推送到main或develop分支
 - 创建Pull Request
 - 手动触发
@@ -99,7 +103,6 @@ npm run build
 
 1. **代码质量检查** (lint)
    - ESLint代码规范检查
-   - Prettier代码格式检查
    - TypeScript类型检查
 
 2. **单元测试** (unit-tests)
@@ -130,12 +133,14 @@ npm run build
 ### 3. 测试结果处理
 
 #### 成功标准
+
 - 所有测试通过 (100%)
 - 代码覆盖率 ≥ 70%
 - 性能指标达标
 - 安全扫描无高危漏洞
 
 #### 失败处理
+
 - 自动通知开发者
 - 阻止合并到主分支
 - 生成详细错误报告
@@ -147,21 +152,21 @@ npm run build
 
 ### 覆盖率要求
 
-| 测试类型 | 覆盖率目标 | 最低要求 |
-|---------|-----------|----------|
-| 语句覆盖率 | ≥ 80% | ≥ 70% |
-| 分支覆盖率 | ≥ 75% | ≥ 65% |
-| 函数覆盖率 | ≥ 85% | ≥ 75% |
-| 行覆盖率 | ≥ 80% | ≥ 70% |
+| 测试类型   | 覆盖率目标 | 最低要求 |
+| ---------- | ---------- | -------- |
+| 语句覆盖率 | ≥ 80%      | ≥ 70%    |
+| 分支覆盖率 | ≥ 75%      | ≥ 65%    |
+| 函数覆盖率 | ≥ 85%      | ≥ 75%    |
+| 行覆盖率   | ≥ 80%      | ≥ 70%    |
 
 ### 性能基准
 
-| 指标 | 目标值 | 警告阈值 |
-|------|--------|----------|
-| 首屏加载时间 | < 2s | > 3s |
-| 交互响应时间 | < 100ms | > 200ms |
-| 内存使用 | < 100MB | > 150MB |
-| CPU使用率 | < 30% | > 50% |
+| 指标         | 目标值  | 警告阈值 |
+| ------------ | ------- | -------- |
+| 首屏加载时间 | < 2s    | > 3s     |
+| 交互响应时间 | < 100ms | > 200ms  |
+| 内存使用     | < 100MB | > 150MB  |
+| CPU使用率    | < 30%   | > 50%    |
 
 ### 安全标准
 
@@ -212,16 +217,16 @@ VITE_APP_DEBUG=false
 
 ```typescript
 // 使用TestDataGenerator生成测试数据
-import { TestDataGenerator } from '@/tests/utils/test-data-generator'
+import { TestDataGenerator } from '@/tests/utils/test-data-generator';
 
 // 生成节点数据
-const nodes = TestDataGenerator.generateNodes(100)
+const nodes = TestDataGenerator.generateNodes(100);
 
 // 生成连接数据
-const connections = TestDataGenerator.generateConnections(nodes, 50)
+const connections = TestDataGenerator.generateConnections(nodes, 50);
 
 // 生成性能测试数据
-const perfData = TestDataGenerator.generatePerformanceTestData('large')
+const perfData = TestDataGenerator.generatePerformanceTestData('large');
 ```
 
 ### 测试数据隔离
@@ -274,13 +279,13 @@ describe('MindMapEngine', () => {
   describe('节点管理', () => {
     it('应该能够创建新节点', () => {
       // 测试实现
-    })
-    
+    });
+
     it('应该在创建节点时生成唯一ID', () => {
       // 测试实现
-    })
-  })
-})
+    });
+  });
+});
 ```
 
 ### 3. 测试组织
@@ -302,7 +307,7 @@ tests/
 
 ```typescript
 // 使用Vitest Mock
-import { vi } from 'vitest'
+import { vi } from 'vitest';
 
 // Mock外部API
 vi.mock('@/services/api', () => ({
@@ -310,7 +315,7 @@ vi.mock('@/services/api', () => ({
     content: 'Mock response',
     timestamp: new Date()
   })
-}))
+}));
 
 // Mock DOM API
 Object.defineProperty(window, 'localStorage', {
@@ -320,7 +325,7 @@ Object.defineProperty(window, 'localStorage', {
     removeItem: vi.fn(),
     clear: vi.fn()
   }
-})
+});
 ```
 
 ---
@@ -335,7 +340,7 @@ Object.defineProperty(window, 'localStorage', {
 // 增加测试超时时间
 test('长时间运行的测试', async () => {
   // 测试代码
-}, 10000) // 10秒超时
+}, 10000); // 10秒超时
 ```
 
 #### 2. 异步测试
@@ -343,9 +348,9 @@ test('长时间运行的测试', async () => {
 ```typescript
 // 正确处理异步操作
 test('异步操作测试', async () => {
-  const result = await asyncFunction()
-  expect(result).toBeDefined()
-})
+  const result = await asyncFunction();
+  expect(result).toBeDefined();
+});
 ```
 
 #### 3. DOM操作测试
@@ -353,10 +358,10 @@ test('异步操作测试', async () => {
 ```typescript
 // 等待DOM更新
 test('DOM操作测试', async () => {
-  renderComponent()
-  await nextTick()
-  expect(document.querySelector('.test-element')).toBeTruthy()
-})
+  renderComponent();
+  await nextTick();
+  expect(document.querySelector('.test-element')).toBeTruthy();
+});
 ```
 
 ### 调试技巧
@@ -364,17 +369,17 @@ test('DOM操作测试', async () => {
 ```typescript
 // 使用console.log调试
 test('调试测试', () => {
-  const result = complexFunction()
-  console.log('调试信息:', result)
-  expect(result).toBeDefined()
-})
+  const result = complexFunction();
+  console.log('调试信息:', result);
+  expect(result).toBeDefined();
+});
 
 // 使用debugger
 test('断点调试', () => {
-  debugger // 在浏览器中设置断点
-  const result = functionToDebug()
-  expect(result).toBeDefined()
-})
+  debugger; // 在浏览器中设置断点
+  const result = functionToDebug();
+  expect(result).toBeDefined();
+});
 ```
 
 ---

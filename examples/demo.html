@@ -1,531 +1,544 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>墨点 Logo 演示</title>
-    <link rel="stylesheet" href="logo.css">
+    <link rel="stylesheet" href="logo.css" />
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background: #f8f9fa;
-        }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+          'Microsoft YaHei', sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        background: #f8f9fa;
+      }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
 
-        h1 {
-            text-align: center;
-            color: #000;
-            margin-bottom: 40px;
-            font-size: 2.5em;
-        }
+      h1 {
+        text-align: center;
+        color: #000;
+        margin-bottom: 40px;
+        font-size: 2.5em;
+      }
 
-        .section {
-            margin-bottom: 60px;
-            padding: 30px;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            background: #fafbfc;
-        }
+      .section {
+        margin-bottom: 60px;
+        padding: 30px;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        background: #fafbfc;
+      }
 
-        .section h2 {
-            color: #333;
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-        }
+      .section h2 {
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+      }
 
-        .logo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin: 20px 0;
-        }
+      .logo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        margin: 20px 0;
+      }
 
-        .logo-item {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+      .logo-item {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
 
-        .logo-item h3 {
-            margin: 15px 0 10px 0;
-            color: #555;
-            font-size: 1.1em;
-        }
+      .logo-item h3 {
+        margin: 15px 0 10px 0;
+        color: #555;
+        font-size: 1.1em;
+      }
 
-        .logo-item p {
-            margin: 0;
-            color: #777;
-            font-size: 0.9em;
-        }
+      .logo-item p {
+        margin: 0;
+        color: #777;
+        font-size: 0.9em;
+      }
 
-        .animation-demo {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-        }
+      .animation-demo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+      }
 
-        .animation-item {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            min-width: 150px;
-        }
+      .animation-item {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        min-width: 150px;
+      }
 
-        .animation-item h4 {
-            margin: 0 0 15px 0;
-            color: #555;
-            font-size: 1em;
-        }
+      .animation-item h4 {
+        margin: 0 0 15px 0;
+        color: #555;
+        font-size: 1em;
+      }
 
-        .controls {
-            text-align: center;
-            margin: 30px 0;
-        }
+      .controls {
+        text-align: center;
+        margin: 30px 0;
+      }
 
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            margin: 0 10px;
-            background: #0066FF;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s ease;
-        }
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0 10px;
+        background: #0066ff;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s ease;
+      }
 
-        .btn:hover {
-            background: #0052CC;
-        }
+      .btn:hover {
+        background: #0052cc;
+      }
 
-        .btn.secondary {
-            background: #6c757d;
-        }
+      .btn.secondary {
+        background: #6c757d;
+      }
 
-        .btn.secondary:hover {
-            background: #5a6268;
-        }
+      .btn.secondary:hover {
+        background: #5a6268;
+      }
 
-        .code-block {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 6px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
+      .code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+        overflow-x: auto;
+      }
 
-        .code-block pre {
-            margin: 0;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 14px;
-            line-height: 1.4;
-        }
+      .code-block pre {
+        margin: 0;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 14px;
+        line-height: 1.4;
+      }
 
-        .color-palette {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 20px 0;
-        }
+      .color-palette {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin: 20px 0;
+      }
 
-        .color-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
+      .color-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background: white;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
 
-        .color-swatch {
-            width: 30px;
-            height: 30px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
+      .color-swatch {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+      }
 
-        .color-name {
-            font-size: 14px;
-            color: #555;
-        }
+      .color-name {
+        font-size: 14px;
+        color: #555;
+      }
 
-        .color-code {
-            font-size: 12px;
-            color: #777;
-            font-family: monospace;
-        }
+      .color-code {
+        font-size: 12px;
+        color: #777;
+        font-family: monospace;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <h1>墨点 Logo 演示</h1>
+      <h1>墨点 Logo 演示</h1>
 
-        <!-- 基础展示 -->
-        <div class="section">
-            <h2>基础展示</h2>
-            <div class="logo-grid">
-                <div class="logo-item">
-                    <svg class="logo logo-xl" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <radialGradient id="centerGradient" cx="50%" cy="50%" r="50%">
-                                <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-                                <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
-                            </radialGradient>
-                            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <g id="connections" stroke="url(#lineGradient)" stroke-width="2" fill="none">
-                            <line x1="60" y1="60" x2="60" y2="24" />
-                            <line x1="60" y1="60" x2="85.5" y2="34.5" />
-                            <line x1="60" y1="60" x2="96" y2="60" />
-                            <line x1="60" y1="60" x2="85.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="60" y2="96" />
-                            <line x1="60" y1="60" x2="34.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="24" y2="60" />
-                            <line x1="60" y1="60" x2="34.5" y2="34.5" />
-                        </g>
-                        <g id="dots">
-                            <circle cx="60" cy="24" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="96" cy="60" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="96" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="24" cy="60" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="60" r="9" fill="url(#centerGradient)" />
-                        </g>
-                    </svg>
-                    <h3>超大尺寸 (200px)</h3>
-                    <p>网站头部、宣传海报</p>
-                </div>
+      <!-- 基础展示 -->
+      <div class="section">
+        <h2>基础展示</h2>
+        <div class="logo-grid">
+          <div class="logo-item">
+            <svg class="logo logo-xl" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="centerGradient" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" style="stop-color: #000000; stop-opacity: 1" />
+                  <stop offset="70%" style="stop-color: #333333; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #666666; stop-opacity: 1" />
+                </radialGradient>
+                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: #0066ff; stop-opacity: 1" />
+                  <stop offset="50%" style="stop-color: #00ffff; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #0066ff; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <g id="connections" stroke="url(#lineGradient)" stroke-width="2" fill="none">
+                <line x1="60" y1="60" x2="60" y2="24" />
+                <line x1="60" y1="60" x2="85.5" y2="34.5" />
+                <line x1="60" y1="60" x2="96" y2="60" />
+                <line x1="60" y1="60" x2="85.5" y2="85.5" />
+                <line x1="60" y1="60" x2="60" y2="96" />
+                <line x1="60" y1="60" x2="34.5" y2="85.5" />
+                <line x1="60" y1="60" x2="24" y2="60" />
+                <line x1="60" y1="60" x2="34.5" y2="34.5" />
+              </g>
+              <g id="dots">
+                <circle cx="60" cy="24" r="5" fill="#333333" />
+                <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="96" cy="60" r="5" fill="#333333" />
+                <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="60" cy="96" r="5" fill="#333333" />
+                <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="24" cy="60" r="5" fill="#333333" />
+                <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="60" cy="60" r="9" fill="url(#centerGradient)" />
+              </g>
+            </svg>
+            <h3>超大尺寸 (200px)</h3>
+            <p>网站头部、宣传海报</p>
+          </div>
 
-                <div class="logo-item">
-                    <svg class="logo logo-lg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <radialGradient id="centerGradient2" cx="50%" cy="50%" r="50%">
-                                <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-                                <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
-                            </radialGradient>
-                            <linearGradient id="lineGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <g id="connections" stroke="url(#lineGradient2)" stroke-width="2" fill="none">
-                            <line x1="60" y1="60" x2="60" y2="24" />
-                            <line x1="60" y1="60" x2="85.5" y2="34.5" />
-                            <line x1="60" y1="60" x2="96" y2="60" />
-                            <line x1="60" y1="60" x2="85.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="60" y2="96" />
-                            <line x1="60" y1="60" x2="34.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="24" y2="60" />
-                            <line x1="60" y1="60" x2="34.5" y2="34.5" />
-                        </g>
-                        <g id="dots">
-                            <circle cx="60" cy="24" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="96" cy="60" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="96" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="24" cy="60" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="60" r="9" fill="url(#centerGradient2)" />
-                        </g>
-                    </svg>
-                    <h3>标准尺寸 (120px)</h3>
-                    <p>标准Logo、文档封面</p>
-                </div>
+          <div class="logo-item">
+            <svg class="logo logo-lg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="centerGradient2" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" style="stop-color: #000000; stop-opacity: 1" />
+                  <stop offset="70%" style="stop-color: #333333; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #666666; stop-opacity: 1" />
+                </radialGradient>
+                <linearGradient id="lineGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: #0066ff; stop-opacity: 1" />
+                  <stop offset="50%" style="stop-color: #00ffff; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #0066ff; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <g id="connections" stroke="url(#lineGradient2)" stroke-width="2" fill="none">
+                <line x1="60" y1="60" x2="60" y2="24" />
+                <line x1="60" y1="60" x2="85.5" y2="34.5" />
+                <line x1="60" y1="60" x2="96" y2="60" />
+                <line x1="60" y1="60" x2="85.5" y2="85.5" />
+                <line x1="60" y1="60" x2="60" y2="96" />
+                <line x1="60" y1="60" x2="34.5" y2="85.5" />
+                <line x1="60" y1="60" x2="24" y2="60" />
+                <line x1="60" y1="60" x2="34.5" y2="34.5" />
+              </g>
+              <g id="dots">
+                <circle cx="60" cy="24" r="5" fill="#333333" />
+                <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="96" cy="60" r="5" fill="#333333" />
+                <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="60" cy="96" r="5" fill="#333333" />
+                <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="24" cy="60" r="5" fill="#333333" />
+                <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="60" cy="60" r="9" fill="url(#centerGradient2)" />
+              </g>
+            </svg>
+            <h3>标准尺寸 (120px)</h3>
+            <p>标准Logo、文档封面</p>
+          </div>
 
-                <div class="logo-item">
-                    <svg class="logo logo-md" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <radialGradient id="centerGradient3" cx="50%" cy="50%" r="50%">
-                                <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-                                <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
-                            </radialGradient>
-                            <linearGradient id="lineGradient3" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <g id="connections" stroke="url(#lineGradient3)" stroke-width="2" fill="none">
-                            <line x1="60" y1="60" x2="60" y2="24" />
-                            <line x1="60" y1="60" x2="85.5" y2="34.5" />
-                            <line x1="60" y1="60" x2="96" y2="60" />
-                            <line x1="60" y1="60" x2="85.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="60" y2="96" />
-                            <line x1="60" y1="60" x2="34.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="24" y2="60" />
-                            <line x1="60" y1="60" x2="34.5" y2="34.5" />
-                        </g>
-                        <g id="dots">
-                            <circle cx="60" cy="24" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="96" cy="60" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="96" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="24" cy="60" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="60" r="9" fill="url(#centerGradient3)" />
-                        </g>
-                    </svg>
-                    <h3>中等尺寸 (80px)</h3>
-                    <p>应用图标、按钮</p>
-                </div>
+          <div class="logo-item">
+            <svg class="logo logo-md" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="centerGradient3" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" style="stop-color: #000000; stop-opacity: 1" />
+                  <stop offset="70%" style="stop-color: #333333; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #666666; stop-opacity: 1" />
+                </radialGradient>
+                <linearGradient id="lineGradient3" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: #0066ff; stop-opacity: 1" />
+                  <stop offset="50%" style="stop-color: #00ffff; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #0066ff; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <g id="connections" stroke="url(#lineGradient3)" stroke-width="2" fill="none">
+                <line x1="60" y1="60" x2="60" y2="24" />
+                <line x1="60" y1="60" x2="85.5" y2="34.5" />
+                <line x1="60" y1="60" x2="96" y2="60" />
+                <line x1="60" y1="60" x2="85.5" y2="85.5" />
+                <line x1="60" y1="60" x2="60" y2="96" />
+                <line x1="60" y1="60" x2="34.5" y2="85.5" />
+                <line x1="60" y1="60" x2="24" y2="60" />
+                <line x1="60" y1="60" x2="34.5" y2="34.5" />
+              </g>
+              <g id="dots">
+                <circle cx="60" cy="24" r="5" fill="#333333" />
+                <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="96" cy="60" r="5" fill="#333333" />
+                <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="60" cy="96" r="5" fill="#333333" />
+                <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="24" cy="60" r="5" fill="#333333" />
+                <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="60" cy="60" r="9" fill="url(#centerGradient3)" />
+              </g>
+            </svg>
+            <h3>中等尺寸 (80px)</h3>
+            <p>应用图标、按钮</p>
+          </div>
 
-                <div class="logo-item">
-                    <svg class="logo logo-sm" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <radialGradient id="centerGradient4" cx="50%" cy="50%" r="50%">
-                                <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-                                <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
-                            </radialGradient>
-                            <linearGradient id="lineGradient4" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <g id="connections" stroke="url(#lineGradient4)" stroke-width="2" fill="none">
-                            <line x1="60" y1="60" x2="60" y2="24" />
-                            <line x1="60" y1="60" x2="85.5" y2="34.5" />
-                            <line x1="60" y1="60" x2="96" y2="60" />
-                            <line x1="60" y1="60" x2="85.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="60" y2="96" />
-                            <line x1="60" y1="60" x2="34.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="24" y2="60" />
-                            <line x1="60" y1="60" x2="34.5" y2="34.5" />
-                        </g>
-                        <g id="dots">
-                            <circle cx="60" cy="24" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="96" cy="60" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="96" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="24" cy="60" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="60" r="9" fill="url(#centerGradient4)" />
-                        </g>
-                    </svg>
-                    <h3>小尺寸 (48px)</h3>
-                    <p>菜单图标、标签页</p>
-                </div>
-            </div>
+          <div class="logo-item">
+            <svg class="logo logo-sm" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="centerGradient4" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" style="stop-color: #000000; stop-opacity: 1" />
+                  <stop offset="70%" style="stop-color: #333333; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #666666; stop-opacity: 1" />
+                </radialGradient>
+                <linearGradient id="lineGradient4" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: #0066ff; stop-opacity: 1" />
+                  <stop offset="50%" style="stop-color: #00ffff; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #0066ff; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <g id="connections" stroke="url(#lineGradient4)" stroke-width="2" fill="none">
+                <line x1="60" y1="60" x2="60" y2="24" />
+                <line x1="60" y1="60" x2="85.5" y2="34.5" />
+                <line x1="60" y1="60" x2="96" y2="60" />
+                <line x1="60" y1="60" x2="85.5" y2="85.5" />
+                <line x1="60" y1="60" x2="60" y2="96" />
+                <line x1="60" y1="60" x2="34.5" y2="85.5" />
+                <line x1="60" y1="60" x2="24" y2="60" />
+                <line x1="60" y1="60" x2="34.5" y2="34.5" />
+              </g>
+              <g id="dots">
+                <circle cx="60" cy="24" r="5" fill="#333333" />
+                <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="96" cy="60" r="5" fill="#333333" />
+                <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="60" cy="96" r="5" fill="#333333" />
+                <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="24" cy="60" r="5" fill="#333333" />
+                <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="60" cy="60" r="9" fill="url(#centerGradient4)" />
+              </g>
+            </svg>
+            <h3>小尺寸 (48px)</h3>
+            <p>菜单图标、标签页</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 动画效果 -->
+      <div class="section">
+        <h2>动画效果</h2>
+        <div class="animation-demo">
+          <div class="animation-item">
+            <svg
+              class="logo logo-lg animate-birth"
+              viewBox="0 0 120 120"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <radialGradient id="centerGradient5" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" style="stop-color: #000000; stop-opacity: 1" />
+                  <stop offset="70%" style="stop-color: #333333; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #666666; stop-opacity: 1" />
+                </radialGradient>
+                <linearGradient id="lineGradient5" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: #0066ff; stop-opacity: 1" />
+                  <stop offset="50%" style="stop-color: #00ffff; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #0066ff; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <g id="connections" stroke="url(#lineGradient5)" stroke-width="2" fill="none">
+                <line x1="60" y1="60" x2="60" y2="24" />
+                <line x1="60" y1="60" x2="85.5" y2="34.5" />
+                <line x1="60" y1="60" x2="96" y2="60" />
+                <line x1="60" y1="60" x2="85.5" y2="85.5" />
+                <line x1="60" y1="60" x2="60" y2="96" />
+                <line x1="60" y1="60" x2="34.5" y2="85.5" />
+                <line x1="60" y1="60" x2="24" y2="60" />
+                <line x1="60" y1="60" x2="34.5" y2="34.5" />
+              </g>
+              <g id="dots">
+                <circle cx="60" cy="24" r="5" fill="#333333" />
+                <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="96" cy="60" r="5" fill="#333333" />
+                <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="60" cy="96" r="5" fill="#333333" />
+                <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="24" cy="60" r="5" fill="#333333" />
+                <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="60" cy="60" r="9" fill="url(#centerGradient5)" />
+              </g>
+            </svg>
+            <h4>星云诞生</h4>
+          </div>
+
+          <div class="animation-item">
+            <svg
+              class="logo logo-lg animate-loading"
+              viewBox="0 0 120 120"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <radialGradient id="centerGradient6" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" style="stop-color: #000000; stop-opacity: 1" />
+                  <stop offset="70%" style="stop-color: #333333; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #666666; stop-opacity: 1" />
+                </radialGradient>
+                <linearGradient id="lineGradient6" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: #0066ff; stop-opacity: 1" />
+                  <stop offset="50%" style="stop-color: #00ffff; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #0066ff; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <g id="connections" stroke="url(#lineGradient6)" stroke-width="2" fill="none">
+                <line x1="60" y1="60" x2="60" y2="24" />
+                <line x1="60" y1="60" x2="85.5" y2="34.5" />
+                <line x1="60" y1="60" x2="96" y2="60" />
+                <line x1="60" y1="60" x2="85.5" y2="85.5" />
+                <line x1="60" y1="60" x2="60" y2="96" />
+                <line x1="60" y1="60" x2="34.5" y2="85.5" />
+                <line x1="60" y1="60" x2="24" y2="60" />
+                <line x1="60" y1="60" x2="34.5" y2="34.5" />
+              </g>
+              <g id="dots">
+                <circle cx="60" cy="24" r="5" fill="#333333" />
+                <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="96" cy="60" r="5" fill="#333333" />
+                <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="60" cy="96" r="5" fill="#333333" />
+                <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="24" cy="60" r="5" fill="#333333" />
+                <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="60" cy="60" r="9" fill="url(#centerGradient6)" />
+              </g>
+            </svg>
+            <h4>星云旋转</h4>
+          </div>
+
+          <div class="animation-item">
+            <svg
+              class="logo logo-lg animate-glow"
+              viewBox="0 0 120 120"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <radialGradient id="centerGradient7" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" style="stop-color: #000000; stop-opacity: 1" />
+                  <stop offset="70%" style="stop-color: #333333; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #666666; stop-opacity: 1" />
+                </radialGradient>
+                <linearGradient id="lineGradient7" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: #0066ff; stop-opacity: 1" />
+                  <stop offset="50%" style="stop-color: #00ffff; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #0066ff; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <g id="connections" stroke="url(#lineGradient7)" stroke-width="2" fill="none">
+                <line x1="60" y1="60" x2="60" y2="24" />
+                <line x1="60" y1="60" x2="85.5" y2="34.5" />
+                <line x1="60" y1="60" x2="96" y2="60" />
+                <line x1="60" y1="60" x2="85.5" y2="85.5" />
+                <line x1="60" y1="60" x2="60" y2="96" />
+                <line x1="60" y1="60" x2="34.5" y2="85.5" />
+                <line x1="60" y1="60" x2="24" y2="60" />
+                <line x1="60" y1="60" x2="34.5" y2="34.5" />
+              </g>
+              <g id="dots">
+                <circle cx="60" cy="24" r="5" fill="#333333" />
+                <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="96" cy="60" r="5" fill="#333333" />
+                <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="60" cy="96" r="5" fill="#333333" />
+                <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
+                <circle cx="24" cy="60" r="5" fill="#333333" />
+                <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
+                <circle cx="60" cy="60" r="9" fill="url(#centerGradient7)" />
+              </g>
+            </svg>
+            <h4>连接线发光</h4>
+          </div>
         </div>
 
-        <!-- 动画效果 -->
-        <div class="section">
-            <h2>动画效果</h2>
-            <div class="animation-demo">
-                <div class="animation-item">
-                    <svg class="logo logo-lg animate-birth" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <radialGradient id="centerGradient5" cx="50%" cy="50%" r="50%">
-                                <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-                                <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
-                            </radialGradient>
-                            <linearGradient id="lineGradient5" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <g id="connections" stroke="url(#lineGradient5)" stroke-width="2" fill="none">
-                            <line x1="60" y1="60" x2="60" y2="24" />
-                            <line x1="60" y1="60" x2="85.5" y2="34.5" />
-                            <line x1="60" y1="60" x2="96" y2="60" />
-                            <line x1="60" y1="60" x2="85.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="60" y2="96" />
-                            <line x1="60" y1="60" x2="34.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="24" y2="60" />
-                            <line x1="60" y1="60" x2="34.5" y2="34.5" />
-                        </g>
-                        <g id="dots">
-                            <circle cx="60" cy="24" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="96" cy="60" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="96" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="24" cy="60" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="60" r="9" fill="url(#centerGradient5)" />
-                        </g>
-                    </svg>
-                    <h4>星云诞生</h4>
-                </div>
-
-                <div class="animation-item">
-                    <svg class="logo logo-lg animate-loading" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <radialGradient id="centerGradient6" cx="50%" cy="50%" r="50%">
-                                <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-                                <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
-                            </radialGradient>
-                            <linearGradient id="lineGradient6" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <g id="connections" stroke="url(#lineGradient6)" stroke-width="2" fill="none">
-                            <line x1="60" y1="60" x2="60" y2="24" />
-                            <line x1="60" y1="60" x2="85.5" y2="34.5" />
-                            <line x1="60" y1="60" x2="96" y2="60" />
-                            <line x1="60" y1="60" x2="85.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="60" y2="96" />
-                            <line x1="60" y1="60" x2="34.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="24" y2="60" />
-                            <line x1="60" y1="60" x2="34.5" y2="34.5" />
-                        </g>
-                        <g id="dots">
-                            <circle cx="60" cy="24" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="96" cy="60" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="96" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="24" cy="60" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="60" r="9" fill="url(#centerGradient6)" />
-                        </g>
-                    </svg>
-                    <h4>星云旋转</h4>
-                </div>
-
-                <div class="animation-item">
-                    <svg class="logo logo-lg animate-glow" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <radialGradient id="centerGradient7" cx="50%" cy="50%" r="50%">
-                                <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-                                <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
-                            </radialGradient>
-                            <linearGradient id="lineGradient7" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <g id="connections" stroke="url(#lineGradient7)" stroke-width="2" fill="none">
-                            <line x1="60" y1="60" x2="60" y2="24" />
-                            <line x1="60" y1="60" x2="85.5" y2="34.5" />
-                            <line x1="60" y1="60" x2="96" y2="60" />
-                            <line x1="60" y1="60" x2="85.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="60" y2="96" />
-                            <line x1="60" y1="60" x2="34.5" y2="85.5" />
-                            <line x1="60" y1="60" x2="24" y2="60" />
-                            <line x1="60" y1="60" x2="34.5" y2="34.5" />
-                        </g>
-                        <g id="dots">
-                            <circle cx="60" cy="24" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="96" cy="60" r="5" fill="#333333" />
-                            <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="96" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
-                            <circle cx="24" cy="60" r="5" fill="#333333" />
-                            <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
-                            <circle cx="60" cy="60" r="9" fill="url(#centerGradient7)" />
-                        </g>
-                    </svg>
-                    <h4>连接线发光</h4>
-                </div>
-            </div>
-
-            <div class="controls">
-                <button class="btn" onclick="restartAnimations()">重新播放动画</button>
-                <button class="btn secondary" onclick="toggleHover()">切换悬停效果</button>
-            </div>
+        <div class="controls">
+          <button class="btn" onclick="restartAnimations()">重新播放动画</button>
+          <button class="btn secondary" onclick="toggleHover()">切换悬停效果</button>
         </div>
+      </div>
 
-        <!-- 颜色系统 -->
-        <div class="section">
-            <h2>颜色系统</h2>
-            <div class="color-palette">
-                <div class="color-item">
-                    <div class="color-swatch" style="background: #000000;"></div>
-                    <div>
-                        <div class="color-name">墨点黑</div>
-                        <div class="color-code">#000000</div>
-                    </div>
-                </div>
-                <div class="color-item">
-                    <div class="color-swatch" style="background: #333333;"></div>
-                    <div>
-                        <div class="color-name">深灰</div>
-                        <div class="color-code">#333333</div>
-                    </div>
-                </div>
-                <div class="color-item">
-                    <div class="color-swatch" style="background: #0066FF;"></div>
-                    <div>
-                        <div class="color-name">科技蓝</div>
-                        <div class="color-code">#0066FF</div>
-                    </div>
-                </div>
-                <div class="color-item">
-                    <div class="color-swatch" style="background: #00FFFF;"></div>
-                    <div>
-                        <div class="color-name">强调青</div>
-                        <div class="color-code">#00FFFF</div>
-                    </div>
-                </div>
-                <div class="color-item">
-                    <div class="color-swatch" style="background: #FFFFFF; border: 1px solid #ddd;"></div>
-                    <div>
-                        <div class="color-name">背景白</div>
-                        <div class="color-code">#FFFFFF</div>
-                    </div>
-                </div>
+      <!-- 颜色系统 -->
+      <div class="section">
+        <h2>颜色系统</h2>
+        <div class="color-palette">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #000000"></div>
+            <div>
+              <div class="color-name">墨点黑</div>
+              <div class="color-code">#000000</div>
             </div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #333333"></div>
+            <div>
+              <div class="color-name">深灰</div>
+              <div class="color-code">#333333</div>
+            </div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #0066ff"></div>
+            <div>
+              <div class="color-name">科技蓝</div>
+              <div class="color-code">#0066FF</div>
+            </div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #00ffff"></div>
+            <div>
+              <div class="color-name">强调青</div>
+              <div class="color-code">#00FFFF</div>
+            </div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ffffff; border: 1px solid #ddd"></div>
+            <div>
+              <div class="color-name">背景白</div>
+              <div class="color-code">#FFFFFF</div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <!-- 使用示例 -->
-        <div class="section">
-            <h2>使用示例</h2>
-            <div class="code-block">
-                <pre><code>&lt;!-- 基础使用 --&gt;
+      <!-- 使用示例 -->
+      <div class="section">
+        <h2>使用示例</h2>
+        <div class="code-block">
+          <pre><code>&lt;!-- 基础使用 --&gt;
 &lt;svg class="logo logo-lg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"&gt;
   &lt;!-- SVG内容 --&gt;
 &lt;/svg&gt;
@@ -539,126 +552,127 @@
 &lt;svg class="logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"&gt;
   &lt;!-- SVG内容 --&gt;
 &lt;/svg&gt;</code></pre>
-            </div>
         </div>
+      </div>
 
-        <!-- 应用场景 -->
-        <div class="section">
-            <h2>应用场景</h2>
-            <div class="logo-grid">
-                <div class="logo-item">
-                    <div class="logo-container">
-                        <svg class="logo logo-lg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <radialGradient id="centerGradient8" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-                                    <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
-                                </radialGradient>
-                                <linearGradient id="lineGradient8" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
-                                    <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <g id="connections" stroke="url(#lineGradient8)" stroke-width="2" fill="none">
-                                <line x1="60" y1="60" x2="60" y2="24" />
-                                <line x1="60" y1="60" x2="85.5" y2="34.5" />
-                                <line x1="60" y1="60" x2="96" y2="60" />
-                                <line x1="60" y1="60" x2="85.5" y2="85.5" />
-                                <line x1="60" y1="60" x2="60" y2="96" />
-                                <line x1="60" y1="60" x2="34.5" y2="85.5" />
-                                <line x1="60" y1="60" x2="24" y2="60" />
-                                <line x1="60" y1="60" x2="34.5" y2="34.5" />
-                            </g>
-                            <g id="dots">
-                                <circle cx="60" cy="24" r="5" fill="#333333" />
-                                <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
-                                <circle cx="96" cy="60" r="5" fill="#333333" />
-                                <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
-                                <circle cx="60" cy="96" r="5" fill="#333333" />
-                                <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
-                                <circle cx="24" cy="60" r="5" fill="#333333" />
-                                <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
-                                <circle cx="60" cy="60" r="9" fill="url(#centerGradient8)" />
-                            </g>
-                        </svg>
-                        <h1 class="brand-name">墨点</h1>
-                    </div>
-                    <h3>网站头部</h3>
-                    <p>Logo + 品牌名称组合</p>
-                </div>
-
-                <div class="logo-item">
-                    <div class="app-icon">
-                        <svg class="logo logo-md" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <radialGradient id="centerGradient9" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-                                    <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
-                                </radialGradient>
-                                <linearGradient id="lineGradient9" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
-                                    <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <g id="connections" stroke="url(#lineGradient9)" stroke-width="2" fill="none">
-                                <line x1="60" y1="60" x2="60" y2="24" />
-                                <line x1="60" y1="60" x2="85.5" y2="34.5" />
-                                <line x1="60" y1="60" x2="96" y2="60" />
-                                <line x1="60" y1="60" x2="85.5" y2="85.5" />
-                                <line x1="60" y1="60" x2="60" y2="96" />
-                                <line x1="60" y1="60" x2="34.5" y2="85.5" />
-                                <line x1="60" y1="60" x2="24" y2="60" />
-                                <line x1="60" y1="60" x2="34.5" y2="34.5" />
-                            </g>
-                            <g id="dots">
-                                <circle cx="60" cy="24" r="5" fill="#333333" />
-                                <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
-                                <circle cx="96" cy="60" r="5" fill="#333333" />
-                                <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
-                                <circle cx="60" cy="96" r="5" fill="#333333" />
-                                <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
-                                <circle cx="24" cy="60" r="5" fill="#333333" />
-                                <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
-                                <circle cx="60" cy="60" r="9" fill="url(#centerGradient9)" />
-                            </g>
-                        </svg>
-                    </div>
-                    <h3>应用图标</h3>
-                    <p>带背景的应用图标</p>
-                </div>
+      <!-- 应用场景 -->
+      <div class="section">
+        <h2>应用场景</h2>
+        <div class="logo-grid">
+          <div class="logo-item">
+            <div class="logo-container">
+              <svg class="logo logo-lg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="centerGradient8" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" style="stop-color: #000000; stop-opacity: 1" />
+                    <stop offset="70%" style="stop-color: #333333; stop-opacity: 1" />
+                    <stop offset="100%" style="stop-color: #666666; stop-opacity: 1" />
+                  </radialGradient>
+                  <linearGradient id="lineGradient8" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color: #0066ff; stop-opacity: 1" />
+                    <stop offset="50%" style="stop-color: #00ffff; stop-opacity: 1" />
+                    <stop offset="100%" style="stop-color: #0066ff; stop-opacity: 1" />
+                  </linearGradient>
+                </defs>
+                <g id="connections" stroke="url(#lineGradient8)" stroke-width="2" fill="none">
+                  <line x1="60" y1="60" x2="60" y2="24" />
+                  <line x1="60" y1="60" x2="85.5" y2="34.5" />
+                  <line x1="60" y1="60" x2="96" y2="60" />
+                  <line x1="60" y1="60" x2="85.5" y2="85.5" />
+                  <line x1="60" y1="60" x2="60" y2="96" />
+                  <line x1="60" y1="60" x2="34.5" y2="85.5" />
+                  <line x1="60" y1="60" x2="24" y2="60" />
+                  <line x1="60" y1="60" x2="34.5" y2="34.5" />
+                </g>
+                <g id="dots">
+                  <circle cx="60" cy="24" r="5" fill="#333333" />
+                  <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
+                  <circle cx="96" cy="60" r="5" fill="#333333" />
+                  <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
+                  <circle cx="60" cy="96" r="5" fill="#333333" />
+                  <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
+                  <circle cx="24" cy="60" r="5" fill="#333333" />
+                  <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
+                  <circle cx="60" cy="60" r="9" fill="url(#centerGradient8)" />
+                </g>
+              </svg>
+              <h1 class="brand-name">墨点</h1>
             </div>
+            <h3>网站头部</h3>
+            <p>Logo + 品牌名称组合</p>
+          </div>
+
+          <div class="logo-item">
+            <div class="app-icon">
+              <svg class="logo logo-md" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="centerGradient9" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" style="stop-color: #000000; stop-opacity: 1" />
+                    <stop offset="70%" style="stop-color: #333333; stop-opacity: 1" />
+                    <stop offset="100%" style="stop-color: #666666; stop-opacity: 1" />
+                  </radialGradient>
+                  <linearGradient id="lineGradient9" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color: #0066ff; stop-opacity: 1" />
+                    <stop offset="50%" style="stop-color: #00ffff; stop-opacity: 1" />
+                    <stop offset="100%" style="stop-color: #0066ff; stop-opacity: 1" />
+                  </linearGradient>
+                </defs>
+                <g id="connections" stroke="url(#lineGradient9)" stroke-width="2" fill="none">
+                  <line x1="60" y1="60" x2="60" y2="24" />
+                  <line x1="60" y1="60" x2="85.5" y2="34.5" />
+                  <line x1="60" y1="60" x2="96" y2="60" />
+                  <line x1="60" y1="60" x2="85.5" y2="85.5" />
+                  <line x1="60" y1="60" x2="60" y2="96" />
+                  <line x1="60" y1="60" x2="34.5" y2="85.5" />
+                  <line x1="60" y1="60" x2="24" y2="60" />
+                  <line x1="60" y1="60" x2="34.5" y2="34.5" />
+                </g>
+                <g id="dots">
+                  <circle cx="60" cy="24" r="5" fill="#333333" />
+                  <circle cx="85.5" cy="34.5" r="5" fill="#333333" />
+                  <circle cx="96" cy="60" r="5" fill="#333333" />
+                  <circle cx="85.5" cy="85.5" r="5" fill="#333333" />
+                  <circle cx="60" cy="96" r="5" fill="#333333" />
+                  <circle cx="34.5" cy="85.5" r="5" fill="#333333" />
+                  <circle cx="24" cy="60" r="5" fill="#333333" />
+                  <circle cx="34.5" cy="34.5" r="5" fill="#333333" />
+                  <circle cx="60" cy="60" r="9" fill="url(#centerGradient9)" />
+                </g>
+              </svg>
+            </div>
+            <h3>应用图标</h3>
+            <p>带背景的应用图标</p>
+          </div>
         </div>
+      </div>
     </div>
 
     <script>
-        function restartAnimations() {
-            // 重新触发动画
-            const animatedLogos = document.querySelectorAll('.animate-birth, .animate-loading, .animate-glow');
-            animatedLogos.forEach(logo => {
-                logo.style.animation = 'none';
-                logo.offsetHeight; // 触发重排
-                logo.style.animation = null;
-            });
-        }
-
-        function toggleHover() {
-            const logos = document.querySelectorAll('.logo');
-            logos.forEach(logo => {
-                logo.classList.toggle('hover-enabled');
-            });
-        }
-
-        // 页面加载完成后自动播放启动动画
-        window.addEventListener('load', function () {
-            setTimeout(() => {
-                restartAnimations();
-            }, 500);
+      function restartAnimations() {
+        // 重新触发动画
+        const animatedLogos = document.querySelectorAll(
+          '.animate-birth, .animate-loading, .animate-glow'
+        );
+        animatedLogos.forEach(logo => {
+          logo.style.animation = 'none';
+          logo.offsetHeight; // 触发重排
+          logo.style.animation = null;
         });
-    </script>
-</body>
+      }
 
+      function toggleHover() {
+        const logos = document.querySelectorAll('.logo');
+        logos.forEach(logo => {
+          logo.classList.toggle('hover-enabled');
+        });
+      }
+
+      // 页面加载完成后自动播放启动动画
+      window.addEventListener('load', function () {
+        setTimeout(() => {
+          restartAnimations();
+        }, 500);
+      });
+    </script>
+  </body>
 </html>

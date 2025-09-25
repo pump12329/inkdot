@@ -15,6 +15,7 @@
 ### 核心表结构
 
 #### 项目表 (projects)
+
 ```sql
 CREATE TABLE projects (
   id TEXT PRIMARY KEY,
@@ -28,6 +29,7 @@ CREATE TABLE projects (
 ```
 
 #### 节点表 (nodes)
+
 ```sql
 CREATE TABLE nodes (
   id TEXT PRIMARY KEY,
@@ -47,6 +49,7 @@ CREATE TABLE nodes (
 ```
 
 #### 连接表 (connections)
+
 ```sql
 CREATE TABLE connections (
   id TEXT PRIMARY KEY,
@@ -63,6 +66,7 @@ CREATE TABLE connections (
 ```
 
 #### AI操作记录表 (ai_actions)
+
 ```sql
 CREATE TABLE ai_actions (
   id TEXT PRIMARY KEY,
@@ -81,6 +85,7 @@ CREATE TABLE ai_actions (
 ```
 
 ### 索引设计
+
 ```sql
 -- 项目查询优化
 CREATE INDEX idx_projects_mode ON projects(mode);
@@ -356,7 +361,12 @@ interface AIModelInfo {
 }
 
 // AI能力
-type AICapability = 'text-generation' | 'text-analysis' | 'code-generation' | 'translation' | 'summarization';
+type AICapability =
+  | 'text-generation'
+  | 'text-analysis'
+  | 'code-generation'
+  | 'translation'
+  | 'summarization';
 
 // 速率限制配置
 interface RateLimitConfig {
@@ -415,7 +425,9 @@ interface TokenUsage {
 // 数据服务接口
 interface DataService {
   // 项目操作
-  createProject(project: Omit<MindMapProject, 'id' | 'createdAt' | 'updatedAt'>): Promise<MindMapProject>;
+  createProject(
+    project: Omit<MindMapProject, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<MindMapProject>;
   getProject(id: ProjectId): Promise<MindMapProject | null>;
   updateProject(id: ProjectId, updates: Partial<MindMapProject>): Promise<MindMapProject>;
   deleteProject(id: ProjectId): Promise<boolean>;
@@ -464,7 +476,7 @@ const CacheKeys = {
   projectNodes: (id: ProjectId) => `project:${id}:nodes`,
   projectConnections: (id: ProjectId) => `project:${id}:connections`,
   nodeAIHistory: (id: NodeId) => `node:${id}:ai-history`,
-  aiModel: (provider: AIProvider, model: string) => `ai:${provider}:${model}`,
+  aiModel: (provider: AIProvider, model: string) => `ai:${provider}:${model}`
 } as const;
 ```
 
@@ -521,18 +533,20 @@ const migrations: Migration[] = [
 
 ## 📋 文档信息
 
-| 属性 | 值 |
-|------|----|  
-| 文档版本 | v1.0.0 |
-| 创建时间戳 | T1.5 |
-| 最后更新 | T1.5 |
-| 状态 | 🟢 CURRENT |
-| 维护者 | InkDot开发团队 |
-| 审查周期 | T30 (月度) |
-| 下次审查 | T31.5 |
+| 属性       | 值             |
+| ---------- | -------------- |
+| 文档版本   | v1.0.0         |
+| 创建时间戳 | T1.5           |
+| 最后更新   | T1.5           |
+| 状态       | 🟢 CURRENT     |
+| 维护者     | InkDot开发团队 |
+| 审查周期   | T30 (月度)     |
+| 下次审查   | T31.5          |
 
 ### 📅 版本历史
+
 - **v1.0.0** (T1.5) - 初始数据模型设计，包含完整的数据库结构和TypeScript接口
 
 ### 📝 变更说明
+
 本文档定义InkDot项目的核心数据模型。数据结构变更需要考虑向后兼容性和迁移策略。

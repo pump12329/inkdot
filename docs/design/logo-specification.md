@@ -25,12 +25,14 @@
 ## 品牌概述
 
 ### 品牌名称
+
 - **中文名称**: 墨点
 - **英文名称**: InkDot
 - **品牌定位**: AI驱动的智能小说创作平台
 - **核心价值**: 从一个墨点开始，创造无限故事
 
 ### 设计原则
+
 - **极简主义**: 简洁有力，一目了然
 - **高识别度**: 独特的视觉记忆点
 - **可扩展性**: 适应各种应用场景
@@ -41,6 +43,7 @@
 ## 设计理念
 
 ### 核心概念：墨点星云
+
 墨点星云Logo将传统的"墨点"概念与现代的"星云网络"相结合，象征着：
 
 1. **创作起源**: 中心墨点代表创作的起点
@@ -49,6 +52,7 @@
 4. **星云美学**: 整体呈现宇宙星云的神秘美感
 
 ### 文化寓意
+
 - **墨**: 传统文学的载体，书香文化的象征
 - **点**: 数字时代的像素单位，现代科技的体现
 - **星云**: 宇宙的奥秘，无限创作可能的象征
@@ -61,6 +65,7 @@
 ### 主要元素
 
 #### 1. 中心墨点
+
 ```
 ● (直径: 18px)
 位置: 画布中心 (60, 60)
@@ -69,6 +74,7 @@
 ```
 
 #### 2. 外围墨点
+
 ```
 ● × 8 (直径: 10px)
 位置: 8个方向，距离中心36px
@@ -77,6 +83,7 @@
 ```
 
 #### 3. 连接线
+
 ```
 ── × 8 (宽度: 2px, 长度: 36px)
 颜色: 科技蓝 #0066FF
@@ -84,6 +91,7 @@
 ```
 
 ### 整体结构
+
 ```
          ●
        ╱─┼─╲
@@ -105,6 +113,7 @@
 ## 技术规格
 
 ### SVG基础代码
+
 ```svg
 <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -114,7 +123,7 @@
       <stop offset="70%" style="stop-color:#333333;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#666666;stop-opacity:1" />
     </radialGradient>
-    
+
     <!-- 连接线渐变 -->
     <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
@@ -122,7 +131,7 @@
       <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
     </linearGradient>
   </defs>
-  
+
   <!-- 连接线组 -->
   <g id="connections" stroke="url(#lineGradient)" stroke-width="2" fill="none">
     <line x1="60" y1="60" x2="60" y2="24" />           <!-- 上 -->
@@ -134,7 +143,7 @@
     <line x1="60" y1="60" x2="24" y2="60" />            <!-- 左 -->
     <line x1="60" y1="60" x2="34.5" y2="34.5" />       <!-- 左上 -->
   </g>
-  
+
   <!-- 墨点组 -->
   <g id="dots">
     <!-- 外围墨点 -->
@@ -146,7 +155,7 @@
     <circle cx="34.5" cy="85.5" r="5" fill="#333333" /> <!-- 左下 -->
     <circle cx="24" cy="60" r="5" fill="#333333" />     <!-- 左 -->
     <circle cx="34.5" cy="34.5" r="5" fill="#333333" /> <!-- 左上 -->
-    
+
     <!-- 中心墨点 -->
     <circle cx="60" cy="60" r="9" fill="url(#centerGradient)" />
   </g>
@@ -154,68 +163,63 @@
 ```
 
 ### 坐标定位表
-| 位置 | 角度 | X坐标 | Y坐标 | 说明 |
-|------|------|-------|-------|------|
-| 中心 | - | 60 | 60 | 画布中心 |
-| 上 | 0° | 60 | 24 | 正上方 |
-| 右上 | 45° | 85.5 | 34.5 | 东北方向 |
-| 右 | 90° | 96 | 60 | 正右方 |
-| 右下 | 135° | 85.5 | 85.5 | 东南方向 |
-| 下 | 180° | 60 | 96 | 正下方 |
-| 左下 | 225° | 34.5 | 85.5 | 西南方向 |
-| 左 | 270° | 24 | 60 | 正左方 |
-| 左上 | 315° | 34.5 | 34.5 | 西北方向 |
+
+| 位置 | 角度 | X坐标 | Y坐标 | 说明     |
+| ---- | ---- | ----- | ----- | -------- |
+| 中心 | -    | 60    | 60    | 画布中心 |
+| 上   | 0°   | 60    | 24    | 正上方   |
+| 右上 | 45°  | 85.5  | 34.5  | 东北方向 |
+| 右   | 90°  | 96    | 60    | 正右方   |
+| 右下 | 135° | 85.5  | 85.5  | 东南方向 |
+| 下   | 180° | 60    | 96    | 正下方   |
+| 左下 | 225° | 34.5  | 85.5  | 西南方向 |
+| 左   | 270° | 24    | 60    | 正左方   |
+| 左上 | 315° | 34.5  | 34.5  | 西北方向 |
 
 ---
 
 ## 颜色系统
 
 ### 主色调
+
 ```css
 /* CSS变量定义 */
 :root {
-  --ink-black:      #000000;    /* 中心墨点 */
-  --ink-gray:       #333333;    /* 外围墨点 */
-  --connection-blue: #0066FF;    /* 连接线主色 */
-  --accent-cyan:    #00FFFF;    /* 强调色 */
-  --bg-white:       #FFFFFF;    /* 背景色 */
-  --text-gray:      #666666;    /* 辅助文字 */
+  --ink-black: #000000; /* 中心墨点 */
+  --ink-gray: #333333; /* 外围墨点 */
+  --connection-blue: #0066ff; /* 连接线主色 */
+  --accent-cyan: #00ffff; /* 强调色 */
+  --bg-white: #ffffff; /* 背景色 */
+  --text-gray: #666666; /* 辅助文字 */
 }
 ```
 
 ### 颜色应用规则
 
 #### 主要应用
+
 - **中心墨点**: 始终使用纯黑色或径向渐变
 - **外围墨点**: 深灰色，与中心形成层次
 - **连接线**: 科技蓝，体现现代感
 - **背景**: 纯白色或透明
 
 #### 特殊场景
+
 - **黑色背景**: 使用白色或亮色版本
 - **彩色背景**: 使用黑白版本保证对比度
 - **印刷应用**: 提供单色版本
 
 ### 渐变配置
+
 ```css
 /* 中心墨点径向渐变 */
 .center-gradient {
-  background: radial-gradient(
-    circle at center,
-    #000000 0%,
-    #333333 70%,
-    #666666 100%
-  );
+  background: radial-gradient(circle at center, #000000 0%, #333333 70%, #666666 100%);
 }
 
 /* 连接线渐变 */
 .line-gradient {
-  background: linear-gradient(
-    var(--direction),
-    #0066FF 0%,
-    #00FFFF 50%,
-    #0066FF 100%
-  );
+  background: linear-gradient(var(--direction), #0066ff 0%, #00ffff 50%, #0066ff 100%);
 }
 ```
 
@@ -226,6 +230,7 @@
 ### 标准尺寸系统
 
 #### 超大尺寸 (200px+)
+
 ```
 画布: 200×200px
 中心墨点: 直径 30px
@@ -236,6 +241,7 @@
 ```
 
 #### 大尺寸 (120px)
+
 ```
 画布: 120×120px
 中心墨点: 直径 18px
@@ -246,6 +252,7 @@
 ```
 
 #### 中尺寸 (80px)
+
 ```
 画布: 80×80px
 中心墨点: 直径 12px
@@ -256,6 +263,7 @@
 ```
 
 #### 小尺寸 (48px)
+
 ```
 画布: 48×48px
 中心墨点: 直径 8px
@@ -266,6 +274,7 @@
 ```
 
 #### 极小尺寸 (32px)
+
 ```
 画布: 32×32px
 简化为 5个点结构
@@ -273,6 +282,7 @@
 ```
 
 ### 响应式CSS
+
 ```css
 /* 基础尺寸 */
 .logo {
@@ -282,19 +292,40 @@
 
 /* 媒体查询适配 */
 @media (max-width: 768px) {
-  .logo { width: 80px; height: 80px; }
+  .logo {
+    width: 80px;
+    height: 80px;
+  }
 }
 
 @media (max-width: 480px) {
-  .logo { width: 48px; height: 48px; }
+  .logo {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 /* 尺寸变体类 */
-.logo-xl { width: 200px; height: 200px; }
-.logo-lg { width: 120px; height: 120px; }
-.logo-md { width: 80px; height: 80px; }
-.logo-sm { width: 48px; height: 48px; }
-.logo-xs { width: 32px; height: 32px; }
+.logo-xl {
+  width: 200px;
+  height: 200px;
+}
+.logo-lg {
+  width: 120px;
+  height: 120px;
+}
+.logo-md {
+  width: 80px;
+  height: 80px;
+}
+.logo-sm {
+  width: 48px;
+  height: 48px;
+}
+.logo-xs {
+  width: 32px;
+  height: 32px;
+}
 ```
 
 ---
@@ -304,6 +335,7 @@
 ### 1. 网站应用
 
 #### 网站头部
+
 ```html
 <header class="site-header">
   <div class="logo-container">
@@ -329,6 +361,7 @@
 ```
 
 #### 页脚
+
 ```html
 <footer class="site-footer">
   <div class="footer-logo">
@@ -341,6 +374,7 @@
 ### 2. 移动应用
 
 #### App图标
+
 ```css
 .app-icon {
   width: 64px;
@@ -348,13 +382,14 @@
   border-radius: 14px;
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   padding: 8px;
-  box-shadow: 
-    0 2px 8px rgba(0,0,0,0.1),
-    0 1px 2px rgba(0,0,0,0.08);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.08);
 }
 ```
 
 #### 启动页
+
 ```html
 <div class="splash-screen">
   <div class="splash-logo">
@@ -368,6 +403,7 @@
 ### 3. 印刷应用
 
 #### 名片
+
 ```
 尺寸: 85×54mm
 Logo位置: 右上角
@@ -376,6 +412,7 @@ Logo尺寸: 12×12mm
 ```
 
 #### 宣传册
+
 ```
 封面Logo: 40×40mm，居中
 内页Logo: 15×15mm，页眉位置
@@ -385,6 +422,7 @@ Logo尺寸: 12×12mm
 ### 4. 数字媒体
 
 #### 社交媒体头像
+
 ```
 微信公众号: 200×200px
 微博头像: 180×180px
@@ -393,6 +431,7 @@ Logo尺寸: 12×12mm
 ```
 
 #### 视频水印
+
 ```
 位置: 右下角
 尺寸: 64×64px
@@ -405,6 +444,7 @@ Logo尺寸: 12×12mm
 ## 动画效果
 
 ### 1. 启动动画 "星云诞生"
+
 ```css
 @keyframes nebulaBirth {
   0% {
@@ -435,9 +475,11 @@ Logo尺寸: 12×12mm
 ```
 
 ### 2. 悬停动画 "星云脉动"
+
 ```css
 @keyframes nebulaPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     filter: brightness(1);
   }
@@ -453,10 +495,15 @@ Logo尺寸: 12×12mm
 ```
 
 ### 3. 加载动画 "星云旋转"
+
 ```css
 @keyframes nebulaRotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-loading {
@@ -465,8 +512,15 @@ Logo尺寸: 12×12mm
 
 /* 墨点闪烁 */
 @keyframes dotFlicker {
-  0%, 90%, 100% { opacity: 1; }
-  45%, 55% { opacity: 0.4; }
+  0%,
+  90%,
+  100% {
+    opacity: 1;
+  }
+  45%,
+  55% {
+    opacity: 0.4;
+  }
 }
 
 .animate-loading #dots circle:nth-child(odd) {
@@ -479,6 +533,7 @@ Logo尺寸: 12×12mm
 ```
 
 ### 4. 交互动画 "星云扩散"
+
 ```css
 @keyframes nebulaExpand {
   0% {
@@ -498,15 +553,17 @@ Logo尺寸: 12×12mm
 ```
 
 ### 5. 连接线发光效果
+
 ```css
 @keyframes lineGlow {
-  0%, 100% {
+  0%,
+  100% {
     stroke-width: 2px;
     filter: drop-shadow(0 0 0 transparent);
   }
   50% {
     stroke-width: 3px;
-    filter: drop-shadow(0 0 8px #00FFFF);
+    filter: drop-shadow(0 0 8px #00ffff);
   }
 }
 
@@ -520,6 +577,7 @@ Logo尺寸: 12×12mm
 ## 文件资源
 
 ### SVG文件
+
 ```
 logo-standard.svg         - 标准版本 (120×120px)
 logo-large.svg           - 大尺寸版本 (200×200px)
@@ -530,6 +588,7 @@ logo-outline.svg         - 线条版本
 ```
 
 ### PNG文件
+
 ```
 logo-standard.png        - 标准版本 (透明背景)
 logo-standard-white.png  - 白色背景版本
@@ -538,6 +597,7 @@ logo-favicon.png        - 网站图标 (32×32px)
 ```
 
 ### 印刷文件
+
 ```
 logo-cmyk.ai            - Adobe Illustrator矢量文件
 logo-pantone.eps        - 专色版本
@@ -545,6 +605,7 @@ logo-print.pdf          - 印刷用PDF
 ```
 
 ### 代码文件
+
 ```
 logo-component.vue      - Vue组件
 logo-component.react.js - React组件
@@ -596,6 +657,7 @@ logo-animations.css     - 动画效果CSS
 ### 特殊情况处理
 
 #### 黑色背景
+
 ```css
 /* 使用反色版本 */
 .logo-inverse {
@@ -610,6 +672,7 @@ logo-animations.css     - 动画效果CSS
 ```
 
 #### 极小尺寸
+
 ```css
 /* 简化到5个点 */
 .logo-simplified {
@@ -618,6 +681,7 @@ logo-animations.css     - 动画效果CSS
 ```
 
 #### 单色印刷
+
 ```css
 /* 使用纯黑版本 */
 .logo-black {
@@ -631,15 +695,19 @@ logo-animations.css     - 动画效果CSS
 ## 维护更新
 
 ### 版本管理
+
 - 主版本: 重大设计变更
 - 次版本: 细节优化调整
 - 修订版本: 技术修复更新
 
 ### 文档更新
+
 本文档将根据品牌发展和应用需求持续更新，请关注最新版本。
 
 ### 联系方式
+
 如有Logo使用相关问题，请联系设计团队：
+
 - **技术支持**：linhuinan542@gmail.com
 - **项目Issues**：[GitHub Issues](https://github.com/pump12329/inkdot/issues)
 

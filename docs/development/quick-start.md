@@ -9,6 +9,7 @@
 ## 🚀 5分钟快速上手
 
 ### 1. 环境检查
+
 ```bash
 # 检查Node.js版本 (需要v18+)
 node --version
@@ -20,6 +21,7 @@ npm --version
 ```
 
 ### 2. 项目初始化
+
 ```bash
 # 克隆项目 (如果从GitHub)
 git clone https://github.com/pump12329/inkdot.git
@@ -30,16 +32,18 @@ npm init -y
 ```
 
 ### 3. 安装依赖
+
 ```bash
 # 安装核心依赖
 npm install vue@next @vue/composition-api pinia
 npm install -D vite @vitejs/plugin-vue typescript
 
 # 安装开发工具
-npm install -D eslint prettier @typescript-eslint/parser
+npm install -D eslint @typescript-eslint/parser
 ```
 
 ### 4. 创建基础文件
+
 ```bash
 # 创建Vite配置
 cat > vite.config.ts << 'EOF'
@@ -87,6 +91,7 @@ EOF
 ```
 
 ### 5. 创建第一个组件
+
 ```bash
 # 创建主应用文件
 mkdir -p src
@@ -169,6 +174,7 @@ EOF
 ```
 
 ### 6. 创建HTML入口
+
 ```bash
 cat > index.html << 'EOF'
 <!DOCTYPE html>
@@ -188,6 +194,7 @@ EOF
 ```
 
 ### 7. 启动开发服务器
+
 ```bash
 # 启动开发服务器
 npm run dev
@@ -197,11 +204,13 @@ npx vite
 ```
 
 ### 8. 打开浏览器
+
 访问 `http://localhost:5173` 查看你的第一个InkDot应用！
 
 ## 🎯 下一步开发
 
 ### 添加状态管理
+
 ```bash
 # 创建Pinia store
 mkdir -p src/stores
@@ -227,6 +236,7 @@ EOF
 ```
 
 ### 添加AI功能
+
 ```bash
 # 创建AI服务
 mkdir -p src/services
@@ -241,6 +251,7 @@ EOF
 ```
 
 ### 添加时间戳工具
+
 ```bash
 # 使用项目自带的时间戳工具
 npm run timestamp:current
@@ -273,18 +284,21 @@ git push origin main     # 推送到远程仓库
 ## 🐛 常见问题
 
 ### Q: 端口被占用怎么办？
+
 ```bash
 # 解决方案：使用其他端口
 npm run dev -- --port 3000
 ```
 
 ### Q: TypeScript报错？
+
 ```bash
 # 解决方案：重启TypeScript服务
 # 在VSCode中按 Ctrl+Shift+P，输入 "TypeScript: Restart TS Server"
 ```
 
 ### Q: 依赖安装失败？
+
 ```bash
 # 解决方案：清理缓存
 npm cache clean --force

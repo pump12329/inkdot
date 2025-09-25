@@ -6,9 +6,11 @@ alwaysApply: true
 
 ## 技术栈
 
-- **Vue 3** + **TypeScript** + **Pinia** + **Vite**
+- **Vue 3.5.21** + **TypeScript 5.9.2** + **Pinia 3.0.3** + **Vite 7.0.0**
 - **样式**: CSS + 自定义组件库（基于墨点Logo设计）
-- **图标**: Lucide Vue Next
+- **图标**: Lucide Vue Next 0.544.0
+- **测试**: Vitest 3.2.4 + Playwright 1.55.1 + Puppeteer 24.22.0
+- **代码质量**: ESLint 9.36.0 + Prettier 3.6.2
 
 ## Vue 3 开发规范
 
@@ -91,6 +93,76 @@ function createNode(data: Partial<MindMapNode>): MindMapNode {
 - **避免缩写**：除非是广泛认知的缩写
 - **保持一致性**：相同类型的文件使用相同的命名模式
 
+## 中文字体支持规范
+
+### 字体配置原则
+- **系统字体优先**：优先使用系统内置的中文字体
+- **渐进降级**：提供多层字体回退方案
+- **性能优化**：避免加载大体积的Web字体
+- **跨平台兼容**：确保在Windows、macOS、Linux上正常显示
+
+### 字体声明
+```css
+/* 中文字体堆栈 */
+.chinese-text {
+  font-family: 
+    /* 系统首选字体 */
+    "PingFang SC", "Microsoft YaHei", "SimHei",
+    /* 开源备选字体 */
+    "Noto Sans CJK SC", "WenQuanYi Micro Hei",
+    /* 通用回退 */
+    sans-serif;
+}
+
+/* 思维导图节点字体 */
+.mindmap-node {
+  font-family: 
+    -apple-system, BlinkMacSystemFont,
+    "PingFang SC", "Microsoft YaHei",
+    "Noto Sans CJK SC", "WenQuanYi Micro Hei",
+    system-ui, sans-serif;
+}
+```
+
+### Docker环境中文支持
+```dockerfile
+# 在Dockerfile中安装中文字体
+RUN apt-get update && apt-get install -y \
+    fonts-noto-cjk \
+    fonts-wqy-microhei \
+    && rm -rf /var/lib/apt/lists/*
+```
+
+### 字体检测和加载
+```typescript
+// 字体支持检测
+interface FontConfig {
+  primary: string[]
+  fallback: string[]
+  testChar: string
+}
+
+const chineseFontConfig: FontConfig = {
+  primary: ['PingFang SC', 'Microsoft YaHei', 'SimHei'],
+  fallback: ['Noto Sans CJK SC', 'WenQuanYi Micro Hei', 'sans-serif'],
+  testChar: '中'
+}
+
+// 检测字体可用性
+function detectFontSupport(fontFamily: string): boolean {
+  const canvas = document.createElement('canvas')
+  const context = canvas.getContext('2d')!
+  
+  context.font = '16px monospace'
+  const fallbackWidth = context.measureText(chineseFontConfig.testChar).width
+  
+  context.font = `16px ${fontFamily}, monospace`
+  const testWidth = context.measureText(chineseFontConfig.testChar).width
+  
+  return testWidth !== fallbackWidth
+}
+```
+
 ## 组件设计原则
 
 ### 思维导图组件设计原则
@@ -100,6 +172,7 @@ function createNode(data: Partial<MindMapNode>): MindMapNode {
 - **交互简化**：拖拽、点击、键盘快捷键，避免复杂手势
 - **视觉极简**：使用Canvas/SVG，避免复杂视觉效果
 - **渐进式功能**：高级功能（如AI辅助）按需启用
+- **中文优化**：确保中文内容在所有环境下正常显示
 
 ### 工作区组件设计原则
 

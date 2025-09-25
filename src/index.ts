@@ -7,7 +7,7 @@ export { default as Button } from './components/Button.vue';
 export { useMindMapStore } from './stores/mindmap';
 
 // 类型
-export type { MindMapNode, NodeConnection, OutlineNode, Position, Size, AppConfig } from './types';
+export type { MindMapNode, NodeConnection, Position, Size } from './types';
 
 // 工具函数
 export * from './utils';

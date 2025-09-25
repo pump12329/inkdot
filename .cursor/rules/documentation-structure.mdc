@@ -1,0 +1,20 @@
+---
+alwaysApply: true
+---
+
+# 文档结构
+
+## 文档目录结构
+```
+docs/
+├── architecture/     # 架构设计
+├── development/      # 开发指南
+├── design/          # 设计规范
+├── api/             # API文档
+├── user-guide/      # 用户指南
+├── deployment/      # 部署文档
+└── tools/           # 项目工具
+```
+
+## 详细规范
+详细规范请查看：[项目规则文档](docs/development/project-rules.md)

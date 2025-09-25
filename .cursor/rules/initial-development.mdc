@@ -1,0 +1,327 @@
+---
+description: 项目初始开发使用
+alwaysApply: false
+---
+# 初始项目开发规则
+
+## 🎯 项目启动阶段
+
+### 核心原则
+- **MVP优先**：先实现最小可行产品，再逐步完善
+- **渐进式开发**：从基础功能开始，逐步添加高级特性
+- **代码质量**：从一开始就保持高质量代码标准
+- **文档同步**：代码和文档同步更新
+
+## 🏗️ 开发优先级
+
+### 第一阶段：基础架构 (Week 1-2)
+1. **项目初始化**
+   - 配置开发环境
+   - 设置构建工具链
+   - 建立代码规范
+
+2. **核心类型定义**
+   - 定义基础数据结构
+   - 建立类型系统
+   - 创建接口规范
+
+3. **基础UI组件**
+   - 创建基础组件库
+   - 实现设计系统
+   - 建立组件规范
+
+### 第二阶段：核心功能 (Week 3-4)
+1. **思维导图引擎**
+   - 节点管理
+   - 连接关系
+   - 基础渲染
+
+2. **状态管理**
+   - Pinia store设计
+   - 数据流管理
+   - 状态持久化
+
+3. **基础交互**
+   - 节点操作
+   - 画布交互
+   - 键盘快捷键
+
+### 第三阶段：高级功能 (Week 5-6)
+1. **AI集成**
+   - AI服务配置
+   - 基础AI功能
+   - 智能建议
+
+2. **数据管理**
+   - 项目保存/加载
+   - 导入/导出
+   - 数据备份
+
+3. **用户体验**
+   - 性能优化
+   - 错误处理
+   - 用户反馈
+
+## 📝 开发规范
+
+### 代码组织
+```typescript
+// 文件结构示例
+src/
+├── components/          # UI组件
+│   ├── common/         # 通用组件
+│   ├── mindmap/        # 思维导图组件
+│   └── index.ts        # 组件导出
+├── stores/             # 状态管理
+│   ├── mindmap.ts      # 思维导图状态
+│   └── settings.ts     # 设置状态
+├── types/              # 类型定义
+│   └── index.ts        # 核心类型
+├── utils/              # 工具函数
+│   └── index.ts        # 工具函数
+└── config/             # 配置文件
+    └── app.config.ts   # 应用配置
+```
+
+### 组件开发规范
+```vue
+<!-- 组件模板示例 -->
+<template>
+  <div class="component-name">
+    <!-- 组件内容 -->
+  </div>
+</template>
+
+<script setup lang="ts">
+// 1. 导入
+import { ref, computed, onMounted } from 'vue'
+import type { ComponentProps } from '@/types'
+
+// 2. 接口定义
+interface Props {
+  // 属性定义
+}
+
+// 3. Props和Emits
+const props = withDefaults(defineProps<Props>(), {
+  // 默认值
+})
+
+const emit = defineEmits<{
+  // 事件定义
+}>()
+
+// 4. 响应式数据
+const data = ref()
+
+// 5. 计算属性
+const computedValue = computed(() => {
+  // 计算逻辑
+})
+
+// 6. 方法
+const handleAction = () => {
+  // 处理逻辑
+}
+
+// 7. 生命周期
+onMounted(() => {
+  // 初始化逻辑
+})
+</script>
+
+<style scoped>
+.component-name {
+  /* 组件样式 */
+}
+</style>
+```
+
+### 状态管理规范
+```typescript
+// Store示例
+import { defineStore } from 'pinia'
+import type { MindMapNode } from '@/types'
+
+export const useMindMapStore = defineStore('mindMap', () => {
+  // 状态
+  const nodes = ref<MindMapNode[]>([])
+  const selectedNodeId = ref<string | null>(null)
+  
+  // 计算属性
+  const selectedNode = computed(() => 
+    nodes.value.find(node => node.id === selectedNodeId.value)
+  )
+  
+  // 方法
+  const addNode = (node: MindMapNode) => {
+    nodes.value.push(node)
+  }
+  
+  const updateNode = (id: string, updates: Partial<MindMapNode>) => {
+    const index = nodes.value.findIndex(node => node.id === id)
+    if (index !== -1) {
+      nodes.value[index] = { ...nodes.value[index], ...updates }
+    }
+  }
+  
+  return {
+    nodes: readonly(nodes),
+    selectedNodeId,
+    selectedNode,
+    addNode,
+    updateNode
+  }
+})
+```
+
+## 🔧 开发工具配置
+
+### TypeScript配置
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  }
+}
+```
+
+### ESLint配置
+```javascript
+// 核心规则
+rules: {
+  // Vue 3 规则
+  'vue/multi-word-component-names': 'off',
+  'vue/no-v-html': 'warn',
+  'vue/require-explicit-emits': 'error',
+  
+  // TypeScript 规则
+  '@typescript-eslint/no-unused-vars': 'warn',
+  '@typescript-eslint/no-explicit-any': 'warn',
+  '@typescript-eslint/explicit-function-return-type': 'off',
+  
+  // 代码质量规则
+  'no-console': 'warn',
+  'no-debugger': 'warn',
+  'prefer-const': 'error',
+  'no-var': 'error'
+}
+```
+
+## 🧪 测试策略
+
+### 测试优先级
+1. **核心业务逻辑** - 必须测试
+2. **工具函数** - 必须测试
+3. **组件交互** - 建议测试
+4. **UI渲染** - 可选测试
+
+### 测试示例
+```typescript
+// 工具函数测试
+import { describe, it, expect } from 'vitest'
+import { createNode } from '@/utils/nodeUtils'
+
+describe('createNode', () => {
+  it('应该创建有效的节点', () => {
+    const node = createNode('测试内容')
+    
+    expect(node.id).toBeDefined()
+    expect(node.content).toBe('测试内容')
+    expect(node.position).toEqual({ x: 0, y: 0 })
+  })
+})
+```
+
+## 📚 文档要求
+
+### 代码注释
+```typescript
+/**
+ * 创建思维导图节点
+ * @param content 节点内容
+ * @param position 节点位置
+ * @returns 创建的节点对象
+ */
+export function createNode(
+  content: string, 
+  position: Position = { x: 0, y: 0 }
+): MindMapNode {
+  // 实现逻辑
+}
+```
+
+### 组件文档
+```vue
+<!--
+  MindMapNode - 思维导图节点组件
+  
+  Props:
+  - node: MindMapNode - 节点数据
+  - selected: boolean - 是否选中
+  
+  Events:
+  - select: 节点被选中
+  - edit: 节点进入编辑模式
+-->
+```
+
+## 🚀 部署准备
+
+### 构建优化
+- 代码分割
+- 资源压缩
+- 懒加载
+- 缓存策略
+
+### 环境配置
+- 开发环境
+- 测试环境
+- 生产环境
+
+## ⚠️ 注意事项
+
+### 开发阶段
+- 不要过早优化
+- 保持代码简洁
+- 及时重构
+- 持续集成
+
+### 代码质量
+- 遵循规范
+- 及时修复错误
+- 保持测试覆盖
+- 定期代码审查
+
+### 性能考虑
+- 避免不必要的重新渲染
+- 合理使用缓存
+- 优化大列表渲染
+- 监控性能指标
+
+## 📋 检查清单
+
+### 每日检查
+- [ ] 代码编译通过
+- [ ] 测试用例通过
+- [ ] ESLint检查通过
+- [ ] 类型检查通过
+
+### 功能完成检查
+- [ ] 功能实现完整
+- [ ] 错误处理完善
+- [ ] 用户体验良好
+- [ ] 性能满足要求
+- [ ] 文档更新完整
+
+### 发布前检查
+- [ ] 所有测试通过
+- [ ] 性能测试通过
+- [ ] 安全扫描通过
+- [ ] 文档完整
+- [ ] 版本号更新

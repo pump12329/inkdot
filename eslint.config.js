@@ -1,11 +1,11 @@
 import js from '@eslint/js';
-import vue from 'eslint-plugin-vue';
 import typescript from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
-import vueParser from 'vue-eslint-parser';
 import prettierConfig from 'eslint-config-prettier';
 import prettierPlugin from 'eslint-plugin-prettier';
+import vue from 'eslint-plugin-vue';
 import globals from 'globals';
+import vueParser from 'vue-eslint-parser';
 
 export default [
   // ESLint recommended rules

@@ -4,7 +4,7 @@
 > **创建时间戳**：T0.4  
 > **最后更新**：T0.4  
 > **状态**：🟢 CURRENT  
-> **维护者**：InkDot开发团队  
+> **维护者**：InkDot开发团队
 
 ## 📋 工具概述
 
@@ -44,6 +44,7 @@ npm run status:update
 ```
 
 **功能特性：**
+
 - 递归扫描项目中的所有Markdown文件
 - 解析文档头部信息（版本、时间戳、状态）
 - 按状态分类显示文档
@@ -51,6 +52,7 @@ npm run status:update
 - 替换CHANGELOG中的现有状态总览
 
 **输出示例：**
+
 ```
 📊 更新CHANGELOG文档状态总览...
 🔍 扫描项目文档状态...
@@ -74,6 +76,7 @@ npm run status:scan
 ```
 
 **扫描内容：**
+
 - 所有Markdown文件的头部信息
 - 文档版本号和状态
 - 最后更新时间戳
@@ -89,12 +92,14 @@ npm run status:check
 ```
 
 **检查项目：**
+
 - 文档头部信息的完整性
 - 状态字段的有效性
 - 版本号格式的正确性
 - 时间戳格式的规范性
 
 **输出示例：**
+
 ```
 📊 文档状态统计:
   总计文档: 27 个
@@ -113,22 +118,22 @@ npm run status:check
 
 ```javascript
 const documentCategories = {
-  'current': {
+  current: {
     title: '🟢 当前文档 (CURRENT)',
     status: 'CURRENT',
     icon: '🟢'
   },
-  'draft': {
+  draft: {
     title: '🚧 开发中文档 (DRAFT)',
     status: 'DRAFT',
     icon: '🚧'
   },
-  'outdated': {
+  outdated: {
     title: '🟡 计划更新文档 (OUTDATED)',
     status: 'OUTDATED',
     icon: '🟡'
   },
-  'deprecated': {
+  deprecated: {
     title: '🔴 已废弃文档 (DEPRECATED)',
     status: 'DEPRECATED',
     icon: '🔴'
@@ -141,12 +146,7 @@ const documentCategories = {
 工具会自动排除以下目录和文件：
 
 ```javascript
-const excludePatterns = [
-  'node_modules/**',
-  '.git/**',
-  'dist/**',
-  'build/**'
-];
+const excludePatterns = ['node_modules/**', '.git/**', 'dist/**', 'build/**'];
 ```
 
 ### 文档头部格式要求
@@ -187,19 +187,23 @@ const excludePatterns = [
 ### 表格生成规则
 
 **当前文档表格：**
+
 ```markdown
 ### 🟢 当前文档 (CURRENT)
-| 文档名称 | 版本 | 最后更新 | 状态 |
-|---------|------|----------|------|
-| system-architecture.md | v1.2.0 | T0.3 | 🟢 CURRENT |
+
+| 文档名称               | 版本   | 最后更新 | 状态       |
+| ---------------------- | ------ | -------- | ---------- |
+| system-architecture.md | v1.2.0 | T0.3     | 🟢 CURRENT |
 ```
 
 **开发中文档表格：**
+
 ```markdown
 ### 🚧 开发中文档 (DRAFT)
-| 文档名称 | 版本 | 预计完成 | 状态 |
-|---------|------|----------|------|
-| api-reference.md | v1.0.0 | T5.0 | 🚧 DRAFT |
+
+| 文档名称         | 版本   | 预计完成 | 状态     |
+| ---------------- | ------ | -------- | -------- |
+| api-reference.md | v1.0.0 | T5.0     | 🚧 DRAFT |
 ```
 
 ## 🔄 工作流程
@@ -207,20 +211,23 @@ const excludePatterns = [
 ### 推荐的文档维护流程
 
 1. **开发新文档**
+
    ```bash
    # 创建新文档时添加标准头部
-   echo "> **文档版本**：v1.0.0  
-   > **最后更新**：T0.4  
-   > **状态**：🟢 CURRENT  
+   echo "> **文档版本**：v1.0.0
+   > **最后更新**：T0.4
+   > **状态**：🟢 CURRENT
    > **维护者**：InkDot开发团队" > new-doc.md
    ```
 
 2. **更新文档后检查状态**
+
    ```bash
    npm run status:check
    ```
 
 3. **更新CHANGELOG状态总览**
+
    ```bash
    npm run status:update
    ```
@@ -234,19 +241,21 @@ const excludePatterns = [
 ### 定期维护流程
 
 1. **月度文档审查**
+
    ```bash
    # 检查所有文档状态
    npm run status:check
-   
+
    # 更新状态总览
    npm run status:update
    ```
 
 2. **版本发布前检查**
+
    ```bash
    # 确保所有文档状态正确
    npm run status:check
-   
+
    # 更新CHANGELOG
    npm run status:update
    npm run changelog:update
@@ -265,8 +274,8 @@ const CONFIG = {
     '.git/**',
     'dist/**',
     'build/**',
-    'temp/**',        // 添加临时目录
-    '**/draft/**'     // 排除所有草稿目录
+    'temp/**', // 添加临时目录
+    '**/draft/**' // 排除所有草稿目录
   ]
 };
 ```
@@ -293,11 +302,11 @@ npm run changelog:update
   run: |
     npm run status:check
     npm run status:update
-    
+
 - name: Update CHANGELOG
   run: |
     npm run changelog:update
-    
+
 - name: Commit Updates
   run: |
     git config --local user.email "action@github.com"
@@ -338,19 +347,23 @@ npm run changelog:update
 ## 📊 文档状态总览
 
 ### 🟢 当前文档 (CURRENT)
-| 文档名称 | 版本 | 最后更新 | 状态 |
-|---------|------|----------|------|
-| system-architecture.md | v1.2.0 | T0.3 | 🟢 CURRENT |
-| project-rules.md | v1.3.0 | T0.3 | 🟢 CURRENT |
+
+| 文档名称               | 版本   | 最后更新 | 状态       |
+| ---------------------- | ------ | -------- | ---------- |
+| system-architecture.md | v1.2.0 | T0.3     | 🟢 CURRENT |
+| project-rules.md       | v1.3.0 | T0.3     | 🟢 CURRENT |
 
 ### 🚧 开发中文档 (DRAFT)
-*当前无开发中文档*
+
+_当前无开发中文档_
 
 ### 🟡 计划更新文档 (OUTDATED)
-*当前无过时文档*
+
+_当前无过时文档_
 
 ### 🔴 已废弃文档 (DEPRECATED)
-*当前无废弃文档*
+
+_当前无废弃文档_
 ```
 
 ## 🐛 故障排除
@@ -395,6 +408,7 @@ grep -n "文档状态总览" docs/CHANGELOG.md
 ## 📞 技术支持
 
 如有问题或建议，请联系：
+
 - **项目Issues**：[GitHub Issues](https://github.com/pump12329/inkdot/issues)
 - **技术支持**：linhuinan542@gmail.com
 - **社区讨论**：[GitHub Discussions](https://github.com/pump12329/inkdot/discussions)

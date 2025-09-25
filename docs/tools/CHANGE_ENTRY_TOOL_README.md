@@ -4,7 +4,7 @@
 > **创建时间戳**：T0.4  
 > **最后更新**：T0.4  
 > **状态**：🟢 CURRENT  
-> **维护者**：InkDot开发团队  
+> **维护者**：InkDot开发团队
 
 ## 📋 工具概述
 
@@ -50,6 +50,7 @@ npm run change:auto
 ```
 
 **功能特性：**
+
 - 扫描Git工作区状态
 - 智能识别变更类型
 - 按类型分组变更
@@ -66,6 +67,7 @@ npm run change:detect
 ```
 
 **输出示例：**
+
 ```
 🤖 自动检测变更类型...
 🔍 扫描项目变更...
@@ -98,6 +100,7 @@ npm run change:add -- --type documentation --description "更新API文档"
 ```
 
 **支持的变更类型：**
+
 - `feature` - 🆕 新增功能
 - `fix` - 🐛 问题修复
 - `improvement` - ⚡ 功能改进
@@ -116,6 +119,7 @@ npm run change:scan
 ```
 
 **扫描内容：**
+
 - Git工作区状态
 - 文件变更类型
 - 变更置信度
@@ -137,18 +141,18 @@ npm run change:interactive
 
 ```javascript
 const changeTypes = {
-  'feature': {
+  feature: {
     keywords: ['feat', 'feature', 'add', 'new', 'implement', 'create'],
     icon: '🆕',
     title: '新增功能',
     category: 'features'
   },
-  'fix': {
+  fix: {
     keywords: ['fix', 'bug', 'error', 'issue', 'resolve', 'correct'],
     icon: '🐛',
     title: '问题修复',
     category: 'bugfixes'
-  },
+  }
   // ... 其他类型
 };
 ```
@@ -159,11 +163,11 @@ const changeTypes = {
 
 ```javascript
 const filePatterns = {
-  'feature': ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.js'],
-  'documentation': ['docs/**/*.md', '*.md'],
-  'style': ['src/**/*.css', 'src/**/*.scss', 'src/**/*.vue'],
-  'test': ['tests/**/*.ts', 'tests/**/*.js', '**/*.test.*', '**/*.spec.*'],
-  'build': ['package.json', 'tsconfig.json', 'vite.config.*', '*.config.*']
+  feature: ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.js'],
+  documentation: ['docs/**/*.md', '*.md'],
+  style: ['src/**/*.css', 'src/**/*.scss', 'src/**/*.vue'],
+  test: ['tests/**/*.ts', 'tests/**/*.js', '**/*.test.*', '**/*.spec.*'],
+  build: ['package.json', 'tsconfig.json', 'vite.config.*', '*.config.*']
 };
 ```
 
@@ -188,6 +192,7 @@ const filePatterns = {
 ### 推荐的开发流程
 
 1. **开发功能**
+
    ```bash
    # 修改文件后
    git add .
@@ -195,16 +200,19 @@ const filePatterns = {
    ```
 
 2. **自动检测变更**
+
    ```bash
    npm run change:detect
    ```
 
 3. **添加变更条目**
+
    ```bash
    npm run change:auto
    ```
 
 4. **检查CHANGELOG**
+
    ```bash
    git diff docs/CHANGELOG.md
    ```
@@ -218,11 +226,13 @@ const filePatterns = {
 ### 手动添加流程
 
 1. **确定变更类型**
+
    ```bash
    npm run change:help
    ```
 
 2. **手动添加条目**
+
    ```bash
    npm run change:add -- --type feature --description "添加用户认证功能"
    ```
@@ -278,10 +288,12 @@ npm run change:add -- --type feature --description "批量功能更新" --files 
 
 ```markdown
 #### 🆕 新增功能
+
 - **添加用户认证功能** - T0.4
 - **实现文件上传功能** - T0.4
 
 #### 🐛 问题修复
+
 - **修复登录页面bug** - T0.4
 ```
 
@@ -339,6 +351,7 @@ git diff --cached
 ## 📞 技术支持
 
 如有问题或建议，请联系：
+
 - **项目Issues**：[GitHub Issues](https://github.com/pump12329/inkdot/issues)
 - **技术支持**：linhuinan542@gmail.com
 - **社区讨论**：[GitHub Discussions](https://github.com/pump12329/inkdot/discussions)

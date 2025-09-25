@@ -1,0 +1,16 @@
+---
+alwaysApply: true
+---
+
+# 时间戳系统
+
+## 基准时间
+- 基准时间：T0 (2025-09-21)
+
+## 时间戳命令
+- 获取当前时间戳：`npm run timestamp:current`
+- 更新文档时间戳：`npm run docs:update <文档路径>`
+
+## 文档要求
+- 所有文档必须包含时间戳头部信息
+- 按流程更新时间戳和CHANGELOG

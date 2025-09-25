@@ -1,526 +1,663 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>墨点 Logo - React 演示</title>
-    <link rel="stylesheet" href="../src/assets/logo.css">
+    <link rel="stylesheet" href="../src/assets/logo.css" />
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background: #f8f9fa;
-        }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+          'Microsoft YaHei', sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        background: #f8f9fa;
+      }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
 
-        h1 {
-            text-align: center;
-            color: #000;
-            margin-bottom: 40px;
-            font-size: 2.5em;
-        }
+      h1 {
+        text-align: center;
+        color: #000;
+        margin-bottom: 40px;
+        font-size: 2.5em;
+      }
 
-        .section {
-            margin-bottom: 60px;
-            padding: 30px;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            background: #fafbfc;
-        }
+      .section {
+        margin-bottom: 60px;
+        padding: 30px;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        background: #fafbfc;
+      }
 
-        .section h2 {
-            color: #333;
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-        }
+      .section h2 {
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+      }
 
-        .logo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin: 20px 0;
-        }
+      .logo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        margin: 20px 0;
+      }
 
-        .logo-item {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+      .logo-item {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
 
-        .logo-item h3 {
-            margin: 15px 0 10px 0;
-            color: #555;
-            font-size: 1.1em;
-        }
+      .logo-item h3 {
+        margin: 15px 0 10px 0;
+        color: #555;
+        font-size: 1.1em;
+      }
 
-        .logo-item p {
-            margin: 0;
-            color: #777;
-            font-size: 0.9em;
-        }
+      .logo-item p {
+        margin: 0;
+        color: #777;
+        font-size: 0.9em;
+      }
 
-        .animation-demo {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-        }
+      .animation-demo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+      }
 
-        .animation-item {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            min-width: 150px;
-        }
+      .animation-item {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        min-width: 150px;
+      }
 
-        .animation-item h4 {
-            margin: 0 0 15px 0;
-            color: #555;
-            font-size: 1em;
-        }
+      .animation-item h4 {
+        margin: 0 0 15px 0;
+        color: #555;
+        font-size: 1em;
+      }
 
-        .controls {
-            text-align: center;
-            margin: 30px 0;
-        }
+      .controls {
+        text-align: center;
+        margin: 30px 0;
+      }
 
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            margin: 0 10px;
-            background: #0066FF;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s ease;
-        }
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0 10px;
+        background: #0066ff;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s ease;
+      }
 
-        .btn:hover {
-            background: #0052CC;
-        }
+      .btn:hover {
+        background: #0052cc;
+      }
 
-        .btn.secondary {
-            background: #6c757d;
-        }
+      .btn.secondary {
+        background: #6c757d;
+      }
 
-        .btn.secondary:hover {
-            background: #5a6268;
-        }
+      .btn.secondary:hover {
+        background: #5a6268;
+      }
 
-        .code-block {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 6px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
+      .code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+        overflow-x: auto;
+      }
 
-        .code-block pre {
-            margin: 0;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 14px;
-            line-height: 1.4;
-        }
+      .code-block pre {
+        margin: 0;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 14px;
+        line-height: 1.4;
+      }
 
-        .interactive-demo {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-        }
+      .interactive-demo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+      }
 
-        .interactive-item {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            min-width: 200px;
-        }
+      .interactive-item {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        min-width: 200px;
+      }
 
-        .interactive-item h4 {
-            margin: 0 0 15px 0;
-            color: #555;
-            font-size: 1em;
-        }
+      .interactive-item h4 {
+        margin: 0 0 15px 0;
+        color: #555;
+        font-size: 1em;
+      }
 
-        .clickable-logo {
-            cursor: pointer;
-        }
+      .clickable-logo {
+        cursor: pointer;
+      }
 
-        .clickable-logo:hover {
-            transform: scale(1.05);
-        }
+      .clickable-logo:hover {
+        transform: scale(1.05);
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <h1>墨点 Logo - React 组件演示</h1>
-        <div id="root"></div>
+      <h1>墨点 Logo - React 组件演示</h1>
+      <div id="root"></div>
     </div>
 
     <script type="text/babel">
-        // InkDotLogo React 组件
-        const InkDotLogo = ({
-            size = 120,
-            variant = 'lg',
-            animation = '',
-            clickable = false,
-            customClass = '',
-            hoverable = true,
-            onClick,
-            ...props
-        }) => {
-            // 生成唯一的实例ID，避免多个组件实例间的ID冲突
-            const instanceId = React.useMemo(() =>
-                Math.random().toString(36).substr(2, 9),
-                []
-            );
+      // InkDotLogo React 组件
+      const InkDotLogo = ({
+        size = 120,
+        variant = 'lg',
+        animation = '',
+        clickable = false,
+        customClass = '',
+        hoverable = true,
+        onClick,
+        ...props
+      }) => {
+        // 生成唯一的实例ID，避免多个组件实例间的ID冲突
+        const instanceId = React.useMemo(() => Math.random().toString(36).substr(2, 9), []);
 
-            // 构建CSS类名
-            const logoClasses = React.useMemo(() => {
-                const classes = ['logo'];
+        // 构建CSS类名
+        const logoClasses = React.useMemo(() => {
+          const classes = ['logo'];
 
-                // 添加尺寸类
-                if (variant !== 'lg') {
-                    classes.push(`logo-${variant}`);
-                }
+          // 添加尺寸类
+          if (variant !== 'lg') {
+            classes.push(`logo-${variant}`);
+          }
 
-                // 添加动画类
-                if (animation) {
-                    classes.push(`animate-${animation}`);
-                }
+          // 添加动画类
+          if (animation) {
+            classes.push(`animate-${animation}`);
+          }
 
-                // 添加自定义类
-                if (customClass) {
-                    classes.push(customClass);
-                }
+          // 添加自定义类
+          if (customClass) {
+            classes.push(customClass);
+          }
 
-                // 添加可点击类
-                if (clickable) {
-                    classes.push('clickable');
-                }
+          // 添加可点击类
+          if (clickable) {
+            classes.push('clickable');
+          }
 
-                // 添加悬停类
-                if (hoverable) {
-                    classes.push('hoverable');
-                }
+          // 添加悬停类
+          if (hoverable) {
+            classes.push('hoverable');
+          }
 
-                return classes.join(' ');
-            }, [variant, animation, customClass, clickable, hoverable]);
+          return classes.join(' ');
+        }, [variant, animation, customClass, clickable, hoverable]);
 
-            // 处理点击事件
-            const handleClick = (event) => {
-                if (clickable && onClick) {
-                    onClick(event);
-                }
-            };
-
-            return React.createElement('svg', {
-                className: logoClasses,
-                width: size,
-                height: size,
-                viewBox: "0 0 120 120",
-                xmlns: "http://www.w3.org/2000/svg",
-                onClick: handleClick,
-                ...props
-            }, [
-                React.createElement('defs', { key: 'defs' }, [
-                    // 中心点渐变
-                    React.createElement('radialGradient', {
-                        key: 'centerGradient',
-                        id: `centerGradient-${instanceId}`,
-                        cx: "50%",
-                        cy: "50%",
-                        r: "50%"
-                    }, [
-                        React.createElement('stop', {
-                            key: 'stop1',
-                            offset: "0%",
-                            style: { stopColor: '#000000', stopOpacity: 1 }
-                        }),
-                        React.createElement('stop', {
-                            key: 'stop2',
-                            offset: "70%",
-                            style: { stopColor: '#333333', stopOpacity: 1 }
-                        }),
-                        React.createElement('stop', {
-                            key: 'stop3',
-                            offset: "100%",
-                            style: { stopColor: '#666666', stopOpacity: 1 }
-                        })
-                    ]),
-
-                    // 连接线渐变
-                    React.createElement('linearGradient', {
-                        key: 'lineGradient',
-                        id: `lineGradient-${instanceId}`,
-                        x1: "0%",
-                        y1: "0%",
-                        x2: "100%",
-                        y2: "0%"
-                    }, [
-                        React.createElement('stop', {
-                            key: 'stop1',
-                            offset: "0%",
-                            style: { stopColor: '#0066FF', stopOpacity: 1 }
-                        }),
-                        React.createElement('stop', {
-                            key: 'stop2',
-                            offset: "50%",
-                            style: { stopColor: '#00FFFF', stopOpacity: 1 }
-                        }),
-                        React.createElement('stop', {
-                            key: 'stop3',
-                            offset: "100%",
-                            style: { stopColor: '#0066FF', stopOpacity: 1 }
-                        })
-                    ])
-                ]),
-
-                // 连接线组
-                React.createElement('g', {
-                    key: 'connections',
-                    id: 'connections',
-                    stroke: `url(#lineGradient-${instanceId})`,
-                    strokeWidth: "2",
-                    fill: "none"
-                }, [
-                    React.createElement('line', { key: 'line1', x1: "60", y1: "60", x2: "60", y2: "24" }),
-                    React.createElement('line', { key: 'line2', x1: "60", y1: "60", x2: "85.5", y2: "34.5" }),
-                    React.createElement('line', { key: 'line3', x1: "60", y1: "60", x2: "96", y2: "60" }),
-                    React.createElement('line', { key: 'line4', x1: "60", y1: "60", x2: "85.5", y2: "85.5" }),
-                    React.createElement('line', { key: 'line5', x1: "60", y1: "60", x2: "60", y2: "96" }),
-                    React.createElement('line', { key: 'line6', x1: "60", y1: "60", x2: "34.5", y2: "85.5" }),
-                    React.createElement('line', { key: 'line7', x1: "60", y1: "60", x2: "24", y2: "60" }),
-                    React.createElement('line', { key: 'line8', x1: "60", y1: "60", x2: "34.5", y2: "34.5" })
-                ]),
-
-                // 墨点组
-                React.createElement('g', { key: 'dots', id: 'dots' }, [
-                    // 外围墨点
-                    React.createElement('circle', { key: 'dot1', cx: "60", cy: "24", r: "5", fill: "#333333" }),
-                    React.createElement('circle', { key: 'dot2', cx: "85.5", cy: "34.5", r: "5", fill: "#333333" }),
-                    React.createElement('circle', { key: 'dot3', cx: "96", cy: "60", r: "5", fill: "#333333" }),
-                    React.createElement('circle', { key: 'dot4', cx: "85.5", cy: "85.5", r: "5", fill: "#333333" }),
-                    React.createElement('circle', { key: 'dot5', cx: "60", cy: "96", r: "5", fill: "#333333" }),
-                    React.createElement('circle', { key: 'dot6', cx: "34.5", cy: "85.5", r: "5", fill: "#333333" }),
-                    React.createElement('circle', { key: 'dot7', cx: "24", cy: "60", r: "5", fill: "#333333" }),
-                    React.createElement('circle', { key: 'dot8', cx: "34.5", cy: "34.5", r: "5", fill: "#333333" }),
-                    // 中心墨点
-                    React.createElement('circle', {
-                        key: 'centerDot',
-                        cx: "60",
-                        cy: "60",
-                        r: "9",
-                        fill: `url(#centerGradient-${instanceId})`
-                    })
-                ])
-            ]);
+        // 处理点击事件
+        const handleClick = event => {
+          if (clickable && onClick) {
+            onClick(event);
+          }
         };
 
-        // 主演示组件
-        const App = () => {
-            const [clickCount, setClickCount] = React.useState(0);
-            const [currentAnimation, setCurrentAnimation] = React.useState('');
+        return React.createElement(
+          'svg',
+          {
+            className: logoClasses,
+            width: size,
+            height: size,
+            viewBox: '0 0 120 120',
+            xmlns: 'http://www.w3.org/2000/svg',
+            onClick: handleClick,
+            ...props
+          },
+          [
+            React.createElement('defs', { key: 'defs' }, [
+              // 中心点渐变
+              React.createElement(
+                'radialGradient',
+                {
+                  key: 'centerGradient',
+                  id: `centerGradient-${instanceId}`,
+                  cx: '50%',
+                  cy: '50%',
+                  r: '50%'
+                },
+                [
+                  React.createElement('stop', {
+                    key: 'stop1',
+                    offset: '0%',
+                    style: { stopColor: '#000000', stopOpacity: 1 }
+                  }),
+                  React.createElement('stop', {
+                    key: 'stop2',
+                    offset: '70%',
+                    style: { stopColor: '#333333', stopOpacity: 1 }
+                  }),
+                  React.createElement('stop', {
+                    key: 'stop3',
+                    offset: '100%',
+                    style: { stopColor: '#666666', stopOpacity: 1 }
+                  })
+                ]
+              ),
 
-            const handleLogoClick = () => {
-                setClickCount(prev => prev + 1);
-            };
+              // 连接线渐变
+              React.createElement(
+                'linearGradient',
+                {
+                  key: 'lineGradient',
+                  id: `lineGradient-${instanceId}`,
+                  x1: '0%',
+                  y1: '0%',
+                  x2: '100%',
+                  y2: '0%'
+                },
+                [
+                  React.createElement('stop', {
+                    key: 'stop1',
+                    offset: '0%',
+                    style: { stopColor: '#0066FF', stopOpacity: 1 }
+                  }),
+                  React.createElement('stop', {
+                    key: 'stop2',
+                    offset: '50%',
+                    style: { stopColor: '#00FFFF', stopOpacity: 1 }
+                  }),
+                  React.createElement('stop', {
+                    key: 'stop3',
+                    offset: '100%',
+                    style: { stopColor: '#0066FF', stopOpacity: 1 }
+                  })
+                ]
+              )
+            ]),
 
-            const restartAnimations = () => {
-                setCurrentAnimation('');
-                setTimeout(() => {
-                    setCurrentAnimation('birth');
-                }, 100);
-            };
+            // 连接线组
+            React.createElement(
+              'g',
+              {
+                key: 'connections',
+                id: 'connections',
+                stroke: `url(#lineGradient-${instanceId})`,
+                strokeWidth: '2',
+                fill: 'none'
+              },
+              [
+                React.createElement('line', {
+                  key: 'line1',
+                  x1: '60',
+                  y1: '60',
+                  x2: '60',
+                  y2: '24'
+                }),
+                React.createElement('line', {
+                  key: 'line2',
+                  x1: '60',
+                  y1: '60',
+                  x2: '85.5',
+                  y2: '34.5'
+                }),
+                React.createElement('line', {
+                  key: 'line3',
+                  x1: '60',
+                  y1: '60',
+                  x2: '96',
+                  y2: '60'
+                }),
+                React.createElement('line', {
+                  key: 'line4',
+                  x1: '60',
+                  y1: '60',
+                  x2: '85.5',
+                  y2: '85.5'
+                }),
+                React.createElement('line', {
+                  key: 'line5',
+                  x1: '60',
+                  y1: '60',
+                  x2: '60',
+                  y2: '96'
+                }),
+                React.createElement('line', {
+                  key: 'line6',
+                  x1: '60',
+                  y1: '60',
+                  x2: '34.5',
+                  y2: '85.5'
+                }),
+                React.createElement('line', {
+                  key: 'line7',
+                  x1: '60',
+                  y1: '60',
+                  x2: '24',
+                  y2: '60'
+                }),
+                React.createElement('line', {
+                  key: 'line8',
+                  x1: '60',
+                  y1: '60',
+                  x2: '34.5',
+                  y2: '34.5'
+                })
+              ]
+            ),
 
-            const toggleAnimation = (animation) => {
-                setCurrentAnimation(currentAnimation === animation ? '' : animation);
-            };
+            // 墨点组
+            React.createElement('g', { key: 'dots', id: 'dots' }, [
+              // 外围墨点
+              React.createElement('circle', {
+                key: 'dot1',
+                cx: '60',
+                cy: '24',
+                r: '5',
+                fill: '#333333'
+              }),
+              React.createElement('circle', {
+                key: 'dot2',
+                cx: '85.5',
+                cy: '34.5',
+                r: '5',
+                fill: '#333333'
+              }),
+              React.createElement('circle', {
+                key: 'dot3',
+                cx: '96',
+                cy: '60',
+                r: '5',
+                fill: '#333333'
+              }),
+              React.createElement('circle', {
+                key: 'dot4',
+                cx: '85.5',
+                cy: '85.5',
+                r: '5',
+                fill: '#333333'
+              }),
+              React.createElement('circle', {
+                key: 'dot5',
+                cx: '60',
+                cy: '96',
+                r: '5',
+                fill: '#333333'
+              }),
+              React.createElement('circle', {
+                key: 'dot6',
+                cx: '34.5',
+                cy: '85.5',
+                r: '5',
+                fill: '#333333'
+              }),
+              React.createElement('circle', {
+                key: 'dot7',
+                cx: '24',
+                cy: '60',
+                r: '5',
+                fill: '#333333'
+              }),
+              React.createElement('circle', {
+                key: 'dot8',
+                cx: '34.5',
+                cy: '34.5',
+                r: '5',
+                fill: '#333333'
+              }),
+              // 中心墨点
+              React.createElement('circle', {
+                key: 'centerDot',
+                cx: '60',
+                cy: '60',
+                r: '9',
+                fill: `url(#centerGradient-${instanceId})`
+              })
+            ])
+          ]
+        );
+      };
 
-            return React.createElement('div', null, [
-                // 基础展示
-                React.createElement('div', { key: 'basic', className: 'section' }, [
-                    React.createElement('h2', { key: 'title' }, '基础展示'),
-                    React.createElement('div', { key: 'grid', className: 'logo-grid' }, [
-                        React.createElement('div', { key: 'item1', className: 'logo-item' }, [
-                            React.createElement(InkDotLogo, {
-                                key: 'logo1',
-                                variant: 'xl',
-                                size: 200
-                            }),
-                            React.createElement('h3', { key: 'title1' }, '超大尺寸 (200px)'),
-                            React.createElement('p', { key: 'desc1' }, '网站头部、宣传海报')
-                        ]),
-                        React.createElement('div', { key: 'item2', className: 'logo-item' }, [
-                            React.createElement(InkDotLogo, {
-                                key: 'logo2',
-                                variant: 'lg',
-                                size: 120
-                            }),
-                            React.createElement('h3', { key: 'title2' }, '标准尺寸 (120px)'),
-                            React.createElement('p', { key: 'desc2' }, '标准Logo、文档封面')
-                        ]),
-                        React.createElement('div', { key: 'item3', className: 'logo-item' }, [
-                            React.createElement(InkDotLogo, {
-                                key: 'logo3',
-                                variant: 'md',
-                                size: 80
-                            }),
-                            React.createElement('h3', { key: 'title3' }, '中等尺寸 (80px)'),
-                            React.createElement('p', { key: 'desc3' }, '应用图标、按钮')
-                        ]),
-                        React.createElement('div', { key: 'item4', className: 'logo-item' }, [
-                            React.createElement(InkDotLogo, {
-                                key: 'logo4',
-                                variant: 'sm',
-                                size: 48
-                            }),
-                            React.createElement('h3', { key: 'title4' }, '小尺寸 (48px)'),
-                            React.createElement('p', { key: 'desc4' }, '菜单图标、标签页')
-                        ])
-                    ])
-                ]),
+      // 主演示组件
+      const App = () => {
+        const [clickCount, setClickCount] = React.useState(0);
+        const [currentAnimation, setCurrentAnimation] = React.useState('');
 
-                // 动画效果
-                React.createElement('div', { key: 'animation', className: 'section' }, [
-                    React.createElement('h2', { key: 'title' }, '动画效果'),
-                    React.createElement('div', { key: 'demo', className: 'animation-demo' }, [
-                        React.createElement('div', { key: 'item1', className: 'animation-item' }, [
-                            React.createElement(InkDotLogo, {
-                                key: 'logo1',
-                                variant: 'lg',
-                                animation: currentAnimation === 'birth' ? 'birth' : '',
-                                size: 120
-                            }),
-                            React.createElement('h4', { key: 'title1' }, '星云诞生'),
-                            React.createElement('button', {
-                                key: 'btn1',
-                                className: 'btn',
-                                onClick: () => toggleAnimation('birth')
-                            }, '播放动画')
-                        ]),
-                        React.createElement('div', { key: 'item2', className: 'animation-item' }, [
-                            React.createElement(InkDotLogo, {
-                                key: 'logo2',
-                                variant: 'lg',
-                                animation: currentAnimation === 'loading' ? 'loading' : '',
-                                size: 120
-                            }),
-                            React.createElement('h4', { key: 'title2' }, '星云旋转'),
-                            React.createElement('button', {
-                                key: 'btn2',
-                                className: 'btn',
-                                onClick: () => toggleAnimation('loading')
-                            }, '播放动画')
-                        ]),
-                        React.createElement('div', { key: 'item3', className: 'animation-item' }, [
-                            React.createElement(InkDotLogo, {
-                                key: 'logo3',
-                                variant: 'lg',
-                                animation: currentAnimation === 'glow' ? 'glow' : '',
-                                size: 120
-                            }),
-                            React.createElement('h4', { key: 'title3' }, '连接线发光'),
-                            React.createElement('button', {
-                                key: 'btn3',
-                                className: 'btn',
-                                onClick: () => toggleAnimation('glow')
-                            }, '播放动画')
-                        ]),
-                        React.createElement('div', { key: 'item4', className: 'animation-item' }, [
-                            React.createElement(InkDotLogo, {
-                                key: 'logo4',
-                                variant: 'lg',
-                                animation: currentAnimation === 'pulse' ? 'pulse' : '',
-                                size: 120
-                            }),
-                            React.createElement('h4', { key: 'title4' }, '墨点脉动'),
-                            React.createElement('button', {
-                                key: 'btn4',
-                                className: 'btn',
-                                onClick: () => toggleAnimation('pulse')
-                            }, '播放动画')
-                        ])
-                    ]),
-                    React.createElement('div', { key: 'controls', className: 'controls' }, [
-                        React.createElement('button', {
-                            key: 'restart',
-                            className: 'btn',
-                            onClick: restartAnimations
-                        }, '重新播放所有动画'),
-                        React.createElement('button', {
-                            key: 'stop',
-                            className: 'btn secondary',
-                            onClick: () => setCurrentAnimation('')
-                        }, '停止所有动画')
-                    ])
-                ]),
+        const handleLogoClick = () => {
+          setClickCount(prev => prev + 1);
+        };
 
-                // 交互演示
-                React.createElement('div', { key: 'interactive', className: 'section' }, [
-                    React.createElement('h2', { key: 'title' }, '交互演示'),
-                    React.createElement('div', { key: 'demo', className: 'interactive-demo' }, [
-                        React.createElement('div', { key: 'item1', className: 'interactive-item' }, [
-                            React.createElement(InkDotLogo, {
-                                key: 'logo1',
-                                variant: 'lg',
-                                clickable: true,
-                                onClick: handleLogoClick,
-                                size: 120
-                            }),
-                            React.createElement('h4', { key: 'title1' }, '可点击Logo'),
-                            React.createElement('p', { key: 'desc1' }, `点击次数: ${clickCount}`)
-                        ]),
-                        React.createElement('div', { key: 'item2', className: 'interactive-item' }, [
-                            React.createElement(InkDotLogo, {
-                                key: 'logo2',
-                                variant: 'lg',
-                                hoverable: true,
-                                size: 120
-                            }),
-                            React.createElement('h4', { key: 'title2' }, '悬停效果'),
-                            React.createElement('p', { key: 'desc2' }, '鼠标悬停查看效果')
-                        ])
-                    ])
-                ]),
+        const restartAnimations = () => {
+          setCurrentAnimation('');
+          setTimeout(() => {
+            setCurrentAnimation('birth');
+          }, 100);
+        };
 
-                // 使用示例
-                React.createElement('div', { key: 'usage', className: 'section' }, [
-                    React.createElement('h2', { key: 'title' }, 'React 使用示例'),
-                    React.createElement('div', { key: 'code', className: 'code-block' }, [
-                        React.createElement('pre', { key: 'pre' }, [
-                            React.createElement('code', { key: 'code' }, `// 基础使用
+        const toggleAnimation = animation => {
+          setCurrentAnimation(currentAnimation === animation ? '' : animation);
+        };
+
+        return React.createElement('div', null, [
+          // 基础展示
+          React.createElement('div', { key: 'basic', className: 'section' }, [
+            React.createElement('h2', { key: 'title' }, '基础展示'),
+            React.createElement('div', { key: 'grid', className: 'logo-grid' }, [
+              React.createElement('div', { key: 'item1', className: 'logo-item' }, [
+                React.createElement(InkDotLogo, {
+                  key: 'logo1',
+                  variant: 'xl',
+                  size: 200
+                }),
+                React.createElement('h3', { key: 'title1' }, '超大尺寸 (200px)'),
+                React.createElement('p', { key: 'desc1' }, '网站头部、宣传海报')
+              ]),
+              React.createElement('div', { key: 'item2', className: 'logo-item' }, [
+                React.createElement(InkDotLogo, {
+                  key: 'logo2',
+                  variant: 'lg',
+                  size: 120
+                }),
+                React.createElement('h3', { key: 'title2' }, '标准尺寸 (120px)'),
+                React.createElement('p', { key: 'desc2' }, '标准Logo、文档封面')
+              ]),
+              React.createElement('div', { key: 'item3', className: 'logo-item' }, [
+                React.createElement(InkDotLogo, {
+                  key: 'logo3',
+                  variant: 'md',
+                  size: 80
+                }),
+                React.createElement('h3', { key: 'title3' }, '中等尺寸 (80px)'),
+                React.createElement('p', { key: 'desc3' }, '应用图标、按钮')
+              ]),
+              React.createElement('div', { key: 'item4', className: 'logo-item' }, [
+                React.createElement(InkDotLogo, {
+                  key: 'logo4',
+                  variant: 'sm',
+                  size: 48
+                }),
+                React.createElement('h3', { key: 'title4' }, '小尺寸 (48px)'),
+                React.createElement('p', { key: 'desc4' }, '菜单图标、标签页')
+              ])
+            ])
+          ]),
+
+          // 动画效果
+          React.createElement('div', { key: 'animation', className: 'section' }, [
+            React.createElement('h2', { key: 'title' }, '动画效果'),
+            React.createElement('div', { key: 'demo', className: 'animation-demo' }, [
+              React.createElement('div', { key: 'item1', className: 'animation-item' }, [
+                React.createElement(InkDotLogo, {
+                  key: 'logo1',
+                  variant: 'lg',
+                  animation: currentAnimation === 'birth' ? 'birth' : '',
+                  size: 120
+                }),
+                React.createElement('h4', { key: 'title1' }, '星云诞生'),
+                React.createElement(
+                  'button',
+                  {
+                    key: 'btn1',
+                    className: 'btn',
+                    onClick: () => toggleAnimation('birth')
+                  },
+                  '播放动画'
+                )
+              ]),
+              React.createElement('div', { key: 'item2', className: 'animation-item' }, [
+                React.createElement(InkDotLogo, {
+                  key: 'logo2',
+                  variant: 'lg',
+                  animation: currentAnimation === 'loading' ? 'loading' : '',
+                  size: 120
+                }),
+                React.createElement('h4', { key: 'title2' }, '星云旋转'),
+                React.createElement(
+                  'button',
+                  {
+                    key: 'btn2',
+                    className: 'btn',
+                    onClick: () => toggleAnimation('loading')
+                  },
+                  '播放动画'
+                )
+              ]),
+              React.createElement('div', { key: 'item3', className: 'animation-item' }, [
+                React.createElement(InkDotLogo, {
+                  key: 'logo3',
+                  variant: 'lg',
+                  animation: currentAnimation === 'glow' ? 'glow' : '',
+                  size: 120
+                }),
+                React.createElement('h4', { key: 'title3' }, '连接线发光'),
+                React.createElement(
+                  'button',
+                  {
+                    key: 'btn3',
+                    className: 'btn',
+                    onClick: () => toggleAnimation('glow')
+                  },
+                  '播放动画'
+                )
+              ]),
+              React.createElement('div', { key: 'item4', className: 'animation-item' }, [
+                React.createElement(InkDotLogo, {
+                  key: 'logo4',
+                  variant: 'lg',
+                  animation: currentAnimation === 'pulse' ? 'pulse' : '',
+                  size: 120
+                }),
+                React.createElement('h4', { key: 'title4' }, '墨点脉动'),
+                React.createElement(
+                  'button',
+                  {
+                    key: 'btn4',
+                    className: 'btn',
+                    onClick: () => toggleAnimation('pulse')
+                  },
+                  '播放动画'
+                )
+              ])
+            ]),
+            React.createElement('div', { key: 'controls', className: 'controls' }, [
+              React.createElement(
+                'button',
+                {
+                  key: 'restart',
+                  className: 'btn',
+                  onClick: restartAnimations
+                },
+                '重新播放所有动画'
+              ),
+              React.createElement(
+                'button',
+                {
+                  key: 'stop',
+                  className: 'btn secondary',
+                  onClick: () => setCurrentAnimation('')
+                },
+                '停止所有动画'
+              )
+            ])
+          ]),
+
+          // 交互演示
+          React.createElement('div', { key: 'interactive', className: 'section' }, [
+            React.createElement('h2', { key: 'title' }, '交互演示'),
+            React.createElement('div', { key: 'demo', className: 'interactive-demo' }, [
+              React.createElement('div', { key: 'item1', className: 'interactive-item' }, [
+                React.createElement(InkDotLogo, {
+                  key: 'logo1',
+                  variant: 'lg',
+                  clickable: true,
+                  onClick: handleLogoClick,
+                  size: 120
+                }),
+                React.createElement('h4', { key: 'title1' }, '可点击Logo'),
+                React.createElement('p', { key: 'desc1' }, `点击次数: ${clickCount}`)
+              ]),
+              React.createElement('div', { key: 'item2', className: 'interactive-item' }, [
+                React.createElement(InkDotLogo, {
+                  key: 'logo2',
+                  variant: 'lg',
+                  hoverable: true,
+                  size: 120
+                }),
+                React.createElement('h4', { key: 'title2' }, '悬停效果'),
+                React.createElement('p', { key: 'desc2' }, '鼠标悬停查看效果')
+              ])
+            ])
+          ]),
+
+          // 使用示例
+          React.createElement('div', { key: 'usage', className: 'section' }, [
+            React.createElement('h2', { key: 'title' }, 'React 使用示例'),
+            React.createElement('div', { key: 'code', className: 'code-block' }, [
+              React.createElement('pre', { key: 'pre' }, [
+                React.createElement(
+                  'code',
+                  { key: 'code' },
+                  `// 基础使用
 <InkDotLogo size={120} variant="lg" />
 
 // 带动画效果
@@ -544,16 +681,16 @@
   variant="lg" 
   customClass="my-logo"
   hoverable={false}
-/>`)
-                        ])
-                    ])
-                ])
-            ]);
-        };
+/>`
+                )
+              ])
+            ])
+          ])
+        ]);
+      };
 
-        // 渲染应用
-        ReactDOM.render(React.createElement(App), document.getElementById('root'));
+      // 渲染应用
+      ReactDOM.render(React.createElement(App), document.getElementById('root'));
     </script>
-</body>
-
+  </body>
 </html>

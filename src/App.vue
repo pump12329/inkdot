@@ -63,9 +63,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue';
 import { useMindMapStore } from '@/stores/mindmap';
 import type { MindMapNode, Position } from '@/types';
+import { computed, nextTick, onMounted, ref } from 'vue';
 
 // Store
 const store = useMindMapStore();
@@ -257,7 +257,9 @@ function resizeCanvas(): void {
 // 生命周期
 onMounted(async () => {
   await nextTick();
-  resizeCanvas();
+  if (canvasRef.value) {
+    resizeCanvas();
+  }
 
   // 监听窗口大小变化
   window.addEventListener('resize', resizeCanvas);

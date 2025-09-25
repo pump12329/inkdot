@@ -1,10 +1,13 @@
 # InkDot 架构实现指南
+
 > **文档版本**：v1.0.0  
 > **创建时间戳**：T0.1  
-> **最后更新**：T0.3  
-> **状态**：CURRENT  
+> **最后更新**：T0.8  
+> **状态**：⚠️ DEPRECATED  
+> **废弃时间戳**：T0.8  
+> **废弃原因**：文档内容已过时，架构实现方式已更新  
 > **维护者**：InkDot开发团队  
-> **下次审查**：T30.3
+> **下次审查**：无需审查（已废弃）
 
 ## 📋 概述
 
@@ -151,6 +154,7 @@ src/
 ## 🔧 模块依赖关系
 
 ### 依赖层次
+
 ```
 ui/ (前端层)
 ├── 依赖 core/ (核心层)
@@ -173,28 +177,30 @@ plugins/ (插件系统)
 ```
 
 ### 导入规则
+
 ```typescript
 // ✅ 正确的导入方式
 // UI层可以导入所有其他层
-import { MindMapEngine } from '@/core/mindmap'
-import { AIAgent } from '@/ai/agents'
-import { ApiClient } from '@/services/api'
+import { MindMapEngine } from '@/core/mindmap';
+import { AIAgent } from '@/ai/agents';
+import { ApiClient } from '@/services/api';
 
 // 核心层可以导入服务层和插件层
-import { ApiClient } from '@/services/api'
-import { PluginManager } from '@/plugins/sdk'
+import { ApiClient } from '@/services/api';
+import { PluginManager } from '@/plugins/sdk';
 
 // ❌ 错误的导入方式
 // 服务层不应该导入UI层
-import { MindMapCanvas } from '@/ui/components' // ❌
+import { MindMapCanvas } from '@/ui/components'; // ❌
 
 // 核心层不应该导入UI层
-import { useMindMap } from '@/ui/composables' // ❌
+import { useMindMap } from '@/ui/composables'; // ❌
 ```
 
 ## 🚀 实现步骤
 
 ### 阶段1：核心模块 (T0 - T7)
+
 1. **思维导图引擎** (`src/core/mindmap/`)
    - 实现基础节点管理
    - 实现连接关系管理
@@ -206,6 +212,7 @@ import { useMindMap } from '@/ui/composables' // ❌
    - 实现状态持久化
 
 ### 阶段2：AI集成 (T7 - T14)
+
 1. **AI Agents** (`src/ai/agents/`)
    - 实现基础Agent接口
    - 实现小说创作Agent
@@ -217,6 +224,7 @@ import { useMindMap } from '@/ui/composables' // ❌
    - 实现项目管理API
 
 ### 阶段3：UI组件 (T14 - T21)
+
 1. **思维导图组件** (`src/ui/components/`)
    - 实现Canvas渲染
    - 实现节点交互
@@ -228,6 +236,7 @@ import { useMindMap } from '@/ui/composables' // ❌
    - 实现工具栏
 
 ### 阶段4：插件系统 (T21 - T28)
+
 1. **插件SDK** (`src/plugins/sdk/`)
    - 实现插件接口
    - 实现热插拔
@@ -241,17 +250,20 @@ import { useMindMap } from '@/ui/composables' // ❌
 ## 📝 开发规范
 
 ### 文件命名
+
 - 组件文件：`PascalCase.vue`
 - 工具文件：`camelCase.ts`
 - 类型文件：`types.ts`
 - 配置文件：`config.ts`
 
 ### 导入导出
+
 - 使用 `index.ts` 作为模块入口
 - 使用命名导出而非默认导出
 - 保持导入路径的一致性
 
 ### 类型定义
+
 - 每个模块都有独立的 `types.ts`
 - 全局类型定义在 `src/types/`
 - 使用严格的TypeScript配置
@@ -259,7 +271,9 @@ import { useMindMap } from '@/ui/composables' // ❌
 ---
 
 **文档版本**：v1.0.0  
-**最后更新**：T0.1  
-**状态**：🟢 CURRENT  
+**最后更新**：T0.8  
+**状态**：⚠️ DEPRECATED  
+**废弃时间戳**：T0.8  
+**废弃原因**：文档内容已过时，架构实现方式已更新  
 **维护者**：InkDot开发团队  
-**下次审查**：T30.1
+**下次审查**：无需审查（已废弃）

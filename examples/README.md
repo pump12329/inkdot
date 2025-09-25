@@ -1,4 +1,5 @@
 # InkDot 示例文件
+
 > **文档版本**：v1.0.0  
 > **创建时间戳**：T0.1  
 > **最后更新**：T0.3  
@@ -13,6 +14,7 @@
 ## 📁 文件说明
 
 ### 演示文件
+
 - `demo.html` - 通用演示页面
 - `react-demo.html` - React组件演示
 - `vue-demo.html` - Vue组件演示
@@ -21,6 +23,7 @@
 ## 🚀 使用方法
 
 ### 本地预览
+
 ```bash
 # 使用Python简单服务器
 python3 -m http.server 8000
@@ -35,15 +38,16 @@ npx serve examples
 ```
 
 ### 组件引用
+
 ```javascript
 // Vue组件
-import { InkDotLogo } from '../src/components'
+import { InkDotLogo } from '../src/components';
 
 // React组件
-import { InkDotLogoReact } from '../src/components'
+import { InkDotLogoReact } from '../src/components';
 
 // 直接HTML引用
-<script src="../src/components/InkDotLogo.vue"></script>
+<script src="../src/components/InkDotLogo.vue"></script>;
 ```
 
 ## 📝 开发说明

@@ -1,0 +1,7 @@
+# 测试输出文件
+*.png
+*.json
+*.log
+
+# 保留目录结构
+!.gitignore

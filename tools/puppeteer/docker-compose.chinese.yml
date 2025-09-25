@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  inkdot-chinese:
+    build:
+      context: ../..
+      dockerfile: tools/puppeteer/Dockerfile.chinese
+    ports:
+      - '3001:3001'
+    environment:
+      - NODE_ENV=development
+      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+    volumes:
+      - ../../:/app
+      - /app/node_modules
+    command: npm run dev
+    stdin_open: true
+    tty: true
+
+  # Puppeteer 测试服务
+  puppeteer-test:
+    build:
+      context: ../..
+      dockerfile: tools/puppeteer/Dockerfile.chinese
+    depends_on:
+      - inkdot-chinese
+    environment:
+      - NODE_ENV=development
+      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+    volumes:
+      - ../../:/app
+      - /app/node_modules
+    command: >
+      sh -c "
+        echo '等待应用启动...' &&
+        sleep 10 &&
+        echo '运行中文渲染测试...' &&
+        npm run test:puppeteer:render
+      "
+    profiles:
+      - test

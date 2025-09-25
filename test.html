@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Vue Test</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      const { createApp } = Vue;
+
+      const App = {
+        template: `
+                <div>
+                    <h1>Hello World!</h1>
+                    <p>Vue is working!</p>
+                </div>
+            `,
+        setup() {
+          console.log('Vue app started');
+          return {};
+        }
+      };
+
+      const app = createApp(App);
+      app.mount('#app');
+    </script>
+  </body>
+</html>

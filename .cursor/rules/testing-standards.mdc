@@ -1,0 +1,176 @@
+---
+alwaysApply: true
+---
+
+# 测试规范
+
+## 测试工作流架构
+
+### 测试金字塔策略
+
+```
+    ┌─────────────────┐
+    │   E2E Tests     │ ← 5% 关键用户流程
+    │   (少量)        │
+    ├─────────────────┤
+    │ Integration     │ ← 25% 模块间交互
+    │ Tests (适量)    │
+    ├─────────────────┤
+    │ Unit Tests      │ ← 70% 核心业务逻辑
+    │ (大量)          │
+    └─────────────────┘
+```
+
+### 测试执行流程
+
+1. **本地开发**: 编写代码 → 运行测试 → 修复问题
+2. **提交前**: 完整测试套件 → 覆盖率检查 → 代码质量检查
+3. **CI/CD**: 自动化测试 → 构建验证 → 部署检查
+4. **发布前**: 端到端测试 → 性能测试 → 安全扫描
+
+## 测试质量标准
+
+### 覆盖率要求
+
+- **语句覆盖率**: ≥ 70%
+- **分支覆盖率**: ≥ 65%
+- **函数覆盖率**: ≥ 75%
+- **行覆盖率**: ≥ 70%
+
+### 性能基准
+
+- **首屏加载时间**: < 2秒
+- **交互响应时间**: < 100ms
+- **内存使用**: < 100MB
+- **CPU使用率**: < 30%
+
+## 测试命令规范
+
+```bash
+# 开发中测试
+npm run test:watch          # 监听模式
+npm run test:ui             # 可视化界面
+npm run test:unit           # 单元测试
+npm run test:integration    # 集成测试
+
+# 提交前检查
+npm run test:run            # 运行所有测试
+npm run test:coverage       # 覆盖率报告
+npm run lint                # 代码规范检查
+npm run type-check          # 类型检查
+
+# CI/CD测试
+npm run test:performance    # 性能测试
+npm run test:e2e           # Playwright端到端测试
+npm run test:playwright    # Playwright测试套件
+npm run test:puppeteer     # Puppeteer测试套件
+npm run build              # 构建测试
+
+# 专项测试
+npm run test:puppeteer:chinese   # 中文渲染测试
+npm run test:playwright:fonts    # 字体支持测试
+npm run test:puppeteer:buttons   # 按钮交互测试
+npm run test:puppeteer:debug     # 调试模式测试
+```
+
+## 单元测试原则
+
+- **使用Vitest进行单元测试**：轻量级测试框架
+- **核心功能优先测试**：重要工具函数和核心逻辑必须有测试
+- **测试覆盖率合理**：目标70%，但不追求100%
+- **AI功能mock测试**：避免真实API调用，提高测试稳定性
+- **测试代码简洁**：测试本身应该简洁易读
+
+## 组件测试
+
+- 使用Vue Test Utils
+- 测试组件的props、events、slots
+- 测试用户交互和状态变化
+- 测试错误边界情况
+
+## 测试示例
+
+```typescript
+// 测试示例
+import { mount } from '@vue/test-utils';
+import MindMapNode from '@/components/mindmap/MindMapNode.vue';
+
+describe('MindMapNode', () => {
+  it('应该正确渲染节点内容', () => {
+    const node = { id: '1', content: '测试节点', position: { x: 0, y: 0 } };
+    const wrapper = mount(MindMapNode, { props: { node } });
+
+    expect(wrapper.text()).toContain('测试节点');
+  });
+
+  it('应该在点击时触发编辑模式', async () => {
+    const wrapper = mount(MindMapNode, { props: { node, editable: true } });
+
+    await wrapper.trigger('click');
+    expect(wrapper.emitted('startEdit')).toBeTruthy();
+  });
+});
+```
+
+## 测试组织结构
+
+```
+tests/
+├── unit/                    # 单元测试 (70%)
+├── integration/            # 集成测试 (25%)
+├── e2e/                    # 端到端测试 (5%)
+├── performance/            # 性能测试
+├── utils/                  # 测试工具
+└── examples/               # 示例测试
+
+tools/                      # 项目测试工具
+├── puppeteer/              # Puppeteer测试工具
+│   ├── run-tests.js        # 测试运行器
+│   └── README.md           # 使用说明
+├── playwright/             # Playwright测试工具
+│   ├── run-tests.js        # 测试运行器
+│   └── README.md           # 使用说明
+└── cleanup.js              # 测试清理工具
+```
+
+## 项目特有测试工具
+
+### Puppeteer测试工具
+
+- **中文渲染测试**: 验证中文字体在不同环境下的显示效果
+- **按钮交互测试**: 测试UI组件的交互功能
+- **渲染性能测试**: 测试大量节点的渲染性能
+- **调试模式**: 支持可视化调试和截图
+
+### Playwright测试工具
+
+- **跨浏览器测试**: 支持Chrome、Firefox、Safari
+- **字体兼容性测试**: 测试不同操作系统的字体支持
+- **响应式测试**: 测试不同屏幕尺寸的适配
+
+## 性能优化规范
+
+### SPA性能优化原则
+
+- **路由懒加载**: 使用动态import实现路由组件懒加载
+- **代码分割**: 按功能模块分割代码，减少初始加载时间
+- **预加载策略**: 预加载关键路由和组件
+- **缓存策略**: 合理使用浏览器缓存和内存缓存
+- **状态优化**: 避免不必要的状态更新和重新渲染
+
+### 渲染优化原则
+
+- **虚拟滚动处理大量节点**：保持界面流畅
+- **智能懒加载**：按需加载节点和组件
+- **动画性能优化**：使用requestAnimationFrame，避免过度动画
+- **避免不必要的重新渲染**：使用合适的响应式策略
+- **渐进式加载**：重要内容优先显示
+
+### 内存管理原则
+
+- **及时清理资源**：事件监听器、定时器等
+- **智能数据缓存**：只缓存必要的数据
+- **避免内存泄漏**：特别是AI调用和长时间运行的功能
+- **数据生命周期管理**：明确数据的创建和销毁时机
+
+## 使用docker模拟用户环境测试

@@ -227,8 +227,8 @@ export const useMindMapStore = defineStore('mindMap', () => {
   // 返回公共接口
   return {
     // 只读状态
-    nodes: readonly(nodes),
-    connections: readonly(connections),
+    nodes,
+    connections,
     selectedNode,
     selectedNodeId: readonly(selectedNodeId),
     currentProject: readonly(currentProject),

@@ -14,6 +14,7 @@
 ### 前提条件
 
 确保你的系统已安装：
+
 - **Node.js** >= 18.0.0
 - **npm** >= 8.0.0
 - **Git** >= 2.30.0
@@ -33,6 +34,7 @@ node scripts/setup-dev-environment.js
 ```
 
 这个脚本会自动：
+
 - ✅ 检查系统环境要求
 - ✅ 安装项目依赖
 - ✅ 配置Git hooks
@@ -80,6 +82,7 @@ git push origin feature/your-feature-name
 ## 🛠️ 常用命令
 
 ### 开发命令
+
 ```bash
 npm run dev              # 启动开发服务器
 npm run build            # 构建生产版本
@@ -88,6 +91,7 @@ npm run type-check       # TypeScript类型检查
 ```
 
 ### 代码质量
+
 ```bash
 npm run lint             # 检查代码风格
 npm run lint:fix         # 自动修复代码风格
@@ -96,6 +100,7 @@ npm run test:coverage    # 生成测试覆盖率报告
 ```
 
 ### 项目工具
+
 ```bash
 npm run changelog:update # 更新CHANGELOG
 npm run status:update    # 更新文档状态
@@ -125,17 +130,20 @@ inkdot/
 ## 🎯 开发重点
 
 ### 核心技术栈
+
 - **Vue 3** + **TypeScript** + **Pinia**
 - **Vite** + **Tailwind CSS** + **Element Plus**
 - **AI集成**：DeepSeek API + OpenRouter API
 
 ### 开发规范
+
 - 使用 **Composition API** 和 `<script setup>`
 - 严格的 **TypeScript** 类型检查
-- **ESLint** + **Prettier** 代码格式化
+- **ESLint** 代码检查
 - **Conventional Commits** 提交规范
 
 ### 测试策略
+
 - **单元测试**：Vitest
 - **组件测试**：Vue Test Utils
 - **E2E测试**：Playwright

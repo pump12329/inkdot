@@ -4,7 +4,7 @@
 > **创建时间戳**：T0.4  
 > **最后更新**：T0.4  
 > **状态**：🟢 CURRENT  
-> **维护者**：InkDot开发团队  
+> **维护者**：InkDot开发团队
 
 ## 📋 工具概述
 
@@ -50,6 +50,7 @@ npm run changelog:update -- --since "2024-01-01"
 ```
 
 **功能特性：**
+
 - 自动解析提交类型和描述
 - 智能版本号递增 (major/minor/patch)
 - 按类别分组提交记录
@@ -70,6 +71,7 @@ npm run changelog:add -- fix "修复登录页面bug" "1.4.0"
 ```
 
 **支持的提交类型：**
+
 - `feat` - 🆕 新增功能
 - `fix` - 🐛 修复问题
 - `docs` - 📝 文档更新
@@ -90,6 +92,7 @@ npm run changelog:status
 ```
 
 **显示信息：**
+
 - 当前版本号
 - 当前时间戳
 - CHANGELOG文件路径
@@ -113,10 +116,11 @@ npm run changelog:version -- patch    # 修订版本
 
 ```javascript
 const CONFIG = {
-  changelogPath: 'docs/CHANGELOG.md',    // CHANGELOG文件路径
-  projectStartDate: '2025-09-21',        // 项目开始日期
-  maxCommits: 50,                        // 最大处理提交数
-  excludePatterns: [                     // 排除的提交模式
+  changelogPath: 'docs/CHANGELOG.md', // CHANGELOG文件路径
+  projectStartDate: '2025-09-21', // 项目开始日期
+  maxCommits: 50, // 最大处理提交数
+  excludePatterns: [
+    // 排除的提交模式
     /^docs?:/i,
     /^chore:/i,
     /^style:/i,
@@ -139,13 +143,16 @@ const CONFIG = {
 ### [v1.4.0] - T0.4
 
 #### 🆕 新增
+
 - **添加用户认证功能** - [abc1234]
 - **实现文件上传功能** - [def5678]
 
 #### 🐛 修复
+
 - **修复登录页面bug** - [ghi9012]
 
 #### 📝 文档
+
 - **更新API文档** - [jkl3456]
 
 ---
@@ -164,6 +171,7 @@ const CONFIG = {
 ```
 
 **示例：**
+
 ```
 feat: 添加用户认证功能
 
@@ -178,17 +186,20 @@ BREAKING CHANGE: 认证API接口已更改
 ### 推荐的开发流程
 
 1. **开发功能**
+
    ```bash
    git add .
    git commit -m "feat: 添加新功能"
    ```
 
 2. **自动更新CHANGELOG**
+
    ```bash
    npm run changelog:update
    ```
 
 3. **检查更新结果**
+
    ```bash
    npm run changelog:status
    ```
@@ -202,11 +213,13 @@ BREAKING CHANGE: 认证API接口已更改
 ### 版本发布流程
 
 1. **准备发布**
+
    ```bash
    npm run changelog:update
    ```
 
 2. **检查版本号**
+
    ```bash
    npm run changelog:status
    ```
@@ -226,8 +239,8 @@ BREAKING CHANGE: 认证API接口已更改
 ```javascript
 const COMMIT_TYPE_MAP = {
   // 现有类型...
-  'security': { icon: '🔒', title: '安全', category: 'security' },
-  'i18n': { icon: '🌐', title: '国际化', category: 'i18n' }
+  security: { icon: '🔒', title: '安全', category: 'security' },
+  i18n: { icon: '🌐', title: '国际化', category: 'i18n' }
 };
 ```
 
@@ -293,6 +306,7 @@ git log --oneline -5
 ## 📞 技术支持
 
 如有问题或建议，请联系：
+
 - **项目Issues**：[GitHub Issues](https://github.com/pump12329/inkdot/issues)
 - **技术支持**：linhuinan542@gmail.com
 - **社区讨论**：[GitHub Discussions](https://github.com/pump12329/inkdot/discussions)

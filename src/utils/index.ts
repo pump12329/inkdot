@@ -30,11 +30,8 @@ export function debounce<T extends (...args: never[]) => unknown>(
   wait: number
 ): DebouncedFunction<T> {
   let timeout: ReturnType<typeof setTimeout> | null = null;
-  let _lastCallTime = 0;
 
   const debounced = (...args: Parameters<T>) => {
-    _lastCallTime = Date.now();
-
     if (timeout) {
       clearTimeout(timeout);
     }
@@ -116,13 +113,16 @@ export function deepClone<T>(obj: T): T {
 /**
  * 深度合并对象
  */
-export function deepMerge<T, U>(target: T, source: U): T & U {
-  const result = { ...target } as T & U;
+export function deepMerge(
+  target: Record<string, unknown>,
+  source: Record<string, unknown>
+): Record<string, unknown> {
+  const result = { ...target };
 
   for (const key in source) {
     if (Object.prototype.hasOwnProperty.call(source, key)) {
       const sourceValue = source[key];
-      const targetValue = result[key as keyof T] as unknown;
+      const targetValue = result[key];
 
       if (
         typeof sourceValue === 'object' &&
@@ -132,10 +132,12 @@ export function deepMerge<T, U>(target: T, source: U): T & U {
         targetValue !== null &&
         !Array.isArray(targetValue)
       ) {
-        result[key as keyof (T & U)] = deepMerge(targetValue, sourceValue) as (T & U)[keyof (T &
-          U)];
-      } else {
-        result[key as keyof (T & U)] = sourceValue as (T & U)[keyof (T & U)];
+        result[key] = deepMerge(
+          targetValue as Record<string, unknown>,
+          sourceValue as Record<string, unknown>
+        );
+      } else if (sourceValue !== undefined) {
+        result[key] = sourceValue;
       }
     }
   }

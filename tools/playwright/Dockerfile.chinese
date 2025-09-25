@@ -1,0 +1,57 @@
+# Playwright 中文支持 Docker 镜像
+FROM mcr.microsoft.com/playwright:v1.40.0-jammy
+
+# 安装系统依赖和中文字体
+RUN apt-get update && apt-get install -y \
+    # 中文字体包
+    fonts-noto-cjk \
+    fonts-wqy-zenhei \
+    fonts-wqy-microhei \
+    fonts-arphic-ukai \
+    fonts-arphic-uming \
+    fonts-ipafont-mincho \
+    fonts-ipafont-gothic \
+    fonts-unfonts-core \
+    # 系统工具
+    wget \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制 package.json 和 package-lock.json
+COPY package*.json ./
+
+# 安装依赖
+RUN npm install
+
+# 复制项目文件
+COPY . .
+
+# 设置环境变量
+ENV LANG=zh_CN.UTF-8
+ENV LC_ALL=zh_CN.UTF-8
+ENV TZ=Asia/Shanghai
+
+# 安装 Playwright 浏览器
+RUN npx playwright install --with-deps chromium
+
+# 创建非root用户
+RUN groupadd -r pwuser && useradd -r -g pwuser -G audio,video pwuser \
+    && mkdir -p /home/pwuser/Downloads \
+    && chown -R pwuser:pwuser /home/pwuser \
+    && chown -R pwuser:pwuser /app
+
+# 创建screenshots目录
+RUN mkdir -p /app/tools/screenshots \
+    && chown -R pwuser:pwuser /app/tools/screenshots
+
+# 切换到非root用户
+USER pwuser
+
+# 暴露端口
+EXPOSE 3001
+
+# 启动命令
+CMD ["npm", "run", "dev"]

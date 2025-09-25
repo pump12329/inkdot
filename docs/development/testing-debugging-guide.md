@@ -4,7 +4,7 @@
 **创建时间戳**: T0.5  
 **最后更新**: T0.5  
 **状态**: 🟢 CURRENT  
-**下次审查**: T7.5  
+**下次审查**: T7.5
 
 ---
 
@@ -115,63 +115,63 @@ tests/
 
 ```typescript
 // tests/unit/core/mindmap.test.ts
-import { describe, it, expect, beforeEach } from 'vitest'
-import { MindMapEngineImpl } from '@/core/mindmap/engine'
+import { describe, it, expect, beforeEach } from 'vitest';
+import { MindMapEngineImpl } from '@/core/mindmap/engine';
 
 describe('MindMapEngine', () => {
-  let engine: MindMapEngineImpl
+  let engine: MindMapEngineImpl;
 
   beforeEach(() => {
-    engine = new MindMapEngineImpl()
-  })
+    engine = new MindMapEngineImpl();
+  });
 
   describe('节点管理', () => {
     it('应该能够创建新节点', () => {
-      const node = engine.createNode('测试节点', { x: 100, y: 100 })
-      
-      expect(node).toBeDefined()
-      expect(node.content).toBe('测试节点')
-      expect(node.position).toEqual({ x: 100, y: 100 })
-    })
+      const node = engine.createNode('测试节点', { x: 100, y: 100 });
+
+      expect(node).toBeDefined();
+      expect(node.content).toBe('测试节点');
+      expect(node.position).toEqual({ x: 100, y: 100 });
+    });
 
     it('应该能够更新节点内容', () => {
-      const node = engine.createNode('原始内容', { x: 100, y: 100 })
-      const updated = engine.updateNode(node.id, { content: '更新内容' })
-      
-      expect(updated.content).toBe('更新内容')
-    })
+      const node = engine.createNode('原始内容', { x: 100, y: 100 });
+      const updated = engine.updateNode(node.id, { content: '更新内容' });
+
+      expect(updated.content).toBe('更新内容');
+    });
 
     it('应该能够删除节点', () => {
-      const node = engine.createNode('待删除节点', { x: 100, y: 100 })
-      const success = engine.deleteNode(node.id)
-      
-      expect(success).toBe(true)
-      expect(engine.getNode(node.id)).toBeUndefined()
-    })
-  })
+      const node = engine.createNode('待删除节点', { x: 100, y: 100 });
+      const success = engine.deleteNode(node.id);
+
+      expect(success).toBe(true);
+      expect(engine.getNode(node.id)).toBeUndefined();
+    });
+  });
 
   describe('连接管理', () => {
     it('应该能够创建节点连接', () => {
-      const node1 = engine.createNode('节点1', { x: 100, y: 100 })
-      const node2 = engine.createNode('节点2', { x: 200, y: 200 })
-      
-      const connection = engine.addConnection(node1.id, node2.id, 'related')
-      
-      expect(connection).toBeDefined()
-      expect(connection.from).toBe(node1.id)
-      expect(connection.to).toBe(node2.id)
-    })
-  })
-})
+      const node1 = engine.createNode('节点1', { x: 100, y: 100 });
+      const node2 = engine.createNode('节点2', { x: 200, y: 200 });
+
+      const connection = engine.addConnection(node1.id, node2.id, 'related');
+
+      expect(connection).toBeDefined();
+      expect(connection.from).toBe(node1.id);
+      expect(connection.to).toBe(node2.id);
+    });
+  });
+});
 ```
 
 ### Vue组件测试示例
 
 ```typescript
 // tests/unit/ui/Button.test.ts
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import Button from '@/ui/components/Button.vue'
+import { describe, it, expect } from 'vitest';
+import { mount } from '@vue/test-utils';
+import Button from '@/ui/components/Button.vue';
 
 describe('Button组件', () => {
   it('应该正确渲染', () => {
@@ -179,42 +179,42 @@ describe('Button组件', () => {
       slots: {
         default: '测试按钮'
       }
-    })
-    
-    expect(wrapper.text()).toBe('测试按钮')
-    expect(wrapper.classes()).toContain('inline-flex')
-  })
+    });
+
+    expect(wrapper.text()).toBe('测试按钮');
+    expect(wrapper.classes()).toContain('inline-flex');
+  });
 
   it('应该支持不同变体', () => {
     const wrapper = mount(Button, {
       props: { variant: 'primary' },
       slots: { default: '主要按钮' }
-    })
-    
-    expect(wrapper.classes()).toContain('bg-blue-600')
-  })
+    });
+
+    expect(wrapper.classes()).toContain('bg-blue-600');
+  });
 
   it('应该处理点击事件', async () => {
     const wrapper = mount(Button, {
       slots: { default: '可点击按钮' }
-    })
-    
-    await wrapper.trigger('click')
-    
-    expect(wrapper.emitted('click')).toBeTruthy()
-  })
+    });
+
+    await wrapper.trigger('click');
+
+    expect(wrapper.emitted('click')).toBeTruthy();
+  });
 
   it('应该在禁用状态下不触发点击', async () => {
     const wrapper = mount(Button, {
       props: { disabled: true },
       slots: { default: '禁用按钮' }
-    })
-    
-    await wrapper.trigger('click')
-    
-    expect(wrapper.emitted('click')).toBeFalsy()
-  })
-})
+    });
+
+    await wrapper.trigger('click');
+
+    expect(wrapper.emitted('click')).toBeFalsy();
+  });
+});
 ```
 
 ---
@@ -234,52 +234,49 @@ describe('Button组件', () => {
 
 ```typescript
 // tests/integration/mindmap-ai.test.ts
-import { describe, it, expect, beforeEach } from 'vitest'
-import { MindMapEngineImpl } from '@/core/mindmap/engine'
-import { AIManager } from '@/ai/ai-manager'
+import { describe, it, expect, beforeEach } from 'vitest';
+import { MindMapEngineImpl } from '@/core/mindmap/engine';
+import { AIManager } from '@/ai/ai-manager';
 
 describe('MindMap与AI集成', () => {
-  let engine: MindMapEngineImpl
-  let aiManager: AIManager
+  let engine: MindMapEngineImpl;
+  let aiManager: AIManager;
 
   beforeEach(() => {
-    engine = new MindMapEngineImpl()
-    aiManager = new AIManager()
-  })
+    engine = new MindMapEngineImpl();
+    aiManager = new AIManager();
+  });
 
   it('应该能够使用AI生成节点内容', async () => {
-    const node = engine.createNode('中心主题', { x: 400, y: 300 })
-    const creativeAssistant = aiManager.getAgent('creative-assistant')
-    
-    const suggestions = await creativeAssistant.generateSuggestions(
-      node.content,
-      'expand'
-    )
-    
-    expect(suggestions).toBeDefined()
-    expect(suggestions.length).toBeGreaterThan(0)
-  })
+    const node = engine.createNode('中心主题', { x: 400, y: 300 });
+    const creativeAssistant = aiManager.getAgent('creative-assistant');
+
+    const suggestions = await creativeAssistant.generateSuggestions(node.content, 'expand');
+
+    expect(suggestions).toBeDefined();
+    expect(suggestions.length).toBeGreaterThan(0);
+  });
 
   it('应该能够保存和加载思维导图', () => {
     // 创建测试数据
-    const node1 = engine.createNode('节点1', { x: 100, y: 100 })
-    const node2 = engine.createNode('节点2', { x: 200, y: 200 })
-    engine.addConnection(node1.id, node2.id, 'related')
-    
+    const node1 = engine.createNode('节点1', { x: 100, y: 100 });
+    const node2 = engine.createNode('节点2', { x: 200, y: 200 });
+    engine.addConnection(node1.id, node2.id, 'related');
+
     // 导出数据
-    const exported = engine.exportData()
-    expect(exported.nodes.length).toBe(2)
-    expect(exported.connections.length).toBe(1)
-    
+    const exported = engine.exportData();
+    expect(exported.nodes.length).toBe(2);
+    expect(exported.connections.length).toBe(1);
+
     // 创建新引擎并导入数据
-    const newEngine = new MindMapEngineImpl()
-    newEngine.importData(exported)
-    
+    const newEngine = new MindMapEngineImpl();
+    newEngine.importData(exported);
+
     // 验证数据正确导入
-    const nodes = newEngine.getAllNodes()
-    expect(nodes.length).toBe(2)
-  })
-})
+    const nodes = newEngine.getAllNodes();
+    expect(nodes.length).toBe(2);
+  });
+});
 ```
 
 ---
@@ -296,52 +293,52 @@ describe('MindMap与AI集成', () => {
 
 ```typescript
 // tests/e2e/user-journey.test.ts
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 
 test.describe('用户完整流程', () => {
   test('用户创建和管理思维导图', async ({ page }) => {
     // 访问应用
-    await page.goto('http://localhost:3000')
-    
+    await page.goto('http://localhost:3000');
+
     // 等待应用加载
-    await expect(page.locator('h1')).toContainText('InkDot')
-    
+    await expect(page.locator('h1')).toContainText('InkDot');
+
     // 创建新节点
-    await page.click('button:has-text("添加节点")')
-    await page.fill('input[placeholder*="节点内容"]', '我的第一个节点')
-    await page.click('button:has-text("创建")')
-    
+    await page.click('button:has-text("添加节点")');
+    await page.fill('input[placeholder*="节点内容"]', '我的第一个节点');
+    await page.click('button:has-text("创建")');
+
     // 验证节点创建成功
-    await expect(page.locator('.mindmap-canvas')).toBeVisible()
-    
+    await expect(page.locator('.mindmap-canvas')).toBeVisible();
+
     // 测试节点选择
-    await page.click('.mindmap-canvas')
-    await expect(page.locator('.context-menu')).toBeVisible()
-    
+    await page.click('.mindmap-canvas');
+    await expect(page.locator('.context-menu')).toBeVisible();
+
     // 测试AI功能
-    await page.click('button:has-text("启用")')
-    await expect(page.locator('text=已启用')).toBeVisible()
-  })
+    await page.click('button:has-text("启用")');
+    await expect(page.locator('text=已启用')).toBeVisible();
+  });
 
   test('思维导图导出功能', async ({ page }) => {
-    await page.goto('http://localhost:3000')
-    
+    await page.goto('http://localhost:3000');
+
     // 创建一些节点
-    await page.click('button:has-text("添加节点")')
-    await page.fill('input[placeholder*="节点内容"]', '导出测试节点')
-    await page.click('button:has-text("创建")')
-    
+    await page.click('button:has-text("添加节点")');
+    await page.fill('input[placeholder*="节点内容"]', '导出测试节点');
+    await page.click('button:has-text("创建")');
+
     // 测试导出功能
-    await page.click('button:has-text("导出")')
-    
+    await page.click('button:has-text("导出")');
+
     // 验证下载开始
-    const downloadPromise = page.waitForEvent('download')
-    await page.click('button:has-text("JSON")')
-    const download = await downloadPromise
-    
-    expect(download.suggestedFilename()).toMatch(/\.json$/)
-  })
-})
+    const downloadPromise = page.waitForEvent('download');
+    await page.click('button:has-text("JSON")');
+    const download = await downloadPromise;
+
+    expect(download.suggestedFilename()).toMatch(/\.json$/);
+  });
+});
 ```
 
 ---
@@ -354,13 +351,13 @@ test.describe('用户完整流程', () => {
 
 ```javascript
 // 在浏览器控制台中的调试命令
-console.log('当前思维导图状态:', window.mindMapEngine.getState())
-console.log('AI管理器状态:', window.aiManager.getStatus())
+console.log('当前思维导图状态:', window.mindMapEngine.getState());
+console.log('AI管理器状态:', window.aiManager.getStatus());
 
 // 性能分析
-console.time('节点创建')
-engine.createNode('性能测试节点', { x: 100, y: 100 })
-console.timeEnd('节点创建')
+console.time('节点创建');
+engine.createNode('性能测试节点', { x: 100, y: 100 });
+console.timeEnd('节点创建');
 ```
 
 #### 2. Vue DevTools
@@ -381,16 +378,16 @@ fetch('/api/ai/generate', {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ prompt: '测试提示' })
 })
-.then(response => {
-  console.log('API响应状态:', response.status)
-  return response.json()
-})
-.then(data => {
-  console.log('API响应数据:', data)
-})
-.catch(error => {
-  console.error('API调用错误:', error)
-})
+  .then(response => {
+    console.log('API响应状态:', response.status);
+    return response.json();
+  })
+  .then(data => {
+    console.log('API响应数据:', data);
+  })
+  .catch(error => {
+    console.error('API调用错误:', error);
+  });
 ```
 
 ### 代码调试
@@ -403,19 +400,19 @@ export class MindMapEngineImpl implements IMindMapEngine {
   createNode(content: string, position: Position): MindMapNode {
     // 在这里设置断点
     debugger; // 或者使用VS Code断点
-    
+
     const node: MindMapNode = {
       id: this.generateId(),
       content,
       position,
       createdAt: new Date(),
       updatedAt: new Date()
-    }
-    
-    this.nodes.set(node.id, node)
-    this.emit('node-created', node)
-    
-    return node
+    };
+
+    this.nodes.set(node.id, node);
+    this.emit('node-created', node);
+
+    return node;
   }
 }
 ```
@@ -424,21 +421,21 @@ export class MindMapEngineImpl implements IMindMapEngine {
 
 ```typescript
 // 使用结构化日志
-import { createLogger } from '@/utils/logger'
+import { createLogger } from '@/utils/logger';
 
-const logger = createLogger('MindMapEngine')
+const logger = createLogger('MindMapEngine');
 
 export class MindMapEngineImpl {
   createNode(content: string, position: Position): MindMapNode {
-    logger.debug('创建节点', { content, position })
-    
+    logger.debug('创建节点', { content, position });
+
     try {
-      const node = this.doCreateNode(content, position)
-      logger.info('节点创建成功', { nodeId: node.id })
-      return node
+      const node = this.doCreateNode(content, position);
+      logger.info('节点创建成功', { nodeId: node.id });
+      return node;
     } catch (error) {
-      logger.error('节点创建失败', { error, content, position })
-      throw error
+      logger.error('节点创建失败', { error, content, position });
+      throw error;
     }
   }
 }
@@ -448,21 +445,22 @@ export class MindMapEngineImpl {
 
 ```typescript
 // 性能监控
-import { performance } from 'perf_hooks'
+import { performance } from 'perf_hooks';
 
 export class CanvasRenderer {
   render(nodes: MindMapNode[], connections: MindMapConnection[]): void {
-    const startTime = performance.now()
-    
-    this.clearCanvas()
-    this.drawNodes(nodes)
-    this.drawConnections(connections)
-    
-    const endTime = performance.now()
-    const duration = endTime - startTime
-    
-    if (duration > 16) { // 超过一帧的时间
-      console.warn(`渲染耗时过长: ${duration.toFixed(2)}ms`)
+    const startTime = performance.now();
+
+    this.clearCanvas();
+    this.drawNodes(nodes);
+    this.drawConnections(connections);
+
+    const endTime = performance.now();
+    const duration = endTime - startTime;
+
+    if (duration > 16) {
+      // 超过一帧的时间
+      console.warn(`渲染耗时过长: ${duration.toFixed(2)}ms`);
     }
   }
 }
@@ -482,18 +480,19 @@ src/App.vue(8,42): error TS2339: Property 'app' does not exist on type 'AppConfi
 ```
 
 **解决方案:**
+
 ```typescript
 // 检查配置文件类型定义
 interface AppConfig {
   app: {
-    title: string
-    version: string
-  }
+    title: string;
+    version: string;
+  };
   // ... 其他配置
 }
 
 // 或者使用类型断言
-const title = (appConfig as any).app.title
+const title = (appConfig as any).app.title;
 ```
 
 #### 问题: 依赖冲突
@@ -504,6 +503,7 @@ npm error ERESOLVE unable to resolve dependency tree
 ```
 
 **解决方案:**
+
 ```bash
 # 清理并重新安装
 rm -rf node_modules package-lock.json
@@ -519,24 +519,25 @@ npm install --legacy-peer-deps
 
 ```javascript
 // 错误: Canvas context获取失败
-const ctx = canvas.getContext('2d')
+const ctx = canvas.getContext('2d');
 // ctx is null
 ```
 
 **解决方案:**
+
 ```typescript
 export class CanvasRenderer {
   init(canvas: HTMLCanvasElement): void {
     if (!canvas) {
-      throw new Error('Canvas元素未找到')
+      throw new Error('Canvas元素未找到');
     }
-    
-    const ctx = canvas.getContext('2d')
+
+    const ctx = canvas.getContext('2d');
     if (!ctx) {
-      throw new Error('无法获取Canvas 2D上下文')
+      throw new Error('无法获取Canvas 2D上下文');
     }
-    
-    this.ctx = ctx
+
+    this.ctx = ctx;
   }
 }
 ```
@@ -546,39 +547,40 @@ export class CanvasRenderer {
 ```javascript
 // 错误: API密钥无效
 fetch('/api/ai/chat', {
-  headers: { 'Authorization': 'Bearer invalid-key' }
-})
+  headers: { Authorization: 'Bearer invalid-key' }
+});
 ```
 
 **解决方案:**
+
 ```typescript
 export class AIService {
   private validateApiKey(): void {
     if (!this.apiKey) {
-      throw new Error('AI API密钥未配置')
+      throw new Error('AI API密钥未配置');
     }
-    
+
     if (this.apiKey.length < 10) {
-      throw new Error('AI API密钥格式无效')
+      throw new Error('AI API密钥格式无效');
     }
   }
-  
+
   async chat(messages: ChatMessage[]): Promise<ChatResponse> {
-    this.validateApiKey()
-    
+    this.validateApiKey();
+
     try {
       const response = await fetch(this.baseUrl, {
-        headers: { 'Authorization': `Bearer ${this.apiKey}` }
-      })
-      
+        headers: { Authorization: `Bearer ${this.apiKey}` }
+      });
+
       if (!response.ok) {
-        throw new Error(`API调用失败: ${response.status}`)
+        throw new Error(`API调用失败: ${response.status}`);
       }
-      
-      return await response.json()
+
+      return await response.json();
     } catch (error) {
-      console.error('AI API调用错误:', error)
-      throw error
+      console.error('AI API调用错误:', error);
+      throw error;
     }
   }
 }
@@ -589,33 +591,34 @@ export class AIService {
 #### 问题: 大量节点时渲染卡顿
 
 **解决方案:**
+
 ```typescript
 export class CanvasRenderer {
-  private renderQueue: RenderTask[] = []
-  private isRendering = false
-  
+  private renderQueue: RenderTask[] = [];
+  private isRendering = false;
+
   render(nodes: MindMapNode[], connections: MindMapConnection[]): void {
     // 使用渲染队列避免频繁重绘
-    this.renderQueue.push({ nodes, connections, timestamp: Date.now() })
-    
+    this.renderQueue.push({ nodes, connections, timestamp: Date.now() });
+
     if (!this.isRendering) {
-      this.processRenderQueue()
+      this.processRenderQueue();
     }
   }
-  
+
   private processRenderQueue(): void {
     if (this.renderQueue.length === 0) {
-      this.isRendering = false
-      return
+      this.isRendering = false;
+      return;
     }
-    
-    this.isRendering = true
-    const task = this.renderQueue.shift()!
-    
+
+    this.isRendering = true;
+    const task = this.renderQueue.shift()!;
+
     requestAnimationFrame(() => {
-      this.doRender(task.nodes, task.connections)
-      this.processRenderQueue()
-    })
+      this.doRender(task.nodes, task.connections);
+      this.processRenderQueue();
+    });
   }
 }
 ```
@@ -645,40 +648,40 @@ npx lighthouse http://localhost:3000 --output html --output-path ./reports/light
 
 ```typescript
 // tests/performance/rendering.test.ts
-import { describe, it, expect } from 'vitest'
-import { performance } from 'perf_hooks'
-import { CanvasRenderer } from '@/core/mindmap/renderer'
+import { describe, it, expect } from 'vitest';
+import { performance } from 'perf_hooks';
+import { CanvasRenderer } from '@/core/mindmap/renderer';
 
 describe('渲染性能测试', () => {
   it('应该能够快速渲染1000个节点', () => {
-    const renderer = new CanvasRenderer()
-    const nodes = generateTestNodes(1000)
-    const connections = generateTestConnections(500)
-    
-    const startTime = performance.now()
-    renderer.render(nodes, connections)
-    const endTime = performance.now()
-    
-    const duration = endTime - startTime
-    expect(duration).toBeLessThan(100) // 应该在100ms内完成
-  })
-  
+    const renderer = new CanvasRenderer();
+    const nodes = generateTestNodes(1000);
+    const connections = generateTestConnections(500);
+
+    const startTime = performance.now();
+    renderer.render(nodes, connections);
+    const endTime = performance.now();
+
+    const duration = endTime - startTime;
+    expect(duration).toBeLessThan(100); // 应该在100ms内完成
+  });
+
   it('内存使用应该保持稳定', () => {
-    const initialMemory = (performance as any).memory?.usedJSHeapSize || 0
-    
+    const initialMemory = (performance as any).memory?.usedJSHeapSize || 0;
+
     // 执行大量操作
     for (let i = 0; i < 1000; i++) {
-      const nodes = generateTestNodes(100)
-      renderer.render(nodes, [])
+      const nodes = generateTestNodes(100);
+      renderer.render(nodes, []);
     }
-    
-    const finalMemory = (performance as any).memory?.usedJSHeapSize || 0
-    const memoryIncrease = finalMemory - initialMemory
-    
+
+    const finalMemory = (performance as any).memory?.usedJSHeapSize || 0;
+    const memoryIncrease = finalMemory - initialMemory;
+
     // 内存增长应该小于50MB
-    expect(memoryIncrease).toBeLessThan(50 * 1024 * 1024)
-  })
-})
+    expect(memoryIncrease).toBeLessThan(50 * 1024 * 1024);
+  });
+});
 ```
 
 ---
@@ -691,8 +694,8 @@ describe('渲染性能测试', () => {
 // tests/utils/test-data-generator.ts
 export class TestDataGenerator {
   static generateNodes(count: number): MindMapNode[] {
-    const nodes: MindMapNode[] = []
-    
+    const nodes: MindMapNode[] = [];
+
     for (let i = 0; i < count; i++) {
       nodes.push({
         id: `test-node-${i}`,
@@ -703,19 +706,19 @@ export class TestDataGenerator {
         },
         createdAt: new Date(),
         updatedAt: new Date()
-      })
+      });
     }
-    
-    return nodes
+
+    return nodes;
   }
-  
+
   static generateConnections(nodes: MindMapNode[], count: number): MindMapConnection[] {
-    const connections: MindMapConnection[] = []
-    
+    const connections: MindMapConnection[] = [];
+
     for (let i = 0; i < count; i++) {
-      const fromIndex = Math.floor(Math.random() * nodes.length)
-      const toIndex = Math.floor(Math.random() * nodes.length)
-      
+      const fromIndex = Math.floor(Math.random() * nodes.length);
+      const toIndex = Math.floor(Math.random() * nodes.length);
+
       if (fromIndex !== toIndex) {
         connections.push({
           id: `test-connection-${i}`,
@@ -723,11 +726,11 @@ export class TestDataGenerator {
           to: nodes[toIndex].id,
           type: 'related',
           createdAt: new Date()
-        })
+        });
       }
     }
-    
-    return connections
+
+    return connections;
   }
 }
 ```
@@ -736,7 +739,7 @@ export class TestDataGenerator {
 
 ```typescript
 // tests/setup.ts
-import { config } from 'vitest/config'
+import { config } from 'vitest/config';
 
 // 全局测试配置
 export default {
@@ -747,30 +750,25 @@ export default {
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'tests/',
-        'dist/',
-        '**/*.d.ts'
-      ]
+      exclude: ['node_modules/', 'tests/', 'dist/', '**/*.d.ts']
     }
   }
-}
+};
 
 // 测试前准备
 beforeEach(() => {
   // 清理DOM
-  document.body.innerHTML = ''
-  
+  document.body.innerHTML = '';
+
   // 重置全局状态
-  window.localStorage.clear()
-  window.sessionStorage.clear()
-})
+  window.localStorage.clear();
+  window.sessionStorage.clear();
+});
 
 afterEach(() => {
   // 清理副作用
-  jest.clearAllMocks()
-})
+  jest.clearAllMocks();
+});
 ```
 
 ---
@@ -785,48 +783,48 @@ name: 测试和构建
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: 设置Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-    
-    - name: 安装依赖
-      run: npm ci
-    
-    - name: 运行类型检查
-      run: npm run type-check
-    
-    - name: 运行linting
-      run: npm run lint
-    
-    - name: 运行单元测试
-      run: npm run test:coverage
-    
-    - name: 上传覆盖率报告
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage/lcov.info
-    
-    - name: 运行构建测试
-      run: npm run build
-    
-    - name: 部署到测试环境
-      if: github.ref == 'refs/heads/main'
-      run: |
-        echo "部署到测试环境"
-        # 这里添加部署脚本
+      - uses: actions/checkout@v3
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 运行类型检查
+        run: npm run type-check
+
+      - name: 运行linting
+        run: npm run lint
+
+      - name: 运行单元测试
+        run: npm run test:coverage
+
+      - name: 上传覆盖率报告
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+
+      - name: 运行构建测试
+        run: npm run build
+
+      - name: 部署到测试环境
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "部署到测试环境"
+          # 这里添加部署脚本
 ```
 
 ### 测试报告

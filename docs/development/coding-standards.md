@@ -21,6 +21,7 @@
 ## 📝 TypeScript 规范
 
 ### 基础配置
+
 ```json
 {
   "compilerOptions": {
@@ -34,6 +35,7 @@
 ```
 
 ### 类型定义
+
 ```typescript
 // ✅ 好的示例
 interface MindMapNode {
@@ -52,6 +54,7 @@ interface BadNode {
 ```
 
 ### 函数定义
+
 ```typescript
 // ✅ 明确的返回类型
 function createNode(data: Partial<MindMapNode>): MindMapNode {
@@ -77,6 +80,7 @@ async function saveProject(project: Project): Promise<SaveResult> {
 ## 🎨 Vue 3 规范
 
 ### 组件结构
+
 ```vue
 <template>
   <div class="mind-map-node" :class="nodeClasses" @click="handleClick">
@@ -89,58 +93,58 @@ async function saveProject(project: Project): Promise<SaveResult> {
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import type { MindMapNode } from '@/types'
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import type { MindMapNode } from '@/types';
 
 // Props定义
 interface Props {
-  node: MindMapNode
-  editable?: boolean
-  selected?: boolean
+  node: MindMapNode;
+  editable?: boolean;
+  selected?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   editable: false,
   selected: false
-})
+});
 
 // Emits定义
 const emit = defineEmits<{
-  edit: [nodeId: string]
-  delete: [nodeId: string]
-  select: [nodeId: string]
-}>()
+  edit: [nodeId: string];
+  delete: [nodeId: string];
+  select: [nodeId: string];
+}>();
 
 // 响应式数据
-const showTools = ref(false)
+const showTools = ref(false);
 
 // 计算属性
 const nodeClasses = computed(() => ({
   'node--editable': props.editable,
   'node--selected': props.selected
-}))
+}));
 
 // 方法
 function handleClick(): void {
-  emit('select', props.node.id)
+  emit('select', props.node.id);
 }
 
 function onEdit(): void {
-  emit('edit', props.node.id)
+  emit('edit', props.node.id);
 }
 
 function onDelete(): void {
-  emit('delete', props.node.id)
+  emit('delete', props.node.id);
 }
 
 // 生命周期
 onMounted(() => {
-  console.log('Node mounted:', props.node.id)
-})
+  console.log('Node mounted:', props.node.id);
+});
 
 onUnmounted(() => {
-  console.log('Node unmounted:', props.node.id)
-})
+  console.log('Node unmounted:', props.node.id);
+});
 </script>
 
 <style scoped>
@@ -180,46 +184,45 @@ onUnmounted(() => {
 ```
 
 ### Composables规范
+
 ```typescript
 // composables/useMindMap.ts
-import { ref, computed, readonly } from 'vue'
-import type { MindMapNode, MindMapProject } from '@/types'
+import { ref, computed, readonly } from 'vue';
+import type { MindMapNode, MindMapProject } from '@/types';
 
 export function useMindMap() {
   // 私有状态
-  const _nodes = ref<MindMapNode[]>([])
-  const _selectedNodeId = ref<string | null>(null)
+  const _nodes = ref<MindMapNode[]>([]);
+  const _selectedNodeId = ref<string | null>(null);
 
   // 公共只读状态
-  const nodes = readonly(_nodes)
-  const selectedNodeId = readonly(_selectedNodeId)
+  const nodes = readonly(_nodes);
+  const selectedNodeId = readonly(_selectedNodeId);
 
   // 计算属性
-  const selectedNode = computed(() => 
-    _nodes.value.find(node => node.id === _selectedNodeId.value)
-  )
+  const selectedNode = computed(() => _nodes.value.find(node => node.id === _selectedNodeId.value));
 
-  const nodeCount = computed(() => _nodes.value.length)
+  const nodeCount = computed(() => _nodes.value.length);
 
   // 方法
   function addNode(node: MindMapNode): void {
-    _nodes.value.push(node)
+    _nodes.value.push(node);
   }
 
   function removeNode(nodeId: string): boolean {
-    const index = _nodes.value.findIndex(node => node.id === nodeId)
+    const index = _nodes.value.findIndex(node => node.id === nodeId);
     if (index !== -1) {
-      _nodes.value.splice(index, 1)
+      _nodes.value.splice(index, 1);
       if (_selectedNodeId.value === nodeId) {
-        _selectedNodeId.value = null
+        _selectedNodeId.value = null;
       }
-      return true
+      return true;
     }
-    return false
+    return false;
   }
 
   function selectNode(nodeId: string | null): void {
-    _selectedNodeId.value = nodeId
+    _selectedNodeId.value = nodeId;
   }
 
   return {
@@ -232,7 +235,7 @@ export function useMindMap() {
     addNode,
     removeNode,
     selectNode
-  }
+  };
 }
 ```
 
@@ -240,53 +243,53 @@ export function useMindMap() {
 
 ```typescript
 // stores/mindMapStore.ts
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import type { MindMapNode, MindMapProject } from '@/types'
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import type { MindMapNode, MindMapProject } from '@/types';
 
 export const useMindMapStore = defineStore('mindMap', () => {
   // State
-  const currentProject = ref<MindMapProject | null>(null)
-  const nodes = ref<MindMapNode[]>([])
-  const selectedNodeIds = ref<Set<string>>(new Set())
+  const currentProject = ref<MindMapProject | null>(null);
+  const nodes = ref<MindMapNode[]>([]);
+  const selectedNodeIds = ref<Set<string>>(new Set());
 
   // Getters
-  const selectedNodes = computed(() => 
+  const selectedNodes = computed(() =>
     nodes.value.filter(node => selectedNodeIds.value.has(node.id))
-  )
+  );
 
-  const hasSelection = computed(() => selectedNodeIds.value.size > 0)
+  const hasSelection = computed(() => selectedNodeIds.value.size > 0);
 
   // Actions
   function setCurrentProject(project: MindMapProject): void {
-    currentProject.value = project
-    nodes.value = project.nodes || []
-    selectedNodeIds.value.clear()
+    currentProject.value = project;
+    nodes.value = project.nodes || [];
+    selectedNodeIds.value.clear();
   }
 
   function addNode(node: MindMapNode): void {
-    nodes.value.push(node)
+    nodes.value.push(node);
     if (currentProject.value) {
-      currentProject.value.nodes = nodes.value
+      currentProject.value.nodes = nodes.value;
     }
   }
 
   function updateNode(nodeId: string, updates: Partial<MindMapNode>): void {
-    const index = nodes.value.findIndex(node => node.id === nodeId)
+    const index = nodes.value.findIndex(node => node.id === nodeId);
     if (index !== -1) {
-      nodes.value[index] = { ...nodes.value[index], ...updates }
+      nodes.value[index] = { ...nodes.value[index], ...updates };
     }
   }
 
   function selectNodes(nodeIds: string[]): void {
-    selectedNodeIds.value = new Set(nodeIds)
+    selectedNodeIds.value = new Set(nodeIds);
   }
 
   function toggleNodeSelection(nodeId: string): void {
     if (selectedNodeIds.value.has(nodeId)) {
-      selectedNodeIds.value.delete(nodeId)
+      selectedNodeIds.value.delete(nodeId);
     } else {
-      selectedNodeIds.value.add(nodeId)
+      selectedNodeIds.value.add(nodeId);
     }
   }
 
@@ -304,54 +307,67 @@ export const useMindMapStore = defineStore('mindMap', () => {
     updateNode,
     selectNodes,
     toggleNodeSelection
-  }
-})
+  };
+});
 ```
 
 ## 🎨 CSS 规范
 
 ### 命名规范
+
 ```css
 /* BEM命名法 */
-.mind-map {}
-.mind-map__canvas {}
-.mind-map__node {}
-.mind-map__node--selected {}
-.mind-map__node--editing {}
+.mind-map {
+}
+.mind-map__canvas {
+}
+.mind-map__node {
+}
+.mind-map__node--selected {
+}
+.mind-map__node--editing {
+}
 
 /* 工具类 */
-.u-text-center { text-align: center; }
-.u-margin-bottom-sm { margin-bottom: 8px; }
-.u-hidden { display: none; }
+.u-text-center {
+  text-align: center;
+}
+.u-margin-bottom-sm {
+  margin-bottom: 8px;
+}
+.u-hidden {
+  display: none;
+}
 ```
 
 ### CSS变量
+
 ```css
 :root {
   /* 颜色系统 */
   --color-primary: #1976d2;
   --color-primary-light: #42a5f5;
   --color-primary-dark: #1565c0;
-  
+
   --color-secondary: #dc004e;
   --color-success: #2e7d32;
   --color-warning: #ed6c02;
   --color-error: #d32f2f;
-  
+
   /* 间距系统 */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
-  
+
   /* 字体系统 */
   --font-size-xs: 12px;
   --font-size-sm: 14px;
   --font-size-md: 16px;
   --font-size-lg: 18px;
   --font-size-xl: 24px;
-  
+
   /* 阴影系统 */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.12);
@@ -362,36 +378,37 @@ export const useMindMapStore = defineStore('mindMap', () => {
 ## 🧪 测试规范
 
 ### 单元测试
+
 ```typescript
 // tests/utils/nodeUtils.test.ts
-import { describe, it, expect } from 'vitest'
-import { createNode, validateNode } from '@/utils/nodeUtils'
+import { describe, it, expect } from 'vitest';
+import { createNode, validateNode } from '@/utils/nodeUtils';
 
 describe('nodeUtils', () => {
   describe('createNode', () => {
     it('应该创建具有默认值的节点', () => {
-      const node = createNode({ content: '测试节点' })
-      
+      const node = createNode({ content: '测试节点' });
+
       expect(node).toMatchObject({
         content: '测试节点',
         position: { x: 0, y: 0 },
         connections: []
-      })
-      expect(node.id).toBeDefined()
-    })
+      });
+      expect(node.id).toBeDefined();
+    });
 
     it('应该使用提供的值覆盖默认值', () => {
       const customData = {
         content: '自定义节点',
         position: { x: 100, y: 200 }
-      }
-      
-      const node = createNode(customData)
-      
-      expect(node.content).toBe('自定义节点')
-      expect(node.position).toEqual({ x: 100, y: 200 })
-    })
-  })
+      };
+
+      const node = createNode(customData);
+
+      expect(node.content).toBe('自定义节点');
+      expect(node.position).toEqual({ x: 100, y: 200 });
+    });
+  });
 
   describe('validateNode', () => {
     it('应该验证有效的节点', () => {
@@ -400,30 +417,31 @@ describe('nodeUtils', () => {
         content: '有效节点',
         position: { x: 0, y: 0 },
         connections: []
-      }
-      
-      expect(validateNode(validNode)).toBe(true)
-    })
+      };
+
+      expect(validateNode(validNode)).toBe(true);
+    });
 
     it('应该拒绝无效的节点', () => {
       const invalidNode = {
         id: '',
         content: '',
         position: null
-      }
-      
-      expect(validateNode(invalidNode)).toBe(false)
-    })
-  })
-})
+      };
+
+      expect(validateNode(invalidNode)).toBe(false);
+    });
+  });
+});
 ```
 
 ### 组件测试
+
 ```typescript
 // tests/components/MindMapNode.test.ts
-import { mount } from '@vue/test-utils'
-import { describe, it, expect, vi } from 'vitest'
-import MindMapNode from '@/components/MindMapNode.vue'
+import { mount } from '@vue/test-utils';
+import { describe, it, expect, vi } from 'vitest';
+import MindMapNode from '@/components/MindMapNode.vue';
 
 describe('MindMapNode', () => {
   const mockNode = {
@@ -431,43 +449,44 @@ describe('MindMapNode', () => {
     content: '测试节点',
     position: { x: 0, y: 0 },
     connections: []
-  }
+  };
 
   it('应该渲染节点内容', () => {
     const wrapper = mount(MindMapNode, {
       props: { node: mockNode }
-    })
-    
-    expect(wrapper.text()).toContain('测试节点')
-  })
+    });
+
+    expect(wrapper.text()).toContain('测试节点');
+  });
 
   it('应该在点击时发出select事件', async () => {
     const wrapper = mount(MindMapNode, {
       props: { node: mockNode }
-    })
-    
-    await wrapper.trigger('click')
-    
-    expect(wrapper.emitted('select')).toBeTruthy()
-    expect(wrapper.emitted('select')?.[0]).toEqual(['1'])
-  })
+    });
+
+    await wrapper.trigger('click');
+
+    expect(wrapper.emitted('select')).toBeTruthy();
+    expect(wrapper.emitted('select')?.[0]).toEqual(['1']);
+  });
 
   it('应该在可编辑时显示工具', () => {
     const wrapper = mount(MindMapNode, {
-      props: { 
+      props: {
         node: mockNode,
-        editable: true 
+        editable: true
       }
-    })
-    
-    expect(wrapper.find('.node-tools').exists()).toBe(true)
-  })
-})
+    });
+
+    expect(wrapper.find('.node-tools').exists()).toBe(true);
+  });
+});
 ```
 
 ## 📁 文件和目录规范
 
 ### 目录结构
+
 ```
 src/
 ├── components/          # 组件
@@ -487,6 +506,7 @@ src/
 ```
 
 ### 文件命名
+
 - 组件：`PascalCase.vue`
 - 工具函数：`camelCase.ts`
 - 类型定义：`camelCase.types.ts`
@@ -496,12 +516,10 @@ src/
 ## 🔧 工具配置
 
 ### ESLint配置
+
 ```json
 {
-  "extends": [
-    "@vue/eslint-config-typescript",
-    "@vue/eslint-config-prettier"
-  ],
+  "extends": ["@vue/eslint-config-typescript"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/explicit-function-return-type": "warn",
@@ -511,21 +529,10 @@ src/
 }
 ```
 
-### Prettier配置
-```json
-{
-  "semi": false,
-  "singleQuote": true,
-  "tabWidth": 2,
-  "trailingComma": "es5",
-  "printWidth": 80,
-  "endOfLine": "lf"
-}
-```
-
 ## 📋 代码审查清单
 
 ### 提交前检查
+
 - [ ] 代码通过ESLint检查
 - [ ] 代码通过TypeScript编译
 - [ ] 所有测试用例通过
@@ -534,6 +541,7 @@ src/
 - [ ] 安全性检查
 
 ### 审查要点
+
 - [ ] 代码逻辑正确性
 - [ ] 错误处理完整性
 - [ ] 性能优化合理性
@@ -545,18 +553,20 @@ src/
 
 ## 📋 文档信息
 
-| 属性 | 值 |
-|------|----|
-| 文档版本 | v1.0.0 |
-| 创建时间戳 | T0 |
-| 最后更新 | T0.1 |
-| 状态 | 🟢 CURRENT |
-| 维护者 | InkDot开发团队 |
-| 审查周期 | T30 (月度) |
-| 下次审查 | T30.1 |
+| 属性       | 值             |
+| ---------- | -------------- |
+| 文档版本   | v1.0.0         |
+| 创建时间戳 | T0             |
+| 最后更新   | T0.1           |
+| 状态       | 🟢 CURRENT     |
+| 维护者     | InkDot开发团队 |
+| 审查周期   | T30 (月度)     |
+| 下次审查   | T30.1          |
 
 ### 📅 版本历史
+
 - **v1.0.0** (T0.1) - 创建编码规范文档，定义TypeScript、Vue 3、测试等规范
 
 ### 📝 变更说明
+
 本文档定义InkDot项目的编码规范和最佳实践。随着技术栈更新，规范将相应调整。

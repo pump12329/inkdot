@@ -3,8 +3,8 @@
  * 在所有测试运行前执行
  */
 
-import { config } from 'vitest/config'
-import { beforeAll, beforeEach, afterEach, afterAll } from 'vitest'
+import { config } from 'vitest/config';
+import { beforeAll, beforeEach, afterEach, afterAll } from 'vitest';
 
 // 全局测试配置
 export default {
@@ -35,7 +35,7 @@ export default {
     testTimeout: 10000,
     hookTimeout: 10000
   }
-}
+};
 
 // 模拟全局对象
 Object.defineProperty(window, 'matchMedia', {
@@ -48,16 +48,16 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: () => {},
     addEventListener: () => {},
     removeEventListener: () => {},
-    dispatchEvent: () => {},
-  }),
-})
+    dispatchEvent: () => {}
+  })
+});
 
 // 模拟ResizeObserver
 global.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}
   disconnect() {}
-}
+};
 
 // 模拟IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
@@ -65,10 +65,10 @@ global.IntersectionObserver = class IntersectionObserver {
   observe() {}
   unobserve() {}
   disconnect() {}
-}
+};
 
 // 模拟Canvas 2D上下文
-HTMLCanvasElement.prototype.getContext = function(contextType: string) {
+HTMLCanvasElement.prototype.getContext = function (contextType: string) {
   if (contextType === '2d') {
     return {
       fillRect: () => {},
@@ -94,62 +94,59 @@ HTMLCanvasElement.prototype.getContext = function(contextType: string) {
       measureText: () => ({ width: 0 }),
       transform: () => {},
       rect: () => {},
-      clip: () => {},
-    }
+      clip: () => {}
+    };
   }
-  return null
-}
+  return null;
+};
 
 // 测试前准备
 beforeAll(() => {
   // 设置测试环境变量
-  process.env.NODE_ENV = 'test'
-  process.env.VITE_APP_TITLE = 'InkDot Test'
-  
+  process.env.NODE_ENV = 'test';
+  process.env.VITE_APP_TITLE = 'InkDot Test';
+
   // 禁用console.warn以减少测试输出噪音
-  const originalWarn = console.warn
+  const originalWarn = console.warn;
   console.warn = (...args: any[]) => {
-    if (
-      typeof args[0] === 'string' &&
-      args[0].includes('[Vue warn]')
-    ) {
-      return
+    if (typeof args[0] === 'string' && args[0].includes('[Vue warn]')) {
+      return;
     }
-    originalWarn(...args)
-  }
-})
+    originalWarn(...args);
+  };
+});
 
 beforeEach(() => {
   // 清理DOM
-  document.body.innerHTML = ''
-  
+  document.body.innerHTML = '';
+
   // 重置全局状态
   if (typeof window !== 'undefined') {
-    window.localStorage.clear()
-    window.sessionStorage.clear()
+    window.localStorage.clear();
+    window.sessionStorage.clear();
   }
-  
+
   // 重置fetch mock
   if (typeof global !== 'undefined') {
-    global.fetch = undefined as any
+    global.fetch = undefined as any;
   }
-})
+});
 
 afterEach(() => {
   // 清理所有定时器
-  vi.clearAllTimers()
-  
+  vi.clearAllTimers();
+
   // 重置所有mock
-  vi.resetAllMocks()
-  
+  vi.resetAllMocks();
+
   // 清理事件监听器
   if (typeof window !== 'undefined') {
-    window.removeEventListener('beforeunload', () => {})
-    window.removeEventListener('unload', () => {})
+    window.removeEventListener('beforeunload', () => {});
+    window.removeEventListener('unload', () => {});
   }
-})
+});
 
 afterAll(() => {
   // 清理测试环境
-  vi.restoreAllMocks()
-})
+  vi.restoreAllMocks();
+});

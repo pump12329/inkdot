@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  inkdot-playwright:
+    build:
+      context: ../../
+      dockerfile: tools/playwright/Dockerfile.chinese
+    container_name: inkdot-playwright-chinese
+    ports:
+      - '3001:3001'
+    volumes:
+      - ../../:/app
+      - /app/node_modules
+      - screenshots:/app/tools/screenshots
+    environment:
+      - NODE_ENV=development
+      - LANG=zh_CN.UTF-8
+      - LC_ALL=zh_CN.UTF-8
+      - TZ=Asia/Shanghai
+    networks:
+      - inkdot-network
+    working_dir: /app
+    command: npm run dev
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3001']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  playwright-tests:
+    build:
+      context: ../../
+      dockerfile: tools/playwright/Dockerfile.chinese
+    container_name: inkdot-playwright-tests
+    depends_on:
+      - inkdot-playwright
+    volumes:
+      - ../../:/app
+      - /app/node_modules
+      - screenshots:/app/tools/screenshots
+    environment:
+      - NODE_ENV=test
+      - LANG=zh_CN.UTF-8
+      - LC_ALL=zh_CN.UTF-8
+      - TZ=Asia/Shanghai
+    networks:
+      - inkdot-network
+    working_dir: /app
+    profiles:
+      - testing
+    command: npm run test:playwright:all
+
+volumes:
+  screenshots:
+
+networks:
+  inkdot-network:
+    driver: bridge
