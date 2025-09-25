@@ -171,7 +171,6 @@ case 'check-timestamp': {
 - [ ] 集成测试 (`npm run test:integration`)
 - [ ] 端到端测试 (`npm run test:e2e`)
 - [ ] Playwright测试 (`npm run test:playwright`)
-- [ ] Puppeteer测试 (`npm run test:puppeteer`)
 - [ ] 覆盖率报告 (`npm run test:coverage`)
 
 ## 🎯 效果评估

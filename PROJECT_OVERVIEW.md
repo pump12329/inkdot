@@ -20,11 +20,6 @@ inkdot/
 │   ├── 📄 PROJECT_STRUCTURE.md      # 项目结构文档
 │   └── 📄 README.md                 # 文档说明
 ├── 📁 tools/                        # 工具脚本目录
-│   ├── 📁 puppeteer/                # Puppeteer测试工具
-│   │   ├── 📄 puppeteer-chinese-config.js  # 中文配置
-│   │   ├── 📄 debug-browser.js      # 调试脚本
-│   │   ├── 📄 test-*.js             # 测试脚本
-│   │   ├── 📄 check-fonts.js        # 字体检测
 │   │   └── 📄 run-tests.js          # 测试运行器
 │   ├── 📁 screenshots/              # 测试截图目录
 │   ├── 📄 cleanup.js                # 项目清理脚本
@@ -58,11 +53,8 @@ npm run dev
 # 运行所有测试
 npm run test
 
-# 运行Puppeteer测试
-npm run test:puppeteer:all
-
-# 测试中文渲染
-npm run test:puppeteer:render
+# 运行所有测试
+npm run test:run
 ```
 
 ### 项目清理
@@ -89,27 +81,27 @@ npm run cleanup
 
 ### 3. 测试工具
 
-- Puppeteer自动化测试
+- Playwright自动化测试
 - 中文渲染测试
 - 字体检测工具
 - 调试工具
 
 ## 📋 开发命令
 
-| 命令                            | 说明                  |
-| ------------------------------- | --------------------- |
-| `npm run dev`                   | 启动开发服务器        |
-| `npm run build`                 | 构建生产版本          |
-| `npm run test`                  | 运行单元测试          |
-| `npm run test:puppeteer:all`    | 运行所有Puppeteer测试 |
-| `npm run test:puppeteer:render` | 测试中文渲染          |
-| `npm run cleanup`               | 清理项目文件          |
-| `npm run lint`                  | 代码检查              |
+| 命令                            | 说明                   |
+| ------------------------------- | ---------------------- |
+| `npm run dev`                   | 启动开发服务器         |
+| `npm run build`                 | 构建生产版本           |
+| `npm run test`                  | 运行单元测试           |
+| `npm run test:playwright:all`   | 运行所有Playwright测试 |
+| `npm run test:playwright:fonts` | 测试字体支持           |
+| `npm run cleanup`               | 清理项目文件           |
+| `npm run lint`                  | 代码检查               |
 
 ## 🔧 技术栈
 
 - **前端**: Vue 3 + TypeScript + Pinia + Vite
-- **测试**: Vitest + Puppeteer
+- **测试**: Vitest + Playwright
 - **工具**: ESLint + TypeScript
 - **字体**: Noto Sans CJK + WenQuanYi
 
@@ -117,7 +109,7 @@ npm run cleanup
 
 - [项目结构文档](docs/PROJECT_STRUCTURE.md)
 - [开发指南](docs/development/)
-- [Puppeteer工具说明](tools/puppeteer/README.md)
+- [Playwright工具说明](tools/playwright/README.md)
 
 ## 🎯 当前状态
 

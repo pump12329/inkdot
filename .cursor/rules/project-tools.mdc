@@ -167,25 +167,6 @@ npm run setup:dev
 
 ## 🧪 测试工具集成
 
-### Puppeteer测试工具
-
-```bash
-# 运行所有Puppeteer测试
-npm run test:puppeteer:all
-
-# 中文渲染测试
-npm run test:puppeteer:chinese
-
-# 按钮交互测试
-npm run test:puppeteer:buttons
-
-# 渲染性能测试
-npm run test:puppeteer:render
-
-# 调试模式
-npm run test:puppeteer:debug
-```
-
 ### Playwright测试工具
 
 ```bash

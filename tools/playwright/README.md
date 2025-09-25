@@ -1,6 +1,6 @@
 # Playwright 测试工具
 
-这个目录包含了用于测试和调试 InkDot 应用的 Playwright 脚本。Playwright 是 Puppeteer 的现代化替代方案，提供更好的性能和跨浏览器支持。
+这个目录包含了用于测试和调试 InkDot 应用的 Playwright 脚本。Playwright 是现代化的端到端测试框架，提供优异的性能和跨浏览器支持。
 
 ## 文件说明
 
@@ -49,7 +49,7 @@
   - 环境检查和依赖验证
   - 详细的帮助信息
 
-## Playwright vs Puppeteer
+## Playwright 优势
 
 ### 主要优势
 
@@ -61,9 +61,9 @@
 
 ### API 对比
 
-| 功能     | Puppeteer                | Playwright          |
+| 功能     | 描述                     | Playwright API      |
 | -------- | ------------------------ | ------------------- |
-| 页面导航 | `page.goto()`            | `page.goto()`       |
+| 页面导航 | 导航到指定页面           | `page.goto()`       |
 | 元素选择 | `page.$()`               | `page.locator()`    |
 | 点击     | `element.click()`        | `locator.click()`   |
 | 等待     | `page.waitForSelector()` | `locator.waitFor()` |

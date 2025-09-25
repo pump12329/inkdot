@@ -92,7 +92,6 @@ function cleanup() {
   console.log('├── src/                    # 源代码');
   console.log('├── docs/                   # 文档');
   console.log('├── tools/                  # 工具脚本');
-  console.log('│   ├── puppeteer/         # Puppeteer测试工具');
   console.log('│   └── screenshots/       # 测试截图');
   console.log('├── tests/                  # 测试文件');
   console.log('└── 配置文件...');

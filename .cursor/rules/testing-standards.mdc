@@ -66,14 +66,10 @@ npm run type-check          # 类型检查
 npm run test:performance    # 性能测试
 npm run test:e2e           # Playwright端到端测试
 npm run test:playwright    # Playwright测试套件
-npm run test:puppeteer     # Puppeteer测试套件
 npm run build              # 构建测试
 
 # 专项测试
-npm run test:puppeteer:chinese   # 中文渲染测试
 npm run test:playwright:fonts    # 字体支持测试
-npm run test:puppeteer:buttons   # 按钮交互测试
-npm run test:puppeteer:debug     # 调试模式测试
 ```
 
 ## 单元测试原则
@@ -127,9 +123,6 @@ tests/
 └── examples/               # 示例测试
 
 tools/                      # 项目测试工具
-├── puppeteer/              # Puppeteer测试工具
-│   ├── run-tests.js        # 测试运行器
-│   └── README.md           # 使用说明
 ├── playwright/             # Playwright测试工具
 │   ├── run-tests.js        # 测试运行器
 │   └── README.md           # 使用说明
@@ -137,13 +130,6 @@ tools/                      # 项目测试工具
 ```
 
 ## 项目特有测试工具
-
-### Puppeteer测试工具
-
-- **中文渲染测试**: 验证中文字体在不同环境下的显示效果
-- **按钮交互测试**: 测试UI组件的交互功能
-- **渲染性能测试**: 测试大量节点的渲染性能
-- **调试模式**: 支持可视化调试和截图
 
 ### Playwright测试工具
 

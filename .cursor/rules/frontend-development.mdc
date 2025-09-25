@@ -9,7 +9,7 @@ alwaysApply: true
 - **Vue 3.5.21** + **TypeScript 5.9.2** + **Pinia 3.0.3** + **Vite 7.0.0**
 - **样式**: CSS + 自定义组件库（基于墨点Logo设计）
 - **图标**: Lucide Vue Next 0.544.0
-- **测试**: Vitest 3.2.4 + Playwright 1.55.1 + Puppeteer 24.22.0
+- **测试**: Vitest 3.2.4 + Playwright 1.55.1
 - **代码质量**: ESLint 9.36.0 + Prettier 3.6.2
 
 ## Vue 3 开发规范

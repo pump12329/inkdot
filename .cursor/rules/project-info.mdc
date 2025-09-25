@@ -10,7 +10,7 @@ alwaysApply: true
 - **项目版本**: v1.0.0
 - **技术栈**: Vue 3.5.21 + TypeScript 5.9.2 + Pinia 3.0.3 + Vite 7.0.0
 - **AI集成**: DeepSeek API + OpenRouter API
-- **测试工具**: Vitest 3.2.4 + Playwright 1.55.1 + Puppeteer 24.22.0
+- **测试工具**: Vitest 3.2.4 + Playwright 1.55.1
 - **Node.js要求**: ≥ 20.0.0
 
 ## 参考文档

@@ -18,7 +18,7 @@ alwaysApply: true
 
 - **类型检查**: vue-tsc 3.0.7
 - **代码检查**: ESLint 9.36.0 + Prettier 3.6.2
-- **测试框架**: Vitest 3.2.4 + Playwright 1.55.1 + Puppeteer 24.22.0
+- **测试框架**: Vitest 3.2.4 + Playwright 1.55.1
 - **Git工具**: Husky 9.1.7 + lint-staged 16.1.6
 
 ### AI集成
@@ -126,9 +126,6 @@ inkdot/
 │   │   └── status-update-helper.js # 状态更新
 │   └── PROJECT_STRUCTURE.md   # 项目结构文档
 ├── tools/                      # 项目工具
-│   ├── puppeteer/              # Puppeteer测试工具
-│   │   ├── run-tests.js        # 测试运行器
-│   │   └── README.md           # 使用说明
 │   ├── playwright/             # Playwright测试工具
 │   │   ├── run-tests.js        # 测试运行器
 │   │   └── README.md           # 使用说明
