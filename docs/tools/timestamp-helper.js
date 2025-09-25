@@ -468,6 +468,36 @@ function main() {
       break;
     }
 
+    case 'check-timestamp': {
+      // Pre-commit专用：检查Markdown文件的时间戳
+      const filePaths = args.slice(1); // 从lint-staged获取的文件路径
+      if (filePaths.length === 0) {
+        console.log('📋 没有Markdown文件需要检查时间戳');
+        break;
+      }
+
+      let hasErrors = false;
+      filePaths.forEach(filePath => {
+        if (path.extname(filePath) === '.md') {
+          const status = checkDocumentTimestampHeader(filePath);
+          if (status && !status.hasHeader) {
+            console.error(`❌ ${filePath}: 缺少时间戳头部信息`);
+            hasErrors = true;
+          } else if (status && status.hasHeader && !status.isValid) {
+            console.warn(`⚠️  ${filePath}: 时间戳头部格式可能有问题`);
+          } else if (status && status.hasHeader && status.isValid) {
+            console.log(`✅ ${filePath}: 时间戳检查通过`);
+          }
+        }
+      });
+
+      if (hasErrors) {
+        console.error('\n❌ 部分Markdown文件缺少时间戳头部，请运行 npm run docs:fix 修复');
+        process.exit(1);
+      }
+      break;
+    }
+
     case 'help':
     default:
       console.log(`
@@ -485,6 +515,7 @@ function main() {
   batch-update [timestamp] [path]  批量更新时间戳
   fix-headers [path] [version] [create]  自动修复文档头部
   find-md [path] [exclude...]  查找所有Markdown文件
+  check-timestamp [files...]  检查指定文件的时间戳（用于pre-commit）
 
 📝 使用示例:
   # 基本操作

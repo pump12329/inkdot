@@ -129,6 +129,9 @@
     ],
     "*.{json,md,yml,yaml}": [
       "prettier --write"
+    ],
+    "*.md": [
+      "node docs/tools/timestamp-helper.js check-timestamp"
     ]
   }
 }

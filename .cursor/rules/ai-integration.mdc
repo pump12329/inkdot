@@ -5,6 +5,7 @@ alwaysApply: true
 # AI功能开发规范
 
 ## AI服务集成原则
+
 - **模型可自主选择**：用户可在 DeepSeek API 与 OpenRouter 等模型间自由切换
 - **统一接口设计**：所有 AI 服务需实现统一的接口规范
 - **智能默认配置**：为用户预设合理参数，降低配置门槛
@@ -13,13 +14,251 @@ alwaysApply: true
 - **统一错误处理**：所有错误反馈需标准化，提示清晰友好
 
 ## AI安全原则
+
 - **智能调用频率限制**：避免过度使用
 - **内容过滤简化**：只过滤明显的敏感内容
 - **成本监控透明**：用户可见的API使用成本
 - **安全默认设置**：默认启用安全功能
 
+## API配置和管理
+
+### 环境变量配置
+
+```bash
+# .env.local 文件配置
+VITE_DEEPSEEK_API_KEY=your_deepseek_api_key_here
+VITE_OPENROUTER_API_KEY=your_openrouter_api_key_here
+VITE_AI_DEFAULT_MODEL=deepseek-chat
+VITE_AI_FALLBACK_MODEL=openrouter/auto
+VITE_AI_RATE_LIMIT=60  # 每分钟请求限制
+```
+
+### AI服务接口设计
+
+```typescript
+// AI服务统一接口
+interface AIService {
+  provider: 'deepseek' | 'openrouter';
+  model: string;
+  apiKey: string;
+  baseURL: string;
+}
+
+interface AIRequest {
+  prompt: string;
+  model?: string;
+  temperature?: number;
+  maxTokens?: number;
+  stream?: boolean;
+}
+
+interface AIResponse {
+  content: string;
+  usage: {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+  };
+  cost?: number;
+}
+
+// AI服务管理类
+class AIServiceManager {
+  private services: Map<string, AIService> = new Map();
+  private currentProvider: string = 'deepseek';
+
+  async callAI(request: AIRequest): Promise<AIResponse> {
+    try {
+      const service = this.services.get(this.currentProvider);
+      if (!service) {
+        throw new Error(`AI服务 ${this.currentProvider} 未配置`);
+      }
+
+      return await this.makeRequest(service, request);
+    } catch (error) {
+      console.warn(`主AI服务失败，尝试备用服务`, error);
+      return await this.fallbackRequest(request);
+    }
+  }
+
+  private async fallbackRequest(request: AIRequest): Promise<AIResponse> {
+    const fallbackProvider = this.currentProvider === 'deepseek' ? 'openrouter' : 'deepseek';
+    const service = this.services.get(fallbackProvider);
+
+    if (!service) {
+      throw new Error('所有AI服务都不可用');
+    }
+
+    return await this.makeRequest(service, request);
+  }
+}
+```
+
+### 错误处理和降级策略
+
+```typescript
+// 错误类型定义
+enum AIErrorType {
+  NETWORK_ERROR = 'network_error',
+  API_KEY_ERROR = 'api_key_error',
+  QUOTA_EXCEEDED = 'quota_exceeded',
+  RATE_LIMITED = 'rate_limited',
+  CONTENT_FILTERED = 'content_filtered',
+  SERVER_ERROR = 'server_error'
+}
+
+interface AIError {
+  type: AIErrorType;
+  message: string;
+  userMessage: string;
+  retryable: boolean;
+}
+
+// 错误处理策略
+class AIErrorHandler {
+  static handleError(error: any): AIError {
+    if (error.status === 401) {
+      return {
+        type: AIErrorType.API_KEY_ERROR,
+        message: 'Invalid API key',
+        userMessage: 'API密钥无效，请检查配置',
+        retryable: false
+      };
+    }
+
+    if (error.status === 429) {
+      return {
+        type: AIErrorType.RATE_LIMITED,
+        message: 'Rate limit exceeded',
+        userMessage: '请求过于频繁，请稍后重试',
+        retryable: true
+      };
+    }
+
+    if (error.status >= 500) {
+      return {
+        type: AIErrorType.SERVER_ERROR,
+        message: 'Server error',
+        userMessage: 'AI服务暂时不可用，已自动切换备用服务',
+        retryable: true
+      };
+    }
+
+    return {
+      type: AIErrorType.NETWORK_ERROR,
+      message: error.message,
+      userMessage: '网络连接异常，请检查网络设置',
+      retryable: true
+    };
+  }
+}
+```
+
+### 成本监控和限制
+
+```typescript
+// 成本计算器
+class AICostCalculator {
+  private readonly PRICING = {
+    'deepseek-chat': {
+      input: 0.000001, // 每token价格（美元）
+      output: 0.000002
+    },
+    'openrouter/auto': {
+      input: 0.000002,
+      output: 0.000004
+    }
+  };
+
+  calculateCost(usage: AIResponse['usage'], model: string): number {
+    const pricing = this.PRICING[model] || this.PRICING['openrouter/auto'];
+
+    return usage.promptTokens * pricing.input + usage.completionTokens * pricing.output;
+  }
+
+  checkBudget(dailyUsage: number, dailyLimit: number): boolean {
+    return dailyUsage < dailyLimit;
+  }
+}
+
+// 使用状态追踪
+interface UsageStats {
+  daily: {
+    requests: number;
+    tokens: number;
+    cost: number;
+  };
+  monthly: {
+    requests: number;
+    tokens: number;
+    cost: number;
+  };
+}
+```
+
 ## 极简主义与AI集成
+
 - **智能简化**: 使用AI自动简化复杂内容
 - **智能推荐**: 基于用户行为推荐简化选项
 - **自然交互**: AI交互使用自然语言，避免复杂表单
 - **渐进式AI**: AI功能渐进式引入，不干扰核心流程
+- **一键操作**: 常用AI功能支持一键调用
+- **智能缓存**: 相似请求使用缓存结果，节省成本
+
+## AI功能实现规范
+
+### 思维导图AI辅助
+
+```typescript
+// 思维导图AI功能
+class MindMapAI {
+  async generateNodeSuggestions(context: string): Promise<string[]> {
+    const prompt = `基于以下上下文，为思维导图生成5个相关的节点建议：
+上下文：${context}
+
+请只返回节点文本，每行一个，不要额外解释。`;
+
+    const response = await aiService.callAI({ prompt, maxTokens: 200 });
+    return response.content.split('\n').filter(line => line.trim());
+  }
+
+  async expandNode(nodeContent: string): Promise<string[]> {
+    const prompt = `请为思维导图节点"${nodeContent}"生成3-5个子节点：`;
+
+    const response = await aiService.callAI({ prompt, maxTokens: 150 });
+    return response.content.split('\n').filter(line => line.trim());
+  }
+
+  async optimizeStructure(nodes: MindMapNode[]): Promise<MindMapNode[]> {
+    // AI优化思维导图结构的实现
+    const prompt = `请分析并优化以下思维导图结构...`;
+    // 实现逻辑
+  }
+}
+```
+
+### 用户交互优化
+
+```typescript
+// AI交互组件
+const AIAssistant = defineComponent({
+  setup() {
+    const isLoading = ref(false);
+    const suggestions = ref<string[]>([]);
+
+    const getSuggestions = async (context: string) => {
+      isLoading.value = true;
+      try {
+        suggestions.value = await mindMapAI.generateNodeSuggestions(context);
+      } catch (error) {
+        const aiError = AIErrorHandler.handleError(error);
+        showUserMessage(aiError.userMessage);
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
+    return { isLoading, suggestions, getSuggestions };
+  }
+});
+```

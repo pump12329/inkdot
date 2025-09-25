@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia';
-import { ref, computed, readonly } from 'vue';
-import type { MindMapNode, NodeConnection, Project, Position } from '@/types';
+import type { MindMapNode, NodeConnection, Position, Project } from '@/types';
 import { generateId } from '@/utils';
+import { defineStore } from 'pinia';
+import { computed, readonly, ref } from 'vue';
 
 export const useMindMapStore = defineStore('mindMap', () => {
   // 状态
