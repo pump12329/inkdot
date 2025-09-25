@@ -2,20 +2,20 @@
 
 /**
  * InkDot 开发环境自动设置脚本
- * 
+ *
  * 功能：
  * - 检查系统环境要求
  * - 安装项目依赖
  * - 配置开发工具
  * - 设置Git hooks
  * - 验证环境配置
- * 
+ *
  * 使用方法：
  * node scripts/setup-dev-environment.js [options]
  */
 
 const fs = require('fs');
-const path = require('path');
+const _path = require('path');
 const { execSync } = require('child_process');
 
 // 配置
@@ -47,7 +47,7 @@ function checkEnvironment() {
     if (!isVersionGreaterOrEqual(version, CONFIG.requiredNodeVersion)) {
       throw new Error(`Node.js版本过低，需要 >= ${CONFIG.requiredNodeVersion}`);
     }
-  } catch (error) {
+  } catch {
     console.error('❌ Node.js未安装或版本过低');
     console.error('请访问 https://nodejs.org/ 下载安装Node.js');
     process.exit(1);
@@ -61,7 +61,7 @@ function checkEnvironment() {
     if (!isVersionGreaterOrEqual(npmVersion, CONFIG.requiredNpmVersion)) {
       throw new Error(`npm版本过低，需要 >= ${CONFIG.requiredNpmVersion}`);
     }
-  } catch (error) {
+  } catch {
     console.error('❌ npm未安装或版本过低');
     process.exit(1);
   }
@@ -70,7 +70,7 @@ function checkEnvironment() {
   try {
     const gitVersion = execSync('git --version', { encoding: 'utf8' }).trim();
     console.log(`✅ Git版本: ${gitVersion}`);
-  } catch (error) {
+  } catch {
     console.error('❌ Git未安装');
     console.error('请访问 https://git-scm.com/ 下载安装Git');
     process.exit(1);
@@ -96,8 +96,8 @@ function installDependencies() {
     execSync('npm install', { stdio: 'inherit' });
 
     console.log('✅ 依赖安装完成\n');
-  } catch (error) {
-    console.error('❌ 依赖安装失败:', error.message);
+  } catch (_error) {
+    console.error('❌ 依赖安装失败:', _error.message);
     process.exit(1);
   }
 }
@@ -121,7 +121,7 @@ function setupGitHooks() {
     execSync('npx husky add .husky/pre-commit "npx lint-staged"', { stdio: 'inherit' });
 
     console.log('✅ Git hooks设置完成\n');
-  } catch (error) {
+  } catch {
     console.log('⚠️ Git hooks设置跳过（不在Git仓库中）\n');
   }
 }
@@ -162,8 +162,8 @@ VITE_DEV_SERVER_PORT=5173
     }
 
     console.log('✅ 环境变量配置完成\n');
-  } catch (error) {
-    console.error('❌ 环境变量配置失败:', error.message);
+  } catch (_error) {
+    console.error('❌ 环境变量配置失败:', _error.message);
   }
 }
 
@@ -175,12 +175,7 @@ function verifySetup() {
 
   try {
     // 检查关键文件
-    const requiredFiles = [
-      'package.json',
-      'vite.config.ts',
-      'tsconfig.json',
-      'tailwind.config.js'
-    ];
+    const requiredFiles = ['package.json', 'vite.config.ts', 'tsconfig.json', 'tailwind.config.js'];
 
     for (const file of requiredFiles) {
       if (!fs.existsSync(file)) {
@@ -205,9 +200,8 @@ function verifySetup() {
     console.log('2. 运行 npm run dev 启动开发服务器');
     console.log('3. 访问 http://localhost:5173 查看应用');
     console.log('4. 阅读 docs/development/initial-development-guide.md 了解开发指南');
-
-  } catch (error) {
-    console.error('❌ 环境验证失败:', error.message);
+  } catch (_error) {
+    console.error('❌ 环境验证失败:', _error.message);
     console.log('\n🔧 故障排除：');
     console.log('1. 确保所有依赖已正确安装');
     console.log('2. 检查TypeScript配置');
@@ -287,8 +281,8 @@ function main() {
   for (const step of CONFIG.setupSteps) {
     try {
       eval(`${step}()`);
-    } catch (error) {
-      console.error(`❌ 步骤 ${step} 执行失败:`, error.message);
+    } catch (_error) {
+      console.error(`❌ 步骤 ${step} 执行失败:`, _error.message);
       process.exit(1);
     }
   }
