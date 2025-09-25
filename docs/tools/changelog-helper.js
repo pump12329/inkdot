@@ -20,7 +20,7 @@
  */
 
 const fs = require('fs');
-const path = require('path');
+const _path = require('path');
 const { execSync } = require('child_process');
 
 // 配置文件
@@ -47,7 +47,7 @@ const COMMIT_TYPE_MAP = {
 };
 
 // 文档类型映射
-const DOC_TYPE_MAP = {
+const _DOC_TYPE_MAP = {
   architecture: { icon: '🏗️', title: '架构文档' },
   development: { icon: '🛠️', title: '开发文档' },
   design: { icon: '🎨', title: '设计文档' },
@@ -370,11 +370,11 @@ function showStatus() {
 /**
  * 批量更新文档状态表
  */
-function updateDocumentStatusTable() {
+function _updateDocumentStatusTable() {
   console.log('📊 更新文档状态表...');
 
   const changelogContent = readChangelog();
-  const timestamp = getCurrentTimestamp();
+  const _timestamp = getCurrentTimestamp();
 
   // 查找文档状态表部分
   const statusTableIndex = changelogContent.indexOf('### 🟢 当前文档 (CURRENT)');

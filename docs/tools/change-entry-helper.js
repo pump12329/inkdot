@@ -120,7 +120,7 @@ function getGitStatus() {
 /**
  * 获取Git差异
  */
-function getGitDiff() {
+function _getGitDiff() {
   try {
     const diff = execSync('git diff --cached', { encoding: 'utf8' });
     return diff;
@@ -133,7 +133,7 @@ function getGitDiff() {
 /**
  * 获取最近提交
  */
-function getRecentCommits(count = 5) {
+function _getRecentCommits(count = 5) {
   try {
     const commits = execSync(`git log --oneline -${count}`, { encoding: 'utf8' });
     return commits
@@ -151,7 +151,7 @@ function getRecentCommits(count = 5) {
  */
 function detectFileChangeType(filePath) {
   const ext = path.extname(filePath).toLowerCase();
-  const dir = path.dirname(filePath);
+  const _dir = path.dirname(filePath);
 
   // 根据文件路径和扩展名判断变更类型
   if (filePath.includes('docs/') || ext === '.md') {
@@ -327,7 +327,7 @@ function autoDetectChanges() {
 /**
  * 添加变更条目到CHANGELOG
  */
-function addChangeEntryToChangelog(changeType, description, files = []) {
+function addChangeEntryToChangelog(changeType, description, _files = []) {
   console.log(`➕ 添加变更条目: ${description}`);
 
   try {
