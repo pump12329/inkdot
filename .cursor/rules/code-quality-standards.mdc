@@ -1,4 +1,5 @@
 ---
+description: ESLint代码质量标准，包含TypeScript规范、Vue组件质量要求、代码清理检查清单等
 alwaysApply: true
 ---
 

@@ -1,4 +1,5 @@
 ---
+description: 测试规范标准，包含测试工作流程、覆盖率要求、性能基准、测试策略等质量保证指导
 alwaysApply: true
 ---
 

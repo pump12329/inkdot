@@ -1,4 +1,5 @@
 ---
+description: 项目技术栈架构设计规范，定义SPA架构、状态管理、数据存储等核心架构原则
 alwaysApply: true
 ---
 

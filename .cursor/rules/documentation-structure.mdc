@@ -1,10 +1,12 @@
 ---
+description: 项目文档结构规范，定义文档目录组织、文档分类、文档管理等文档体系指导
 alwaysApply: true
 ---
 
 # 文档结构
 
 ## 文档目录结构
+
 ```
 docs/
 ├── architecture/     # 架构设计
@@ -17,4 +19,5 @@ docs/
 ```
 
 ## 详细规范
+
 详细规范请查看：[项目规则文档](docs/development/project-rules.md)

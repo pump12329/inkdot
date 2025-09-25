@@ -1,4 +1,5 @@
 ---
+description: Vue 3 + TypeScript前端开发规范，包含代码规范、组件设计、样式规范等核心开发指导
 alwaysApply: true
 ---
 
