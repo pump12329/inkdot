@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+.vite/
+
+# Generated files
+*.min.js
+*.min.css
+
+# Coverage reports
+coverage/
+
+# Screenshots and media
+tools/screenshots/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+
+# Documentation
+CHANGELOG.md
+LICENSE
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment files
+.env*
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log

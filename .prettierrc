@@ -1,13 +1,14 @@
 {
-  "semi": false,
   "singleQuote": true,
+  "semi": true,
   "tabWidth": 2,
+  "useTabs": false,
   "trailingComma": "none",
-  "printWidth": 80,
+  "printWidth": 100,
   "endOfLine": "lf",
-  "arrowParens": "avoid",
   "bracketSpacing": true,
-  "bracketSameLine": false,
+  "arrowParens": "avoid",
   "vueIndentScriptAndStyle": false,
-  "htmlWhitespaceSensitivity": "ignore"
+  "htmlWhitespaceSensitivity": "ignore",
+  "embeddedLanguageFormatting": "auto"
 }

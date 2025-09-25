@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "InkDot - 创意创作思维导图平台",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "timestamp": "node docs/tools/timestamp-helper.js",
     "timestamp:current": "node docs/tools/timestamp-helper.js current",
@@ -49,10 +50,26 @@
     "test:integration": "vitest tests/integration/",
     "test:unit": "vitest tests/unit/",
     "test:e2e": "playwright test",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "lint:fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "test:puppeteer": "node tools/puppeteer/run-tests.js",
+    "test:puppeteer:all": "node tools/puppeteer/run-tests.js all",
+    "test:puppeteer:debug": "node tools/puppeteer/run-tests.js debug",
+    "test:puppeteer:buttons": "node tools/puppeteer/run-tests.js buttons",
+    "test:puppeteer:chinese": "node tools/puppeteer/run-tests.js chinese",
+    "test:puppeteer:render": "node tools/puppeteer/run-tests.js render",
+    "test:playwright": "node tools/playwright/run-tests.js",
+    "test:playwright:all": "node tools/playwright/run-tests.js all",
+    "test:playwright:debug": "node tools/playwright/run-tests.js debug",
+    "test:playwright:buttons": "node tools/playwright/run-tests.js buttons",
+    "test:playwright:chinese": "node tools/playwright/run-tests.js chinese",
+    "test:playwright:render": "node tools/playwright/run-tests.js render",
+    "test:playwright:fonts": "node tools/playwright/run-tests.js fonts",
+    "cleanup": "node tools/cleanup.js",
+    "clean": "node tools/cleanup.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "type-check": "vue-tsc --noEmit",
     "prepare": "husky install"
   },
   "keywords": [
@@ -66,34 +83,52 @@
   "author": "InkDot Team",
   "license": "MIT",
   "dependencies": {
-    "@vue/runtime-core": "^3.4.0",
-    "pinia": "^2.1.0",
-    "vue": "^3.4.0"
+    "@vue/runtime-core": "^3.5.21",
+    "lucide-vue-next": "^0.544.0",
+    "pinia": "^3.0.3",
+    "vue": "^3.5.21"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.1",
+    "@types/node": "^24.5.2",
     "@typescript-eslint/eslint-plugin": "^8.44.0",
     "@typescript-eslint/parser": "^8.44.0",
-    "@vitejs/plugin-vue": "^5.0.0",
-    "@vue/eslint-config-typescript": "^12.0.0",
-    "@vue/test-utils": "^2.4.0",
-    "@vue/tsconfig": "^0.5.0",
-    "eslint": "^8.57.1",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/test-utils": "^2.4.6",
+    "@vue/tsconfig": "^0.8.1",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-vue": "^10.4.0",
-    "husky": "^9.0.0",
-    "jsdom": "^24.0.0",
-    "lint-staged": "^15.0.0",
-    "prettier": "^3.0.0",
-    "typescript": "^5.0.0",
-    "vite": "^5.0.0",
-    "vitest": "^2.0.0",
-    "vue-eslint-parser": "^9.4.3",
-    "vue-tsc": "^2.0.0"
+    "globals": "^16.4.0",
+    "husky": "^9.1.7",
+    "jsdom": "^27.0.0",
+    "lint-staged": "^16.1.6",
+    "playwright": "^1.55.1",
+    "prettier": "^3.6.2",
+    "puppeteer": "^24.22.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.0.0",
+    "vitest": "^3.2.4",
+    "vue-eslint-parser": "^10.2.0",
+    "vue-tsc": "^3.0.7"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=20.0.0"
   },
   "directories": {
     "doc": "docs",
     "example": "examples"
+  },
+  "lint-staged": {
+    "*.{js,ts,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   }
 }

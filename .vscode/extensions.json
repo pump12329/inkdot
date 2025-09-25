@@ -1,10 +1,28 @@
 {
   "recommendations": [
+    // Vue.js support
     "Vue.volar",
     "Vue.vscode-typescript-vue-plugin",
+    // Code formatting and linting
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
+    // TypeScript support
+    "ms-vscode.vscode-typescript-next",
+    // General development
+    "EditorConfig.EditorConfig",
     "bradlc.vscode-tailwindcss",
-    "ms-vscode.vscode-typescript-next"
+    "ms-vscode.vscode-json",
+    // Git support
+    "eamodio.gitlens",
+    // Testing
+    "ms-playwright.playwright",
+    // Utilities
+    "christian-kohler.path-intellisense",
+    "formulahendry.auto-rename-tag",
+    "ms-vscode.vscode-todo-highlight"
+  ],
+  "unwantedRecommendations": [
+    "octref.vetur",
+    "ms-vscode.vscode-typescript-tslint-plugin"
   ]
 }
