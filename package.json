@@ -69,7 +69,6 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "type-check": "vue-tsc --noEmit",
     "prepare": "husky install"
   },
   "keywords": [
