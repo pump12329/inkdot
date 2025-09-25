@@ -1,7 +1,7 @@
 // Vue 3 类型声明
 declare module '*.vue' {
   import type { DefineComponent } from 'vue';
-  const component: DefineComponent<{}, {}, any>;
+  const component: DefineComponent<Record<string, unknown>, Record<string, unknown>, unknown>;
   export default component;
 }
 
@@ -9,7 +9,7 @@ declare module '*.vue' {
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      [elem: string]: any;
+      [elem: string]: Record<string, unknown>;
     }
   }
 }
@@ -17,7 +17,7 @@ declare global {
 // Vue 3 运行时类型
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $emit: (event: string, ...args: any[]) => void;
+    $emit: (event: string, ...args: unknown[]) => void;
   }
 }
 
@@ -43,5 +43,8 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+// 避免未使用的警告
+export type { ImportMeta };
 
 export {};

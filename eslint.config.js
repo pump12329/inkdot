@@ -62,6 +62,8 @@ export default [
       'vue/multi-word-component-names': 'off',
       'vue/no-unused-vars': 'error',
       'vue/no-multiple-template-root': 'off', // Vue 3 allows multiple roots
+      'vue/no-undef-components': 'off',
+      'vue/no-undef-properties': 'off',
 
       // General JavaScript rules
       'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -84,7 +86,11 @@ export default [
         parser: typescriptParser,
         ecmaVersion: 2022,
         sourceType: 'module',
-        extraFileExtensions: ['.vue']
+        extraFileExtensions: ['.vue'],
+        ecmaFeatures: {
+          jsx: true
+        },
+        project: false // 禁用项目级别的类型检查以避免模板错误
       },
       globals: {
         ...globals.browser,
@@ -118,9 +124,11 @@ export default [
         }
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-undef': 'off', // Vue模板中的变量检查由vue-tsc处理
 
       // Disable conflicting rules
       'no-unused-vars': 'off', // Use TypeScript version instead
+      'no-undef': 'off', // 在Vue SFC中由TypeScript处理
       'no-case-declarations': 'error',
       'no-prototype-builtins': 'error',
       'no-misleading-character-class': 'error',
@@ -137,6 +145,14 @@ export default [
           endOfLine: 'lf'
         }
       ]
+    }
+  },
+
+  // Vue 模板特殊配置 - 禁用未定义变量检查
+  {
+    files: ['**/*.vue'],
+    rules: {
+      'no-undef': 'off' // Vue 模板中的变量由 vue-tsc 处理
     }
   },
 

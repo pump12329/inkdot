@@ -14,23 +14,34 @@
     <!-- 主要内容区域 -->
     <main class="main-content">
       <!-- 工具栏 -->
-      <div class="toolbar">
-        <button type="button" class="btn btn-primary" @click="createNewProject">新建项目</button>
-        <button type="button" class="btn btn-secondary" :disabled="!canSave" @click="saveProject">
-          保存
-        </button>
-        <button type="button" class="btn btn-secondary" @click="loadProject">加载项目</button>
-      </div>
+      <Toolbar
+        :can-save="canSave"
+        :can-undo="false"
+        :can-redo="false"
+        :has-selection="selectedNode !== null"
+        :can-connect="false"
+        :zoom-level="1"
+        @new-project="createNewProject"
+        @save-project="saveProject"
+        @load-project="loadProject"
+        @delete-node="deleteSelectedNode"
+        @zoom-in="handleZoomIn"
+        @zoom-out="handleZoomOut"
+      />
 
       <!-- 思维导图画布 -->
       <div class="canvas-container">
-        <canvas
-          ref="canvasRef"
-          class="mindmap-canvas"
-          @click="handleCanvasClick"
-          @mousedown="handleMouseDown"
-          @mousemove="handleMouseMove"
-          @mouseup="handleMouseUp"
+        <MindMapCanvas
+          :nodes="nodes"
+          :connections="connections"
+          :selected-node-id="selectedNode?.id || null"
+          :canvas-size="{ width: 1200, height: 800 }"
+          @node-click="handleNodeClick"
+          @node-double-click="handleNodeDoubleClick"
+          @node-content-update="handleNodeContentUpdate"
+          @node-position-update="handleNodePositionUpdate"
+          @canvas-click="handleCanvasClick"
+          @selection-change="handleSelectionChange"
         />
       </div>
 
@@ -48,7 +59,7 @@
               v-model="selectedNode.content"
               type="text"
               class="input-text"
-              @input="updateNode"
+              @input="updateNodeContent"
             />
           </div>
         </div>
@@ -63,18 +74,20 @@
 </template>
 
 <script setup lang="ts">
+import MindMapCanvas from '@/components/MindMapCanvas.vue';
+import Toolbar from '@/components/Toolbar.vue';
+import { useKeyboardShortcuts } from '@/composables/useKeyboardShortcuts';
+import { useMindMapInteraction } from '@/composables/useMindMapInteraction';
 import { useMindMapStore } from '@/stores/mindmap';
-import type { MindMapNode, Position } from '@/types';
-import { computed, nextTick, onMounted, ref } from 'vue';
+import type { Position } from '@/types';
+import { computed, ref } from 'vue';
 
-// Store
+// Store 和组合式函数
 const store = useMindMapStore();
+const interaction = useMindMapInteraction();
 
 // 响应式数据
-const canvasRef = ref<HTMLCanvasElement | null>(null);
 const showSidebar = ref(false);
-const isDragging = ref(false);
-const dragOffset = ref<Position>({ x: 0, y: 0 });
 
 // 计算属性
 const nodes = computed(() => store.nodes);
@@ -84,9 +97,18 @@ const currentProject = computed(() => store.currentProject);
 const isProjectModified = computed(() => store.isModified);
 const canSave = computed(() => isProjectModified.value && nodes.value.length > 0);
 
-// 方法
+// 键盘快捷键
+useKeyboardShortcuts({
+  onNew: createNewProject,
+  onSave: saveProject,
+  onDelete: deleteSelectedNode,
+  onEscape: () => interaction.selectNode(null)
+});
+
+// 项目操作方法
 function createNewProject(): void {
   store.createNewProject();
+  showSidebar.value = false;
 }
 
 function saveProject(): void {
@@ -96,183 +118,63 @@ function saveProject(): void {
 }
 
 function loadProject(): void {
-  // 这里可以打开文件选择器或项目列表
+  // TODO: 实现文件选择器功能
   console.log('加载项目功能待实现');
 }
 
-function handleCanvasClick(event: MouseEvent): void {
-  if (!canvasRef.value) return;
-
-  const rect = canvasRef.value.getBoundingClientRect();
-  const position: Position = {
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.top
-  };
-
-  // 检查是否点击了现有节点
-  const clickedNode = findNodeAtPosition(position);
-
-  if (clickedNode) {
-    store.selectNode(clickedNode.id);
-    showSidebar.value = true;
-  } else {
-    // 创建新节点
-    const newNode: Omit<MindMapNode, 'id'> = {
-      content: '新节点',
-      position,
-      connections: []
-    };
-    store.addNode(newNode);
-  }
+// 事件处理方法
+function handleNodeClick(nodeId: string, _event: MouseEvent): void {
+  interaction.selectNode(nodeId);
+  showSidebar.value = true;
 }
 
-function handleMouseDown(event: MouseEvent): void {
-  if (!canvasRef.value) return;
-
-  const rect = canvasRef.value.getBoundingClientRect();
-  const position: Position = {
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.top
-  };
-
-  const clickedNode = findNodeAtPosition(position);
-  if (clickedNode) {
-    isDragging.value = true;
-    dragOffset.value = {
-      x: position.x - clickedNode.position.x,
-      y: position.y - clickedNode.position.y
-    };
-    store.selectNode(clickedNode.id);
-  }
+function handleNodeDoubleClick(nodeId: string): void {
+  interaction.selectNode(nodeId);
 }
 
-function handleMouseMove(event: MouseEvent): void {
-  if (!isDragging.value || !selectedNode.value || !canvasRef.value) return;
-
-  const rect = canvasRef.value.getBoundingClientRect();
-  const newPosition: Position = {
-    x: event.clientX - rect.left - dragOffset.value.x,
-    y: event.clientY - rect.top - dragOffset.value.y
-  };
-
-  store.updateNodePosition(selectedNode.value.id, newPosition);
-  drawCanvas();
+function handleNodeContentUpdate(nodeId: string, content: string): void {
+  interaction.updateNodeContent(nodeId, content);
 }
 
-function handleMouseUp(): void {
-  isDragging.value = false;
+function handleNodePositionUpdate(nodeId: string, position: Position): void {
+  interaction.updateNodePosition(nodeId, position);
 }
 
-function updateNode(): void {
+function handleCanvasClick(position: Position, _event: MouseEvent): void {
+  // 创建新节点
+  interaction.createNodeAtPosition(position, '新节点');
+  showSidebar.value = false;
+}
+
+function handleSelectionChange(nodeId: string | null): void {
+  interaction.selectNode(nodeId);
+  showSidebar.value = nodeId !== null;
+}
+
+// 工具栏操作方法
+function deleteSelectedNode(): void {
+  interaction.deleteSelectedNode();
+  showSidebar.value = false;
+}
+
+function handleZoomIn(): void {
+  console.log('放大视图');
+}
+
+function handleZoomOut(): void {
+  console.log('缩小视图');
+}
+
+function updateNodeContent(): void {
   if (selectedNode.value) {
-    store.updateNode(selectedNode.value.id, { content: selectedNode.value.content });
-    drawCanvas();
+    interaction.updateNodeContent(selectedNode.value.id, selectedNode.value.content);
   }
 }
 
 function closeSidebar(): void {
   showSidebar.value = false;
-  store.clearSelection();
+  interaction.selectNode(null);
 }
-
-function findNodeAtPosition(position: Position): MindMapNode | null {
-  for (const node of nodes.value) {
-    const distance = Math.sqrt(
-      Math.pow(position.x - node.position.x, 2) + Math.pow(position.y - node.position.y, 2)
-    );
-    if (distance <= 30) {
-      // 节点半径
-      return node;
-    }
-  }
-  return null;
-}
-
-function drawCanvas(): void {
-  if (!canvasRef.value) return;
-
-  const ctx = canvasRef.value.getContext('2d');
-  if (!ctx) return;
-
-  // 清空画布
-  ctx.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height);
-
-  // 绘制连接线
-  ctx.strokeStyle = '#ddd';
-  ctx.lineWidth = 2;
-  connections.value.forEach(connection => {
-    const fromNode = nodes.value.find(n => n.id === connection.fromNodeId);
-    const toNode = nodes.value.find(n => n.id === connection.toNodeId);
-
-    if (fromNode && toNode) {
-      ctx.beginPath();
-      ctx.moveTo(fromNode.position.x, fromNode.position.y);
-      ctx.lineTo(toNode.position.x, toNode.position.y);
-      ctx.stroke();
-    }
-  });
-
-  // 绘制节点
-  nodes.value.forEach(node => {
-    ctx.beginPath();
-    ctx.arc(node.position.x, node.position.y, 30, 0, 2 * Math.PI);
-
-    // 节点样式
-    if (selectedNode.value?.id === node.id) {
-      ctx.fillStyle = '#007bff';
-      ctx.strokeStyle = '#0056b3';
-    } else {
-      ctx.fillStyle = '#f8f9fa';
-      ctx.strokeStyle = '#dee2e6';
-    }
-
-    ctx.lineWidth = 2;
-    ctx.fill();
-    ctx.stroke();
-
-    // 绘制文本
-    ctx.fillStyle = '#333';
-    ctx.font = '14px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(
-      node.content.length > 8 ? node.content.substring(0, 8) + '...' : node.content,
-      node.position.x,
-      node.position.y
-    );
-  });
-}
-
-function resizeCanvas(): void {
-  if (!canvasRef.value) return;
-
-  const container = canvasRef.value.parentElement;
-  if (container) {
-    canvasRef.value.width = container.clientWidth;
-    canvasRef.value.height = container.clientHeight;
-    drawCanvas();
-  }
-}
-
-// 生命周期
-onMounted(async () => {
-  await nextTick();
-  if (canvasRef.value) {
-    resizeCanvas();
-  }
-
-  // 监听窗口大小变化
-  window.addEventListener('resize', resizeCanvas);
-
-  // 初始化示例数据
-  if (nodes.value.length === 0) {
-    store.addNode({
-      content: '中心节点',
-      position: { x: 400, y: 300 },
-      connections: []
-    });
-  }
-});
 </script>
 
 <style scoped>
@@ -281,14 +183,15 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
+    -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC',
+    'WenQuanYi Micro Hei', system-ui, sans-serif;
+  background: #ffffff;
+  color: #000000;
 }
 
 .header {
-  background: #fff;
-  border-bottom: 1px solid #e9ecef;
+  background: #ffffff;
+  border-bottom: 1px solid #00000022;
   padding: 1rem;
 }
 
@@ -301,7 +204,12 @@ onMounted(async () => {
 }
 
 .header-content.modified {
-  color: #dc3545;
+  color: #000000;
+}
+
+.header-content.modified .modified-indicator {
+  color: #000000;
+  opacity: 0.7;
 }
 
 .title {
@@ -321,64 +229,16 @@ onMounted(async () => {
 }
 
 .modified-indicator {
-  color: #dc3545;
+  color: #000000;
   font-weight: bold;
+  opacity: 0.7;
 }
 
 .main-content {
   flex: 1;
   display: flex;
+  flex-direction: column;
   position: relative;
-}
-
-.toolbar {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  z-index: 10;
-  display: flex;
-  gap: 0.5rem;
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid #dee2e6;
-  border-radius: 0.375rem;
-  background: #fff;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: all 0.2s;
-}
-
-.btn:hover {
-  background: #f8f9fa;
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background: #007bff;
-  color: #fff;
-  border-color: #007bff;
-}
-
-.btn-primary:hover {
-  background: #0056b3;
-  border-color: #0056b3;
-}
-
-.btn-secondary {
-  background: #6c757d;
-  color: #fff;
-  border-color: #6c757d;
-}
-
-.btn-secondary:hover {
-  background: #545b62;
-  border-color: #545b62;
 }
 
 .canvas-container {
@@ -387,18 +247,16 @@ onMounted(async () => {
   overflow: hidden;
 }
 
-.mindmap-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  cursor: crosshair;
-}
-
 .sidebar {
+  position: absolute;
+  right: 0;
+  top: 0;
   width: 300px;
-  background: #f8f9fa;
-  border-left: 1px solid #dee2e6;
+  height: 100%;
+  background: #ffffff;
+  border-left: 1px solid #00000022;
   padding: 1rem;
+  z-index: 10;
 }
 
 .sidebar-header {
@@ -418,11 +276,11 @@ onMounted(async () => {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #6c757d;
+  color: #00000066;
 }
 
 .btn-close:hover {
-  color: #495057;
+  color: #000000;
 }
 
 .property-group {
@@ -438,25 +296,27 @@ onMounted(async () => {
 .input-text {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #00000022;
   border-radius: 0.375rem;
   font-size: 0.875rem;
+  background: #ffffff;
+  color: #000000;
 }
 
 .input-text:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  border-color: #000000;
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
 }
 
 .status-bar {
-  background: #f8f9fa;
-  border-top: 1px solid #dee2e6;
+  background: #ffffff;
+  border-top: 1px solid #00000022;
   padding: 0.5rem 1rem;
 }
 
 .status-text {
   font-size: 0.875rem;
-  color: #6c757d;
+  color: #00000066;
 }
 </style>

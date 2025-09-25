@@ -71,40 +71,44 @@ const handleClick = (event: MouseEvent) => {
   font-size: 1rem;
 }
 
+/* 极简主义配色方案 */
 .btn--primary {
-  background-color: #2563eb;
-  color: white;
+  background-color: #000000;
+  color: #ffffff;
 }
 
 .btn--primary:hover:not(.btn--disabled) {
-  background-color: #1d4ed8;
+  background-color: #000000;
+  opacity: 0.8;
 }
 
 .btn--secondary {
-  background-color: #4b5563;
-  color: white;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #00000022;
 }
 
 .btn--secondary:hover:not(.btn--disabled) {
-  background-color: #374151;
+  background-color: #00000005;
 }
 
 .btn--ghost {
   background-color: transparent;
-  color: #374151;
+  color: #000000;
 }
 
 .btn--ghost:hover:not(.btn--disabled) {
-  background-color: #f3f4f6;
+  background-color: #00000005;
 }
 
 .btn--danger {
-  background-color: #dc2626;
-  color: white;
+  background-color: #000000;
+  color: #ffffff;
 }
 
 .btn--danger:hover:not(.btn--disabled) {
-  background-color: #b91c1c;
+  background-color: #000000;
+  opacity: 0.8;
 }
 
 .btn--disabled {
