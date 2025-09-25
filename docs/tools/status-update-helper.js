@@ -2,16 +2,16 @@
 
 /**
  * InkDot 文档状态总览自动更新工具
- * 
+ *
  * 功能：
  * - 自动扫描项目中的所有Markdown文档
  * - 解析文档头部信息（版本、时间戳、状态）
  * - 自动更新CHANGELOG中的文档状态总览
  * - 支持分类显示（当前、开发中、过时、废弃）
- * 
+ *
  * 使用方法：
  * node docs/tools/status-update-helper.js [command] [options]
- * 
+ *
  * 命令：
  * - update: 更新文档状态总览
  * - scan: 扫描文档状态
@@ -27,29 +27,24 @@ const { execSync } = require('child_process');
 const CONFIG = {
   changelogPath: 'docs/CHANGELOG.md',
   projectRoot: process.cwd(),
-  excludePatterns: [
-    'node_modules/**',
-    '.git/**',
-    'dist/**',
-    'build/**'
-  ],
+  excludePatterns: ['node_modules/**', '.git/**', 'dist/**', 'build/**'],
   documentCategories: {
-    'current': {
+    current: {
       title: '🟢 当前文档 (CURRENT)',
       status: 'CURRENT',
       icon: '🟢'
     },
-    'draft': {
+    draft: {
       title: '🚧 开发中文档 (DRAFT)',
       status: 'DRAFT',
       icon: '🚧'
     },
-    'outdated': {
+    outdated: {
       title: '🟡 计划更新文档 (OUTDATED)',
       status: 'OUTDATED',
       icon: '🟡'
     },
-    'deprecated': {
+    deprecated: {
       title: '🔴 已废弃文档 (DEPRECATED)',
       status: 'DEPRECATED',
       icon: '🔴'
@@ -128,7 +123,13 @@ function parseDocumentHeader(filePath) {
       } else if (line.startsWith('> **最后更新**：')) {
         header.lastUpdate = line.replace('> **最后更新**：', '').trim();
       } else if (line.startsWith('> **状态**：')) {
-        header.status = line.replace('> **状态**：', '').trim().replace(/🟢\s*/, '').replace(/🚧\s*/, '').replace(/🟡\s*/, '').replace(/🔴\s*/, '');
+        header.status = line
+          .replace('> **状态**：', '')
+          .trim()
+          .replace(/🟢\s*/, '')
+          .replace(/🚧\s*/, '')
+          .replace(/🟡\s*/, '')
+          .replace(/🔴\s*/, '');
       } else if (line.startsWith('> **维护者**：')) {
         header.maintainer = line.replace('> **维护者**：', '').trim();
       } else if (line.startsWith('> **下次审查**：')) {
@@ -261,7 +262,7 @@ function generateStatusOverview(categorized) {
     content += '|---------|------|----------|------|\n';
 
     for (const doc of categorized.current) {
-      content += `${generateStatusTableRow(doc)  }\n`;
+      content += `${generateStatusTableRow(doc)}\n`;
     }
     content += '\n';
   }
@@ -273,7 +274,7 @@ function generateStatusOverview(categorized) {
     content += '|---------|------|----------|------|\n';
 
     for (const doc of categorized.draft) {
-      content += `${generateDraftTableRow(doc)  }\n`;
+      content += `${generateDraftTableRow(doc)}\n`;
     }
     content += '\n';
   }
@@ -285,7 +286,7 @@ function generateStatusOverview(categorized) {
     content += '|---------|------|----------|------|\n';
 
     for (const doc of categorized.outdated) {
-      content += `${generateOutdatedTableRow(doc)  }\n`;
+      content += `${generateOutdatedTableRow(doc)}\n`;
     }
     content += '\n';
   } else {
@@ -300,7 +301,7 @@ function generateStatusOverview(categorized) {
     content += '|---------|------|----------|------|\n';
 
     for (const doc of categorized.deprecated) {
-      content += `${generateDeprecatedTableRow(doc)  }\n`;
+      content += `${generateDeprecatedTableRow(doc)}\n`;
     }
     content += '\n';
   } else {
@@ -335,13 +336,13 @@ function updateChangelogStatusOverview() {
     }
 
     // 查找下一个主要部分
-    const nextSectionMatch = changelogContent.match(/^## [^📊]/m);
+    const nextSectionMatch = changelogContent.match(/^## [^📊]/mu);
     const statusOverviewEnd = nextSectionMatch ? nextSectionMatch.index : changelogContent.length;
 
     // 替换状态总览部分
     const beforeStatus = changelogContent.substring(0, statusOverviewStart);
     const afterStatus = changelogContent.substring(statusOverviewEnd);
-    const newChangelog = `${beforeStatus  }## 📊 文档状态总览\n\n${  newStatusOverview  }${afterStatus}`;
+    const newChangelog = `${beforeStatus}## 📊 文档状态总览\n\n${newStatusOverview}${afterStatus}`;
 
     // 写入文件
     fs.writeFileSync(CONFIG.changelogPath, newChangelog, 'utf8');
@@ -357,7 +358,6 @@ function updateChangelogStatusOverview() {
     console.log(`  ❌ 无效文档: ${categorized.invalid.length} 个`);
 
     return true;
-
   } catch (error) {
     console.error('❌ 更新文档状态总览失败:', error.message);
     return false;

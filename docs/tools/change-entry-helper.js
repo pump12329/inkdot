@@ -2,16 +2,16 @@
 
 /**
  * InkDot 自动变更条目工具
- * 
+ *
  * 功能：
  * - 自动检测项目变更类型
  * - 智能生成变更条目描述
  * - 支持多种变更检测模式
  * - 自动添加到CHANGELOG
- * 
+ *
  * 使用方法：
  * node docs/tools/change-entry-helper.js [command] [options]
- * 
+ *
  * 命令：
  * - auto: 自动检测并添加变更条目
  * - detect: 检测变更类型
@@ -29,49 +29,49 @@ const CONFIG = {
   changelogPath: 'docs/CHANGELOG.md',
   projectRoot: process.cwd(),
   changeTypes: {
-    'feature': {
+    feature: {
       keywords: ['feat', 'feature', 'add', 'new', 'implement', 'create'],
       icon: '🆕',
       title: '新增功能',
       category: 'features'
     },
-    'fix': {
+    fix: {
       keywords: ['fix', 'bug', 'error', 'issue', 'resolve', 'correct'],
       icon: '🐛',
       title: '问题修复',
       category: 'bugfixes'
     },
-    'improvement': {
+    improvement: {
       keywords: ['improve', 'enhance', 'optimize', 'better', 'upgrade', 'refactor'],
       icon: '⚡',
       title: '功能改进',
       category: 'improvements'
     },
-    'documentation': {
+    documentation: {
       keywords: ['docs', 'documentation', 'readme', 'guide', 'manual'],
       icon: '📝',
       title: '文档更新',
       category: 'documentation'
     },
-    'style': {
+    style: {
       keywords: ['style', 'format', 'design', 'ui', 'css', 'theme'],
       icon: '🎨',
       title: '样式调整',
       category: 'styling'
     },
-    'test': {
+    test: {
       keywords: ['test', 'testing', 'spec', 'coverage', 'unit'],
       icon: '✅',
       title: '测试相关',
       category: 'testing'
     },
-    'build': {
+    build: {
       keywords: ['build', 'config', 'setup', 'install', 'dependencies'],
       icon: '🏗️',
       title: '构建配置',
       category: 'build'
     },
-    'security': {
+    security: {
       keywords: ['security', 'vulnerability', 'safe', 'protect', 'auth'],
       icon: '🔒',
       title: '安全相关',
@@ -79,13 +79,13 @@ const CONFIG = {
     }
   },
   filePatterns: {
-    'feature': ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.js'],
-    'fix': ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.js'],
-    'documentation': ['docs/**/*.md', '*.md'],
-    'style': ['src/**/*.css', 'src/**/*.scss', 'src/**/*.vue'],
-    'test': ['tests/**/*.ts', 'tests/**/*.js', '**/*.test.*', '**/*.spec.*'],
-    'build': ['package.json', 'tsconfig.json', 'vite.config.*', '*.config.*'],
-    'config': ['*.json', '*.yml', '*.yaml', '*.toml']
+    feature: ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.js'],
+    fix: ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.js'],
+    documentation: ['docs/**/*.md', '*.md'],
+    style: ['src/**/*.css', 'src/**/*.scss', 'src/**/*.vue'],
+    test: ['tests/**/*.ts', 'tests/**/*.js', '**/*.test.*', '**/*.spec.*'],
+    build: ['package.json', 'tsconfig.json', 'vite.config.*', '*.config.*'],
+    config: ['*.json', '*.yml', '*.yaml', '*.toml']
   }
 };
 
@@ -107,7 +107,10 @@ function getCurrentTimestamp() {
 function getGitStatus() {
   try {
     const status = execSync('git status --porcelain', { encoding: 'utf8' });
-    return status.trim().split('\n').filter(line => line.trim());
+    return status
+      .trim()
+      .split('\n')
+      .filter(line => line.trim());
   } catch (error) {
     console.error('获取Git状态失败:', error.message);
     return [];
@@ -133,7 +136,10 @@ function getGitDiff() {
 function getRecentCommits(count = 5) {
   try {
     const commits = execSync(`git log --oneline -${count}`, { encoding: 'utf8' });
-    return commits.trim().split('\n').filter(line => line.trim());
+    return commits
+      .trim()
+      .split('\n')
+      .filter(line => line.trim());
   } catch (error) {
     console.error('获取提交记录失败:', error.message);
     return [];
@@ -336,7 +342,9 @@ function addChangeEntryToChangelog(changeType, description, files = []) {
     }
 
     const currentVersion = versionMatch[1];
-    const versionPattern = new RegExp(`(### \\[v${currentVersion.replace(/\./g, '\\.')}\\] - [^\\n]+\\n\\n)`);
+    const versionPattern = new RegExp(
+      `(### \\[v${currentVersion.replace(/\./g, '\\.')}\\] - [^\\n]+\\n\\n)`
+    );
     const versionMatch2 = changelogContent.match(versionPattern);
 
     if (!versionMatch2) {
@@ -354,19 +362,22 @@ function addChangeEntryToChangelog(changeType, description, files = []) {
     if (typeMatch) {
       // 在现有类型部分添加条目
       const insertIndex = typeMatch.index + typeMatch[0].length;
-      const newChangelog = changelogContent.slice(0, insertIndex) + entry + changelogContent.slice(insertIndex);
+      const newChangelog =
+        changelogContent.slice(0, insertIndex) + entry + changelogContent.slice(insertIndex);
       fs.writeFileSync(CONFIG.changelogPath, newChangelog, 'utf8');
     } else {
       // 创建新的类型部分
       const versionInsertIndex = versionMatch2.index + versionMatch2[0].length;
       const newTypeSection = `#### ${typeInfo.icon} ${typeInfo.title}\n${entry}\n`;
-      const newChangelog = changelogContent.slice(0, versionInsertIndex) + newTypeSection + changelogContent.slice(versionInsertIndex);
+      const newChangelog =
+        changelogContent.slice(0, versionInsertIndex) +
+        newTypeSection +
+        changelogContent.slice(versionInsertIndex);
       fs.writeFileSync(CONFIG.changelogPath, newChangelog, 'utf8');
     }
 
     console.log('✅ 变更条目已添加到CHANGELOG');
     return true;
-
   } catch (error) {
     console.error('❌ 添加变更条目失败:', error.message);
     return false;
@@ -393,12 +404,17 @@ function autoAddChangeEntries() {
 
     // 生成汇总描述
     const fileCount = changes.length;
-    const summaryDescription = fileCount > 1
-      ? `${typeInfo.title} (${fileCount}个文件)`
-      : changes[0].description;
+    const summaryDescription =
+      fileCount > 1 ? `${typeInfo.title} (${fileCount}个文件)` : changes[0].description;
 
     // 添加条目
-    if (addChangeEntryToChangelog(changeType, summaryDescription, changes.map(c => c.file))) {
+    if (
+      addChangeEntryToChangelog(
+        changeType,
+        summaryDescription,
+        changes.map(c => c.file)
+      )
+    ) {
       addedCount++;
     }
   }
@@ -505,15 +521,18 @@ function main() {
       autoDetectChanges();
       break;
 
-    case 'add':
+    case 'add': {
       if (!options.type || !options.description) {
         console.error('❌ 需要指定 --type 和 --description 参数');
-        console.log('示例: node change-entry-helper.js add --type feature --description "添加新功能"');
+        console.log(
+          '示例: node change-entry-helper.js add --type feature --description "添加新功能"'
+        );
         return;
       }
       const files = options.files ? options.files.split(',') : [];
       manualAddChangeEntry(options.type, options.description, files);
       break;
+    }
 
     case 'scan':
       scanProjectChanges();

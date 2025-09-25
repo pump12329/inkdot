@@ -2,16 +2,16 @@
 
 /**
  * InkDot CHANGELOG 自动更新工具
- * 
+ *
  * 功能：
  * - 自动解析Git提交记录
  * - 根据提交类型生成CHANGELOG条目
  * - 支持版本号管理
  * - 自动更新时间戳
- * 
+ *
  * 使用方法：
  * node docs/tools/changelog-helper.js [command] [options]
- * 
+ *
  * 命令：
  * - update: 更新CHANGELOG
  * - add: 手动添加条目
@@ -28,38 +28,33 @@ const CONFIG = {
   changelogPath: 'docs/CHANGELOG.md',
   projectStartDate: '2025-09-21',
   maxCommits: 50,
-  excludePatterns: [
-    /^docs?:/i,
-    /^chore:/i,
-    /^style:/i,
-    /^refactor:/i
-  ]
+  excludePatterns: [/^docs?:/i, /^chore:/i, /^style:/i, /^refactor:/i]
 };
 
 // 提交类型映射
 const COMMIT_TYPE_MAP = {
-  'feat': { icon: '🆕', title: '新增', category: 'features' },
-  'fix': { icon: '🐛', title: '修复', category: 'bugfixes' },
-  'docs': { icon: '📝', title: '文档', category: 'documentation' },
-  'style': { icon: '🎨', title: '样式', category: 'styling' },
-  'refactor': { icon: '♻️', title: '重构', category: 'refactoring' },
-  'perf': { icon: '⚡', title: '性能', category: 'performance' },
-  'test': { icon: '✅', title: '测试', category: 'testing' },
-  'build': { icon: '🏗️', title: '构建', category: 'build' },
-  'ci': { icon: '👷', title: 'CI', category: 'ci' },
-  'chore': { icon: '🔧', title: '维护', category: 'maintenance' },
-  'revert': { icon: '⏪', title: '回滚', category: 'revert' }
+  feat: { icon: '🆕', title: '新增', category: 'features' },
+  fix: { icon: '🐛', title: '修复', category: 'bugfixes' },
+  docs: { icon: '📝', title: '文档', category: 'documentation' },
+  style: { icon: '🎨', title: '样式', category: 'styling' },
+  refactor: { icon: '♻️', title: '重构', category: 'refactoring' },
+  perf: { icon: '⚡', title: '性能', category: 'performance' },
+  test: { icon: '✅', title: '测试', category: 'testing' },
+  build: { icon: '🏗️', title: '构建', category: 'build' },
+  ci: { icon: '👷', title: 'CI', category: 'ci' },
+  chore: { icon: '🔧', title: '维护', category: 'maintenance' },
+  revert: { icon: '⏪', title: '回滚', category: 'revert' }
 };
 
 // 文档类型映射
 const DOC_TYPE_MAP = {
-  'architecture': { icon: '🏗️', title: '架构文档' },
-  'development': { icon: '🛠️', title: '开发文档' },
-  'design': { icon: '🎨', title: '设计文档' },
-  'api': { icon: '📡', title: 'API文档' },
+  architecture: { icon: '🏗️', title: '架构文档' },
+  development: { icon: '🛠️', title: '开发文档' },
+  design: { icon: '🎨', title: '设计文档' },
+  api: { icon: '📡', title: 'API文档' },
   'user-guide': { icon: '📖', title: '用户指南' },
-  'deployment': { icon: '🚀', title: '部署文档' },
-  'tools': { icon: '🔧', title: '工具文档' }
+  deployment: { icon: '🚀', title: '部署文档' },
+  tools: { icon: '🔧', title: '工具文档' }
 };
 
 /**
@@ -85,7 +80,10 @@ function getGitCommits(since = null) {
     }
 
     const output = execSync(cmd, { encoding: 'utf8' });
-    return output.trim().split('\n').filter(line => line.trim());
+    return output
+      .trim()
+      .split('\n')
+      .filter(line => line.trim());
   } catch (error) {
     console.error('获取Git提交记录失败:', error.message);
     return [];
@@ -215,11 +213,26 @@ function generateVersionEntry(version, timestamp, commitGroups) {
   let content = `### [v${version}] - ${timestamp}\n\n`;
 
   // 按优先级排序类别
-  const categoryOrder = ['features', 'bugfixes', 'documentation', 'refactoring', 'performance', 'testing', 'build', 'ci', 'maintenance', 'revert', 'other'];
+  const categoryOrder = [
+    'features',
+    'bugfixes',
+    'documentation',
+    'refactoring',
+    'performance',
+    'testing',
+    'build',
+    'ci',
+    'maintenance',
+    'revert',
+    'other'
+  ];
 
   for (const category of categoryOrder) {
     if (commitGroups[category] && commitGroups[category].length > 0) {
-      const typeInfo = COMMIT_TYPE_MAP[commitGroups[category][0].type] || { icon: '📝', title: '其他' };
+      const typeInfo = COMMIT_TYPE_MAP[commitGroups[category][0].type] || {
+        icon: '📝',
+        title: '其他'
+      };
       content += `#### ${typeInfo.icon} ${typeInfo.title}\n`;
 
       for (const commit of commitGroups[category]) {
@@ -251,7 +264,9 @@ function updateChangelog(options = {}) {
   // 解析提交记录
   const commits = rawCommits
     .map(parseCommitMessage)
-    .filter(commit => commit && !CONFIG.excludePatterns.some(pattern => pattern.test(commit.description)))
+    .filter(
+      commit => commit && !CONFIG.excludePatterns.some(pattern => pattern.test(commit.description))
+    )
     .slice(0, 20); // 限制条目数量
 
   if (commits.length === 0) {
@@ -284,7 +299,8 @@ function updateChangelog(options = {}) {
   }
 
   const insertIndex = changeRecordIndex + '## 📅 变更记录\n\n'.length;
-  const newChangelog = changelogContent.slice(0, insertIndex) + versionEntry + changelogContent.slice(insertIndex);
+  const newChangelog =
+    changelogContent.slice(0, insertIndex) + versionEntry + changelogContent.slice(insertIndex);
 
   // 更新文档头部信息
   const updatedChangelog = newChangelog.replace(
@@ -311,7 +327,9 @@ function addEntry(type, description, version = null) {
   const entry = `- **${description}** - ${timestamp}\n`;
 
   // 查找对应版本部分并添加条目
-  const versionPattern = new RegExp(`(### \\[v${currentVersion.replace(/\./g, '\\.')}\\] - [^\\n]+\\n\\n)`);
+  const versionPattern = new RegExp(
+    `(### \\[v${currentVersion.replace(/\./g, '\\.')}\\] - [^\\n]+\\n\\n)`
+  );
   const match = changelogContent.match(versionPattern);
 
   if (!match) {
@@ -320,7 +338,8 @@ function addEntry(type, description, version = null) {
   }
 
   const insertIndex = match.index + match[0].length;
-  const newChangelog = changelogContent.slice(0, insertIndex) + entry + changelogContent.slice(insertIndex);
+  const newChangelog =
+    changelogContent.slice(0, insertIndex) + entry + changelogContent.slice(insertIndex);
 
   writeChangelog(newChangelog);
   console.log('✅ 条目添加完成');
@@ -376,12 +395,13 @@ function main() {
   const command = args[0] || 'update';
 
   switch (command) {
-    case 'update':
+    case 'update': {
       const since = args.includes('--since') ? args[args.indexOf('--since') + 1] : null;
       updateChangelog({ since });
       break;
+    }
 
-    case 'add':
+    case 'add': {
       if (args.length < 3) {
         console.log('用法: node changelog-helper.js add <type> <description> [version]');
         console.log('类型: feat, fix, docs, style, refactor, perf, test, build, ci, chore');
@@ -392,12 +412,14 @@ function main() {
       const version = args[3] || null;
       addEntry(type, description, version);
       break;
+    }
 
-    case 'version':
+    case 'version': {
       const versionType = args[1] || 'patch';
       console.log(`📈 版本类型: ${versionType}`);
       // 这里可以实现版本号管理逻辑
       break;
+    }
 
     case 'status':
       showStatus();
