@@ -1,4 +1,4 @@
-const { chromium } = require('playwright');
+import { chromium } from 'playwright';
 
 // 中文支持的Playwright配置
 const chineseConfig = {
@@ -29,41 +29,41 @@ const chineseConfig = {
 // 中文字体CSS
 const chineseFontCSS = `
   * {
-    font-family: 
-      -apple-system, 
-      BlinkMacSystemFont, 
-      'Segoe UI', 
-      'PingFang SC', 
-      'Hiragino Sans GB', 
-      'Microsoft YaHei', 
-      'WenQuanYi Micro Hei', 
-      'WenQuanYi Zen Hei', 
-      'Noto Sans CJK SC', 
-      'Source Han Sans SC', 
-      'Helvetica Neue', 
-      Helvetica, 
-      Arial, 
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      'PingFang SC',
+      'Hiragino Sans GB',
+      'Microsoft YaHei',
+      'WenQuanYi Micro Hei',
+      'WenQuanYi Zen Hei',
+      'Noto Sans CJK SC',
+      'Source Han Sans SC',
+      'Helvetica Neue',
+      Helvetica,
+      Arial,
       sans-serif !important;
   }
-  
+
   /* 确保中文字符正确显示 */
   body, html {
     font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   /* 标题字体 */
   h1, h2, h3, h4, h5, h6 {
     font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
     font-weight: 600;
   }
-  
+
   /* 按钮字体 */
   button {
     font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
   }
-  
+
   /* 输入框字体 */
   input, textarea {
     font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
@@ -90,24 +90,24 @@ async function setupChineseSupport(page) {
       style.textContent = `
         /* 强制中文字体渲染 - 使用系统安装的字体 */
         * {
-          font-family: 
-            'Noto Sans CJK SC', 
-            'Noto Sans CJK TC', 
-            'WenQuanYi Micro Hei', 
-            'WenQuanYi Zen Hei', 
-            'PingFang SC', 
-            'Hiragino Sans GB', 
-            'Microsoft YaHei', 
-            'Source Han Sans SC', 
-            -apple-system, 
-            BlinkMacSystemFont, 
-            'Segoe UI', 
-            'Helvetica Neue', 
-            Helvetica, 
-            Arial, 
+          font-family:
+            'Noto Sans CJK SC',
+            'Noto Sans CJK TC',
+            'WenQuanYi Micro Hei',
+            'WenQuanYi Zen Hei',
+            'PingFang SC',
+            'Hiragino Sans GB',
+            'Microsoft YaHei',
+            'Source Han Sans SC',
+            -apple-system,
+            BlinkMacSystemFont,
+            'Segoe UI',
+            'Helvetica Neue',
+            Helvetica,
+            Arial,
             sans-serif !important;
         }
-        
+
         body, html {
           font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
           -webkit-font-smoothing: antialiased;
@@ -115,16 +115,16 @@ async function setupChineseSupport(page) {
           font-size: 14px;
           line-height: 1.5;
         }
-        
+
         h1, h2, h3, h4, h5, h6 {
           font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
           font-weight: 600;
         }
-        
+
         button {
           font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
         }
-        
+
         input, textarea {
           font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
         }
@@ -219,24 +219,24 @@ async function forceChineseFont(page) {
     style.textContent = `
       /* 强制中文字体渲染 - 使用系统安装的字体 */
       * {
-        font-family: 
-          'Noto Sans CJK SC', 
-          'Noto Sans CJK TC', 
-          'WenQuanYi Micro Hei', 
-          'WenQuanYi Zen Hei', 
-          'PingFang SC', 
-          'Hiragino Sans GB', 
-          'Microsoft YaHei', 
-          'Source Han Sans SC', 
-          -apple-system, 
-          BlinkMacSystemFont, 
-          'Segoe UI', 
-          'Helvetica Neue', 
-          Helvetica, 
-          Arial, 
+        font-family:
+          'Noto Sans CJK SC',
+          'Noto Sans CJK TC',
+          'WenQuanYi Micro Hei',
+          'WenQuanYi Zen Hei',
+          'PingFang SC',
+          'Hiragino Sans GB',
+          'Microsoft YaHei',
+          'Source Han Sans SC',
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          'Helvetica Neue',
+          Helvetica,
+          Arial,
           sans-serif !important;
       }
-      
+
       body, html {
         font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
         -webkit-font-smoothing: antialiased;
@@ -256,11 +256,11 @@ async function forceChineseFont(page) {
   console.log('✅ 已强制应用中文字体');
 }
 
-module.exports = {
+export {
   chineseConfig,
   chineseFontCSS,
   createChineseBrowser,
+  forceChineseFont,
   setupChineseSupport,
-  testChineseFont,
-  forceChineseFont
+  testChineseFont
 };

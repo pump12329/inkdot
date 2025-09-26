@@ -1,0 +1,468 @@
+/* InkDot 响应式设计系统 */
+
+/* ===== 响应式断点 ===== */
+/*
+  Mobile First 策略:
+  - 基础样式: < 640px (手机)
+  - sm: ≥ 640px (大手机)
+  - md: ≥ 768px (平板)
+  - lg: ≥ 1024px (小桌面)
+  - xl: ≥ 1280px (大桌面)
+  - 2xl: ≥ 1536px (超大桌面)
+*/
+
+/* ===== 容器响应式 ===== */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+/* 小手机 */
+@media (max-width: 639px) {
+  .container {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
+}
+
+/* 大手机及以上 */
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+/* 平板及以上 */
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+/* 小桌面及以上 */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+/* 大桌面及以上 */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/* 超大桌面及以上 */
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+/* ===== 应用布局响应式 ===== */
+
+/* 手机端布局 (< 768px) */
+@media (max-width: 767px) {
+  .app-layout {
+    overflow-x: hidden;
+  }
+
+  /* 侧边栏变为覆盖层 */
+  .workspace-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: var(--z-modal);
+    transform: translateX(-100%);
+    transition: transform var(--duration-normal) var(--easing-smooth);
+    width: 280px; /* 固定宽度，不响应式缩放 */
+  }
+
+  .workspace-sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* 右侧面板变为覆盖层 */
+  .side-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-modal);
+    transform: translateX(100%);
+    transition: transform var(--duration-normal) var(--easing-smooth);
+    width: 320px; /* 手机端稍微小一点 */
+  }
+
+  .side-panel.open {
+    transform: translateX(0);
+  }
+
+  /* 悬浮工具栏移到底部 */
+  .floating-toolbar {
+    position: fixed;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    right: var(--space-4);
+    top: auto;
+    transform: none;
+    max-width: none;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  /* 工具栏按钮变小 */
+  .floating-toolbar .btn {
+    min-width: 44px; /* 符合触摸标准 */
+    height: 44px;
+  }
+
+  /* 主内容区域调整 */
+  .main-content {
+    padding-bottom: 80px; /* 为底部工具栏留空间 */
+  }
+
+  /* 模态框调整 */
+  .modal-overlay {
+    padding: var(--space-2);
+  }
+
+  .modal-content {
+    max-height: 95vh;
+    margin: auto 0;
+  }
+}
+
+/* 超小手机端 (< 480px) */
+@media (max-width: 479px) {
+  .floating-toolbar {
+    padding: var(--space-1);
+    gap: var(--space-1);
+  }
+
+  .toolbar-group {
+    gap: var(--space-1);
+  }
+
+  .floating-toolbar .btn {
+    min-width: 40px;
+    height: 40px;
+    padding: 0;
+  }
+
+  /* 字体大小调整 */
+  :root {
+    --font-size-base: 0.875rem; /* 14px */
+    --font-size-sm: 0.75rem; /* 12px */
+  }
+
+  /* 间距调整 */
+  .container {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
+
+  /* 按钮尺寸调整 */
+  .btn-base {
+    height: 36px;
+    padding: 0 var(--space-3);
+    font-size: var(--font-size-sm);
+  }
+
+  .btn-sm {
+    height: 32px;
+    padding: 0 var(--space-2);
+  }
+}
+
+/* ===== 平板端布局 (768px - 1023px) ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* 侧边栏可以是覆盖层也可以是收缩版 */
+  .workspace-sidebar {
+    width: var(--sidebar-collapsed-width);
+  }
+
+  .workspace-sidebar.expanded {
+    width: var(--sidebar-width);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* 右侧面板稍微小一点 */
+  .side-panel {
+    width: 300px;
+  }
+
+  /* 悬浮工具栏保持顶部 */
+  .floating-toolbar {
+    position: absolute;
+    top: var(--space-5);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* ===== 桌面端布局 (≥ 1024px) ===== */
+@media (min-width: 1024px) {
+  /* 完整的桌面布局 */
+  .workspace-sidebar,
+  .side-panel {
+    position: static;
+    transform: none;
+  }
+
+  .floating-toolbar {
+    position: absolute;
+    top: var(--space-5);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* 大屏幕上的额外功能 */
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* ===== 响应式显示工具类 ===== */
+.mobile-only {
+  display: block;
+}
+
+.tablet-only {
+  display: none;
+}
+
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .mobile-only {
+    display: none;
+  }
+
+  .tablet-only {
+    display: block;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none;
+  }
+
+  .tablet-only {
+    display: none;
+  }
+
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* ===== 响应式字体 ===== */
+@media (max-width: 767px) {
+  .text-responsive-xl {
+    font-size: var(--font-size-lg);
+  }
+
+  .text-responsive-lg {
+    font-size: var(--font-size-base);
+  }
+
+  .text-responsive-base {
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (min-width: 768px) {
+  .text-responsive-xl {
+    font-size: var(--font-size-2xl);
+  }
+
+  .text-responsive-lg {
+    font-size: var(--font-size-xl);
+  }
+
+  .text-responsive-base {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* ===== 响应式间距 ===== */
+@media (max-width: 767px) {
+  .p-responsive {
+    padding: var(--space-2);
+  }
+
+  .px-responsive {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
+
+  .py-responsive {
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+  }
+
+  .m-responsive {
+    margin: var(--space-2);
+  }
+
+  .gap-responsive {
+    gap: var(--space-2);
+  }
+}
+
+@media (min-width: 768px) {
+  .p-responsive {
+    padding: var(--space-4);
+  }
+
+  .px-responsive {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .py-responsive {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+
+  .m-responsive {
+    margin: var(--space-4);
+  }
+
+  .gap-responsive {
+    gap: var(--space-4);
+  }
+}
+
+@media (min-width: 1024px) {
+  .p-responsive {
+    padding: var(--space-6);
+  }
+
+  .px-responsive {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+
+  .py-responsive {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-8);
+  }
+
+  .m-responsive {
+    margin: var(--space-6);
+  }
+
+  .gap-responsive {
+    gap: var(--space-6);
+  }
+}
+
+/* ===== 触摸设备优化 ===== */
+@media (hover: none) and (pointer: coarse) {
+  /* 触摸设备上的按钮和链接最小尺寸 */
+  .btn,
+  .btn-icon,
+  a,
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* 增加触摸目标间距 */
+  .toolbar-group {
+    gap: var(--space-3);
+  }
+
+  /* 移除悬停效果 */
+  .btn:hover,
+  .dropdown-item:hover,
+  .tabs-trigger:hover {
+    background-color: transparent;
+  }
+
+  /* 增加点击反馈 */
+  .btn:active,
+  .dropdown-item:active,
+  .tabs-trigger:active {
+    transform: scale(0.95);
+    transition: transform 0.1s var(--easing-ease-out);
+  }
+}
+
+/* ===== 高密度屏幕优化 ===== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* 高密度屏幕上的边框调整 */
+  .border {
+    border-width: 0.5px;
+  }
+
+  /* 精细线条 */
+  .divider,
+  .border-t,
+  .border-b {
+    border-width: 0.5px;
+  }
+}
+
+/* ===== 横屏优化 ===== */
+@media (orientation: landscape) and (max-height: 600px) {
+  /* 横屏时减少垂直间距 */
+  .floating-toolbar {
+    top: var(--space-2);
+  }
+
+  .main-content {
+    padding-bottom: 60px;
+  }
+
+  /* 模态框高度调整 */
+  .modal-content {
+    max-height: 85vh;
+  }
+}
+
+/* ===== 可访问性相关的响应式 ===== */
+@media (prefers-reduced-motion: reduce) {
+  .workspace-sidebar,
+  .side-panel {
+    transition: none;
+  }
+
+  .floating-toolbar {
+    transition: none;
+  }
+}
+
+/* ===== 打印样式响应式 ===== */
+@media print {
+  .mobile-only,
+  .tablet-only,
+  .desktop-only {
+    display: block !important;
+  }
+
+  .floating-toolbar,
+  .workspace-sidebar,
+  .side-panel {
+    display: none !important;
+  }
+
+  .main-content {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+}

@@ -1,4 +1,4 @@
-const { createChineseBrowser, testChineseFont } = require('./playwright-chinese-config');
+import { createChineseBrowser, testChineseFont } from './playwright-chinese-config.js';
 
 async function testButtons() {
   const { browser, context, page } = await createChineseBrowser();
@@ -9,10 +9,10 @@ async function testButtons() {
   });
 
   try {
-    console.log('正在访问 http://localhost:3001...');
+    console.log('正在访问 http://localhost:3000...');
 
     // 访问页面
-    await page.goto('http://localhost:3001', {
+    await page.goto('http://localhost:3000', {
       waitUntil: 'networkidle',
       timeout: 10000
     });

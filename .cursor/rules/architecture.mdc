@@ -1,6 +1,6 @@
 ---
-description: 项目技术栈架构设计规范，定义SPA架构、状态管理、数据存储等核心架构原则
-alwaysApply: true
+description: 用于系统架构设计、技术选型、模块设计、重构等架构相关问题
+alwaysApply: false
 ---
 
 # 架构设计规范

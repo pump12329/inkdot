@@ -1,6 +1,6 @@
 ---
-description: 用户交互模式规范，包含核心交互原则、输入输出模式、状态指示、无障碍交互等用户体验指导
-alwaysApply: true
+description: 用于用户交互设计、操作体验、无障碍设计、用户行为等交互相关问题
+alwaysApply: false
 ---
 
 # 交互模式规范

@@ -1,322 +1,225 @@
 <template>
-  <div id="app" class="app">
-    <!-- 极简头部 -->
-    <header class="header">
-      <div class="header-content" :class="{ modified: isProjectModified }">
-        <h1 class="title">InkDot</h1>
-        <div v-if="currentProject" class="project-info">
-          <span class="project-name">{{ currentProject.name }}</span>
-          <span v-if="isProjectModified" class="modified-indicator">*</span>
+  <div id="app" class="app-layout">
+    <!-- 应用头部 -->
+    <header class="app-header">
+      <div class="container flex items-center justify-between">
+        <h1 class="text-xl font-semibold text-primary">InkDot</h1>
+        <div class="flex items-center gap-2">
+          <span class="text-base font-medium text-primary">思维导图工具</span>
         </div>
       </div>
     </header>
 
     <!-- 主要内容区域 -->
-    <main class="main-content">
-      <!-- 工具栏 -->
-      <Toolbar
-        :can-save="canSave"
-        :can-undo="false"
-        :can-redo="false"
-        :has-selection="selectedNode !== null"
-        :can-connect="false"
-        :zoom-level="1"
-        @new-project="createNewProject"
-        @save-project="saveProject"
-        @load-project="loadProject"
-        @delete-node="deleteSelectedNode"
-        @zoom-in="handleZoomIn"
-        @zoom-out="handleZoomOut"
-      />
+    <main class="app-main">
+      <!-- 悬浮工具栏 -->
+      <div class="floating-toolbar">
+        <div class="toolbar-group">
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon"
+            title="新建项目 (Ctrl+N)"
+            @click="handleNewProject"
+          >
+            <Plus class="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon"
+            title="保存项目 (Ctrl+S)"
+            @click="handleSaveProject"
+          >
+            <Save class="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon"
+            title="打开项目 (Ctrl+O)"
+            @click="handleLoadProject"
+          >
+            <FolderOpen class="w-4 h-4" />
+          </button>
+        </div>
 
-      <!-- 思维导图画布 -->
-      <div class="canvas-container">
-        <MindMapCanvas
-          :nodes="nodes"
-          :connections="connections"
-          :selected-node-id="selectedNode?.id || null"
-          :canvas-size="{ width: 1200, height: 800 }"
-          @node-click="handleNodeClick"
-          @node-double-click="handleNodeDoubleClick"
-          @node-content-update="handleNodeContentUpdate"
-          @node-position-update="handleNodePositionUpdate"
-          @canvas-click="handleCanvasClick"
-          @selection-change="handleSelectionChange"
-        />
+        <div class="toolbar-group">
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon"
+            title="删除节点 (Delete)"
+            @click="handleDeleteNode"
+          >
+            <Trash2 class="w-4 h-4" />
+          </button>
+        </div>
+
+        <div class="toolbar-group">
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon"
+            title="缩小 (Ctrl+-)"
+            @click="handleZoomOut"
+          >
+            <ZoomOut class="w-4 h-4" />
+          </button>
+          <span class="px-2 text-sm text-secondary">{{ zoomLevel }}%</span>
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon"
+            title="放大 (Ctrl+=)"
+            @click="handleZoomIn"
+          >
+            <ZoomIn class="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
-      <!-- 侧边栏 -->
-      <aside v-show="showSidebar" class="sidebar">
-        <div class="sidebar-header">
-          <h3>节点属性</h3>
-          <button type="button" class="btn-close" @click="closeSidebar">×</button>
+      <!-- 思维导图画布区域 -->
+      <div class="main-content-inner">
+        <div class="mindmap-canvas-container">
+          <div class="flex items-center justify-center h-full">
+            <div class="text-center">
+              <h2 class="text-lg font-medium text-primary mb-4">InkDot 思维导图</h2>
+              <p class="text-sm text-secondary mb-6">基于新CSS样式系统的现代化思维导图工具</p>
+              <div class="flex gap-3 justify-center">
+                <button class="btn btn-primary btn-sm" @click="createSampleNode">
+                  创建示例节点
+                </button>
+                <button class="btn btn-secondary btn-sm" @click="toggleGrid">
+                  {{ showGrid ? '隐藏' : '显示' }}网格
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 网格背景 -->
+          <div v-if="showGrid" class="grid-background" />
+
+          <!-- 示例节点 -->
+          <div
+            v-if="sampleNode"
+            class="mindmap-node mindmap-node--primary"
+            :style="sampleNodeStyle"
+          >
+            <div class="node-content">{{ sampleNode.content }}</div>
+          </div>
         </div>
-        <div v-if="selectedNode" class="node-properties">
-          <div class="property-group">
-            <label for="node-content">内容：</label>
-            <input
-              id="node-content"
-              v-model="selectedNode.content"
-              type="text"
-              class="input-text"
-              @input="updateNodeContent"
-            />
+      </div>
+
+      <!-- 右侧面板 -->
+      <aside v-show="showPanel" class="side-panel">
+        <div class="panel-header">
+          <div class="panel-tabs">
+            <button class="panel-tab active">样式展示</button>
+          </div>
+        </div>
+        <div class="panel-content">
+          <div class="panel-pane active">
+            <div class="space-y-4">
+              <div>
+                <h3 class="text-sm font-medium text-primary mb-2">按钮样式</h3>
+                <div class="flex flex-col gap-2">
+                  <button class="btn btn-primary btn-sm">主要按钮</button>
+                  <button class="btn btn-secondary btn-sm">次要按钮</button>
+                  <button class="btn btn-ghost btn-sm">幽灵按钮</button>
+                  <button class="btn btn-danger btn-sm">危险按钮</button>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-primary mb-2">输入框样式</h3>
+                <input class="input w-full" placeholder="输入框示例" />
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-primary mb-2">文本样式</h3>
+                <p class="text-xs text-secondary">超小文本</p>
+                <p class="text-sm text-secondary">小文本</p>
+                <p class="text-base text-primary">基础文本</p>
+                <p class="text-lg font-medium text-primary">大文本</p>
+              </div>
+            </div>
           </div>
         </div>
       </aside>
     </main>
 
     <!-- 状态栏 -->
-    <footer class="status-bar">
-      <span class="status-text">节点数: {{ nodes.length }} | 连接数: {{ connections.length }}</span>
+    <footer class="app-footer">
+      <span class="text-xs text-secondary">就绪 - InkDot v1.0.0 | 使用新的CSS样式系统</span>
+      <button
+        class="text-xs text-secondary hover:text-primary transition-colors"
+        @click="togglePanel"
+      >
+        {{ showPanel ? '隐藏' : '显示' }}样式面板
+      </button>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import MindMapCanvas from '@/components/MindMapCanvas.vue';
-import Toolbar from '@/components/Toolbar.vue';
-import { useKeyboardShortcuts } from '@/composables/useKeyboardShortcuts';
-import { useMindMapInteraction } from '@/composables/useMindMapInteraction';
-import { useMindMapStore } from '@/stores/mindmap';
-import type { Position } from '@/types';
+import { FolderOpen, Plus, Save, Trash2, ZoomIn, ZoomOut } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 
-// Store 和组合式函数
-const store = useMindMapStore();
-const interaction = useMindMapInteraction();
-
 // 响应式数据
-const showSidebar = ref(false);
+const showPanel = ref(true);
+const showGrid = ref(false);
+const zoomLevel = ref(100);
+const sampleNode = ref<{ content: string; x: number; y: number } | null>(null);
 
 // 计算属性
-const nodes = computed(() => store.nodes);
-const connections = computed(() => store.connections);
-const selectedNode = computed(() => store.selectedNode);
-const currentProject = computed(() => store.currentProject);
-const isProjectModified = computed(() => store.isModified);
-const canSave = computed(() => isProjectModified.value && nodes.value.length > 0);
-
-// 键盘快捷键
-useKeyboardShortcuts({
-  onNew: createNewProject,
-  onSave: saveProject,
-  onDelete: deleteSelectedNode,
-  onEscape: () => interaction.selectNode(null)
+const sampleNodeStyle = computed(() => {
+  if (!sampleNode.value) return {};
+  return {
+    transform: `translate(${sampleNode.value.x}px, ${sampleNode.value.y}px)`
+  };
 });
 
-// 项目操作方法
-function createNewProject(): void {
-  store.createNewProject();
-  showSidebar.value = false;
+// 工具栏事件处理
+function handleNewProject(): void {
+  console.log('新建项目');
+  sampleNode.value = null;
 }
 
-function saveProject(): void {
-  if (canSave.value) {
-    store.saveCurrentProject();
-  }
+function handleSaveProject(): void {
+  console.log('保存项目');
 }
 
-function loadProject(): void {
-  // TODO: 实现文件选择器功能
-  console.log('加载项目功能待实现');
+function handleLoadProject(): void {
+  console.log('加载项目');
 }
 
-// 事件处理方法
-function handleNodeClick(nodeId: string, _event: MouseEvent): void {
-  interaction.selectNode(nodeId);
-  showSidebar.value = true;
-}
-
-function handleNodeDoubleClick(nodeId: string): void {
-  interaction.selectNode(nodeId);
-}
-
-function handleNodeContentUpdate(nodeId: string, content: string): void {
-  interaction.updateNodeContent(nodeId, content);
-}
-
-function handleNodePositionUpdate(nodeId: string, position: Position): void {
-  interaction.updateNodePosition(nodeId, position);
-}
-
-function handleCanvasClick(position: Position, _event: MouseEvent): void {
-  // 创建新节点
-  interaction.createNodeAtPosition(position, '新节点');
-  showSidebar.value = false;
-}
-
-function handleSelectionChange(nodeId: string | null): void {
-  interaction.selectNode(nodeId);
-  showSidebar.value = nodeId !== null;
-}
-
-// 工具栏操作方法
-function deleteSelectedNode(): void {
-  interaction.deleteSelectedNode();
-  showSidebar.value = false;
+function handleDeleteNode(): void {
+  console.log('删除节点');
+  sampleNode.value = null;
 }
 
 function handleZoomIn(): void {
-  console.log('放大视图');
+  zoomLevel.value = Math.min(200, zoomLevel.value + 25);
+  console.log(`放大到 ${zoomLevel.value}%`);
 }
 
 function handleZoomOut(): void {
-  console.log('缩小视图');
+  zoomLevel.value = Math.max(50, zoomLevel.value - 25);
+  console.log(`缩小到 ${zoomLevel.value}%`);
 }
 
-function updateNodeContent(): void {
-  if (selectedNode.value) {
-    interaction.updateNodeContent(selectedNode.value.id, selectedNode.value.content);
-  }
+// 其他功能
+function createSampleNode(): void {
+  sampleNode.value = {
+    content: '示例节点 - 展示新样式',
+    x: 300,
+    y: 200
+  };
 }
 
-function closeSidebar(): void {
-  showSidebar.value = false;
-  interaction.selectNode(null);
+function toggleGrid(): void {
+  showGrid.value = !showGrid.value;
 }
+
+function togglePanel(): void {
+  showPanel.value = !showPanel.value;
+}
+
+// 日志输出
+console.log('InkDot 应用已加载 - 使用新的CSS样式系统');
 </script>
-
-<style scoped>
-.app {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC',
-    'WenQuanYi Micro Hei', system-ui, sans-serif;
-  background: #ffffff;
-  color: #000000;
-}
-
-.header {
-  background: #ffffff;
-  border-bottom: 1px solid #00000022;
-  padding: 1rem;
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.header-content.modified {
-  color: #000000;
-}
-
-.header-content.modified .modified-indicator {
-  color: #000000;
-  opacity: 0.7;
-}
-
-.title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-.project-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.project-name {
-  font-weight: 500;
-}
-
-.modified-indicator {
-  color: #000000;
-  font-weight: bold;
-  opacity: 0.7;
-}
-
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.canvas-container {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-}
-
-.sidebar {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 300px;
-  height: 100%;
-  background: #ffffff;
-  border-left: 1px solid #00000022;
-  padding: 1rem;
-  z-index: 10;
-}
-
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.sidebar-header h3 {
-  margin: 0;
-  font-size: 1.125rem;
-}
-
-.btn-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #00000066;
-}
-
-.btn-close:hover {
-  color: #000000;
-}
-
-.property-group {
-  margin-bottom: 1rem;
-}
-
-.property-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.input-text {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #00000022;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  background: #ffffff;
-  color: #000000;
-}
-
-.input-text:focus {
-  outline: none;
-  border-color: #000000;
-  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
-}
-
-.status-bar {
-  background: #ffffff;
-  border-top: 1px solid #00000022;
-  padding: 0.5rem 1rem;
-}
-
-.status-text {
-  font-size: 0.875rem;
-  color: #00000066;
-}
-</style>

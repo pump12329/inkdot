@@ -32,6 +32,7 @@ export interface MindMapNode {
   content: string;
   position: Position;
   connections: string[];
+  level?: number;
   style?: NodeStyle;
   metadata?: Record<string, unknown>;
 }
@@ -55,6 +56,8 @@ export interface NodeConnection {
   toNodeId: string;
   style?: ConnectionStyle;
   label?: string;
+  important?: boolean;
+  type?: 'solid' | 'dashed' | 'dotted';
 }
 
 // 连接样式

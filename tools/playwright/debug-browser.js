@@ -1,5 +1,5 @@
-const fs = require('fs');
-const { createChineseBrowser } = require('./playwright-chinese-config');
+import fs from 'fs';
+import { createChineseBrowser } from './playwright-chinese-config.js';
 
 async function debugBrowser() {
   const { browser, context, page } = await createChineseBrowser();
@@ -41,10 +41,10 @@ async function debugBrowser() {
   });
 
   try {
-    console.log('正在访问 http://localhost:3001...');
+    console.log('正在访问 http://localhost:3000...');
 
     // 访问页面
-    await page.goto('http://localhost:3001', {
+    await page.goto('http://localhost:3000', {
       waitUntil: 'networkidle',
       timeout: 10000
     });
@@ -85,7 +85,7 @@ async function debugBrowser() {
     // 保存控制台日志
     const debugInfo = {
       timestamp: new Date().toISOString(),
-      url: 'http://localhost:3001',
+      url: 'http://localhost:3000',
       consoleLogs,
       pageErrors,
       networkErrors,

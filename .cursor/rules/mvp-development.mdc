@@ -1,6 +1,6 @@
 ---
-description: MVP开发策略规范，包含最小可行产品定义、开发优先级、功能规划、发布策略等敏捷开发指导
-alwaysApply: true
+description: 用于MVP规划、产品策略、功能优先级、敏捷开发等项目规划相关问题
+alwaysApply: false
 ---
 
 # MVP开发策略

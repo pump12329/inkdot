@@ -1,6 +1,6 @@
 ---
-description: 设计实施指南，包含现代化UI改造、实施优先级、设计约束、验收标准等设计实施指导
-alwaysApply: true
+description: 用于设计实施、UI改造、界面重构、设计系统落地等设计实施相关问题
+alwaysApply: false
 ---
 
 # 设计实施指南

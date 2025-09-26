@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process');
-const path = require('path');
+import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 测试脚本列表
 const tests = [
@@ -86,10 +91,10 @@ function showHelp() {
 }
 
 // 检查环境
-function checkEnvironment() {
+async function checkEnvironment() {
   try {
     // 检查Playwright是否安装
-    require('playwright');
+    await import('playwright');
     console.log('✅ Playwright 已安装');
   } catch (error) {
     console.error(
@@ -100,7 +105,6 @@ function checkEnvironment() {
 
   // 检查screenshots目录
   const screenshotsDir = path.join(__dirname, '..', 'screenshots');
-  const fs = require('fs');
   if (!fs.existsSync(screenshotsDir)) {
     fs.mkdirSync(screenshotsDir, { recursive: true });
     console.log('✅ 创建了 screenshots 目录');
@@ -108,11 +112,11 @@ function checkEnvironment() {
 }
 
 // 主函数
-function main() {
+async function main() {
   const command = process.argv[2];
 
   // 检查环境
-  checkEnvironment();
+  await checkEnvironment();
 
   switch (command) {
     case 'all':
@@ -153,4 +157,4 @@ if (!process.argv[1].includes('run-tests.js')) {
   process.exit(1);
 }
 
-main();
+main().catch(console.error);

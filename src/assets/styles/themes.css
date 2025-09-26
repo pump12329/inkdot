@@ -1,0 +1,306 @@
+/* InkDot 主题系统 */
+
+/* ===== 主题切换动画 ===== */
+* {
+  transition:
+    background-color var(--duration-normal) var(--easing-smooth),
+    border-color var(--duration-normal) var(--easing-smooth),
+    color var(--duration-normal) var(--easing-smooth);
+}
+
+/* ===== 浅色主题（默认） ===== */
+:root {
+  /* 主题标识 */
+  --theme: 'light';
+
+  /* 色彩覆盖（如果需要的话） */
+  color-scheme: light;
+}
+
+/* ===== 深色主题 ===== */
+[data-theme='dark'] {
+  /* 主题标识 */
+  --theme: 'dark';
+
+  /* CSS变量已在 tokens.css 中定义 */
+  color-scheme: dark;
+}
+
+/* ===== 系统主题跟随 ===== */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    /* 当用户偏好深色主题且未手动设置时，应用深色主题变量 */
+    --color-primary: #ffffff;
+    --color-secondary: #000000;
+    --color-background: #0f0f0f;
+    --color-surface: #1a1a1a;
+    --color-surface-elevated: #262626;
+
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #a3a3a3;
+    --color-text-muted: #525252;
+    --color-text-inverse: #000000;
+
+    --color-border-light: #262626;
+    --color-border-default: #404040;
+    --color-border-strong: #525252;
+    --color-border-focus: #ffffff;
+
+    --color-accent: #ffffff;
+    --color-accent-hover: #e5e5e5;
+    --color-accent-subtle: #1a1a1a;
+
+    --connection-color: rgba(255, 255, 255, 0.3);
+    --grid-color: rgba(255, 255, 255, 0.03);
+    --grid-color-strong: rgba(255, 255, 255, 0.08);
+
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+    color-scheme: dark;
+  }
+}
+
+/* ===== 高对比度主题 ===== */
+[data-theme='high-contrast'] {
+  --color-primary: #000000;
+  --color-secondary: #ffffff;
+  --color-background: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+
+  --color-text-primary: #000000;
+  --color-text-secondary: #000000;
+  --color-text-muted: #000000;
+  --color-text-inverse: #ffffff;
+
+  --color-border-light: #000000;
+  --color-border-default: #000000;
+  --color-border-strong: #000000;
+  --color-border-focus: #000000;
+
+  --color-accent: #000000;
+  --color-accent-hover: #333333;
+  --color-accent-subtle: #f0f0f0;
+
+  /* 功能色彩保持高对比度 */
+  --color-success: #006600;
+  --color-warning: #cc6600;
+  --color-error: #cc0000;
+  --color-info: #0066cc;
+
+  /* 阴影移除或减少 */
+  --shadow-xs: none;
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --shadow-base: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px 0 rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 12px 0 rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 12px 20px 0 rgba(0, 0, 0, 0.3);
+
+  color-scheme: light;
+}
+
+/* 高对比度主题的深色版本 */
+[data-theme='high-contrast-dark'] {
+  --color-primary: #ffffff;
+  --color-secondary: #000000;
+  --color-background: #000000;
+  --color-surface: #000000;
+  --color-surface-elevated: #000000;
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #ffffff;
+  --color-text-muted: #ffffff;
+  --color-text-inverse: #000000;
+
+  --color-border-light: #ffffff;
+  --color-border-default: #ffffff;
+  --color-border-strong: #ffffff;
+  --color-border-focus: #ffffff;
+
+  --color-accent: #ffffff;
+  --color-accent-hover: #cccccc;
+  --color-accent-subtle: #333333;
+
+  /* 功能色彩保持高对比度 */
+  --color-success: #00ff00;
+  --color-warning: #ffcc00;
+  --color-error: #ff0000;
+  --color-info: #00ccff;
+
+  color-scheme: dark;
+}
+
+/* ===== 减少动画主题支持 ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* 保留重要的焦点指示动画 */
+  .focus-visible {
+    transition: outline var(--duration-fast) var(--easing-smooth) !important;
+  }
+}
+
+/* ===== 主题切换器组件样式 ===== */
+.theme-switcher {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.theme-option {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border-default);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-option:hover {
+  transform: scale(1.1);
+  border-color: var(--color-border-focus);
+}
+
+.theme-option.active {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+.theme-option.active::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+/* 主题选项颜色 */
+.theme-light {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.theme-dark {
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+}
+
+.theme-high-contrast {
+  background: linear-gradient(135deg, #ffffff 0%, #000000 100%);
+}
+
+.theme-high-contrast-dark {
+  background: linear-gradient(135deg, #000000 0%, #ffffff 100%);
+}
+
+/* ===== 打印主题 ===== */
+@media print {
+  :root {
+    /* 强制使用浅色主题用于打印 */
+    --color-primary: #000000;
+    --color-secondary: #ffffff;
+    --color-background: #ffffff;
+    --color-surface: #ffffff;
+    --color-surface-elevated: #ffffff;
+
+    --color-text-primary: #000000;
+    --color-text-secondary: #666666;
+    --color-text-muted: #999999;
+    --color-text-inverse: #ffffff;
+
+    --color-border-light: #e5e5e5;
+    --color-border-default: #cccccc;
+    --color-border-strong: #999999;
+    --color-border-focus: #000000;
+
+    /* 移除所有阴影 */
+    --shadow-xs: none;
+    --shadow-sm: none;
+    --shadow-base: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-xl: none;
+
+    color-scheme: light;
+  }
+
+  /* 隐藏主题切换器 */
+  .theme-switcher {
+    display: none !important;
+  }
+}
+
+/* ===== 主题特定的组件样式覆盖 ===== */
+
+/* 深色主题下的特殊处理 */
+[data-theme='dark'] .floating-toolbar {
+  background-color: rgba(26, 26, 26, 0.9);
+  border-color: var(--color-border-default);
+}
+
+[data-theme='dark'] .modal-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* 高对比度主题下的特殊处理 */
+[data-theme='high-contrast'] .btn,
+[data-theme='high-contrast-dark'] .btn {
+  border-width: 2px;
+}
+
+[data-theme='high-contrast'] .input,
+[data-theme='high-contrast-dark'] .input {
+  border-width: 2px;
+}
+
+[data-theme='high-contrast'] .floating-toolbar,
+[data-theme='high-contrast-dark'] .floating-toolbar {
+  border-width: 2px;
+  backdrop-filter: none;
+}
+
+/* ===== 主题工具类 ===== */
+.theme-light-only {
+  display: block;
+}
+
+.theme-dark-only {
+  display: none;
+}
+
+[data-theme='dark'] .theme-light-only {
+  display: none;
+}
+
+[data-theme='dark'] .theme-dark-only {
+  display: block;
+}
+
+/* 主题感知的颜色覆盖 */
+.force-light {
+  --color-background: #ffffff;
+  --color-text-primary: #000000;
+  color-scheme: light;
+}
+
+.force-dark {
+  --color-background: #000000;
+  --color-text-primary: #ffffff;
+  color-scheme: dark;
+}

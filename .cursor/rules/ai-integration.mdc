@@ -1,6 +1,6 @@
 ---
-description: AI功能集成规范，包含AI服务架构、代理系统、交互模式、隐私安全等AI集成开发指导
-alwaysApply: true
+description: 用于AI功能开发、API集成、智能助手、机器学习功能等AI相关问题
+alwaysApply: false
 ---
 
 # AI集成设计规范

@@ -1,6 +1,6 @@
 ---
-description: 项目时间戳管理系统，包含时间戳命令、文档更新要求、版本控制等时间管理指导
-alwaysApply: true
+description: 用于文档更新、时间戳管理、版本控制等文档管理相关问题
+alwaysApply: false
 ---
 
 # 时间戳系统

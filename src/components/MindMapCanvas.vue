@@ -2,13 +2,7 @@
   <div class="mindmap-canvas-container">
     <!-- SVG画布用于绘制连接线 -->
     <svg class="connections-layer" :width="canvasSize.width" :height="canvasSize.height">
-      <defs>
-        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-          <polygon points="0 0, 10 3.5, 0 7" fill="#00000044" />
-        </marker>
-      </defs>
-
-      <!-- 连接线 -->
+      <!-- 连接线 - 无箭头极简设计 -->
       <line
         v-for="connection in connections"
         :key="connection.id"
@@ -16,10 +10,15 @@
         :y1="getNodePosition(connection.fromNodeId).y"
         :x2="getNodePosition(connection.toNodeId).x"
         :y2="getNodePosition(connection.toNodeId).y"
-        stroke="#00000044"
-        stroke-width="2"
-        marker-end="url(#arrowhead)"
+        :stroke="getConnectionStyle(connection).color"
+        :stroke-width="getConnectionStyle(connection).width"
+        :stroke-dasharray="getConnectionStyle(connection).dasharray"
         class="connection-line"
+        :class="{
+          'connection-line--selected': selectedConnectionId === connection.id,
+          'connection-line--important': connection.important
+        }"
+        @click="handleConnectionClick(connection.id, $event)"
       />
     </svg>
 
@@ -47,6 +46,9 @@
 
     <!-- 网格背景（可选） -->
     <div v-if="showGrid" class="grid-background" :style="gridStyle" />
+
+    <!-- 画布状态指示器 -->
+    <div v-if="isDragging" class="canvas-info">拖拽中...</div>
   </div>
 </template>
 
@@ -60,6 +62,7 @@ interface Props {
   nodes: MindMapNode[];
   connections: NodeConnection[];
   selectedNodeId?: string | null;
+  selectedConnectionId?: string | null;
   showGrid?: boolean;
   scale?: number;
   canvasSize?: { width: number; height: number };
@@ -67,6 +70,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   selectedNodeId: null,
+  selectedConnectionId: null,
   showGrid: false,
   scale: 1,
   canvasSize: () => ({ width: 800, height: 600 })
@@ -80,6 +84,7 @@ const emit = defineEmits<{
   nodePositionUpdate: [nodeId: string, position: Position];
   canvasClick: [position: Position, event: MouseEvent];
   selectionChange: [nodeId: string | null];
+  connectionClick: [connectionId: string, event: MouseEvent];
 }>();
 
 // 响应式数据
@@ -175,55 +180,26 @@ function handleCanvasMouseUp(): void {
   draggingNodeId.value = null;
   dragOffset.value = { x: 0, y: 0 };
 }
+
+// 连接线样式计算
+function getConnectionStyle(connection: NodeConnection) {
+  const isSelected = props.selectedConnectionId === connection.id;
+  const isImportant = connection.important || false;
+
+  return {
+    color: isSelected
+      ? 'var(--connection-selected-color)'
+      : isImportant
+        ? 'rgba(0, 0, 0, 0.6)'
+        : 'var(--connection-color)',
+    width: isSelected ? '3' : isImportant ? '3' : 'var(--connection-width)',
+    dasharray: connection.type === 'dashed' ? '5,5' : 'none'
+  };
+}
+
+// 连接线点击处理
+function handleConnectionClick(connectionId: string, event: MouseEvent): void {
+  event.stopPropagation();
+  emit('connectionClick', connectionId, event);
+}
 </script>
-
-<style scoped>
-.mindmap-canvas-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #ffffff;
-  user-select: none;
-}
-
-.connections-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.nodes-layer {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  cursor: crosshair;
-}
-
-.grid-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.connection-line {
-  transition: stroke 0.2s ease;
-}
-
-.connection-line:hover {
-  stroke: #000000;
-  stroke-width: 3;
-}
-
-/* 拖拽时的样式 */
-.nodes-layer.dragging {
-  cursor: grabbing;
-}
-</style>

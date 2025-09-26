@@ -49,28 +49,59 @@
 
 ### 规则优先级
 
+#### 核心规则（Always Apply）
+
 1. **`project-info.mdc`** - 项目基本信息（总是应用）
 2. **`frontend-development.mdc`** - 前端开发规范（总是应用）
-3. **`testing-standards.mdc`** - 测试标准规范（总是应用）
-4. **`project-tools.mdc`** - 项目工具使用规范（总是应用）
-5. **`initial-development.mdc`** - 初始开发阶段
-6. **`architecture.mdc`** - 架构设计规范
-7. **`ai-integration.mdc`** - AI功能开发
-8. **`mvp-development.mdc`** - MVP开发策略
-9. **`development-workflow.mdc`** - 日常开发流程
-10. **其他规则** - 按需应用
+3. **`code-quality-standards.mdc`** - 代码质量标准（总是应用）
 
-### 规则应用场景
+#### 场景规则（Agent Requestable）
 
-- **新功能开发**：应用 `frontend-development.mdc` + `testing-standards.mdc`
-- **架构设计**：应用 `architecture.mdc` + `frontend-development.mdc`
-- **测试编写**：应用 `testing-standards.mdc` + `project-tools.mdc`
-- **AI功能开发**：应用 `ai-integration.mdc` + `frontend-development.mdc`
-- **项目工具使用**：应用 `project-tools.mdc`
-- **代码质量检查**：应用 `code-quality-standards.mdc` + `frontend-development.mdc`
-- **开发流程管理**：应用 `development-workflow.mdc` + `project-tools.mdc`
-- **文档更新**：应用 `documentation-structure.mdc` + `project-tools.mdc`
-- **环境设置**：应用 `project-tools.mdc` + `initial-development.mdc`
+4. **`architecture.mdc`** - 系统架构设计
+5. **`component-architecture.mdc`** - Vue组件架构
+6. **`ui-design-system.mdc`** - UI设计系统
+7. **`css-style-system.mdc`** - CSS样式架构
+8. **`interaction-patterns.mdc`** - 用户交互设计
+9. **`ai-integration.mdc`** - AI功能开发
+10. **`testing-standards.mdc`** - 测试规范
+11. **`development-workflow.mdc`** - 开发流程
+12. **`project-tools.mdc`** - 项目工具
+13. **`mvp-development.mdc`** - MVP开发策略
+14. **`initial-development.mdc`** - 初始开发阶段
+15. **其他文档规则** - 按需应用
+
+### 智能规则应用场景
+
+AI助手将根据用户请求的关键词自动选择相关规则：
+
+#### 设计类请求
+
+- **UI设计、界面、布局**: `ui-design-system` + `css-style-system`
+- **交互设计、用户体验**: `interaction-patterns` + `ui-design-system`
+- **组件设计**: `component-architecture` + `ui-design-system`
+
+#### 开发类请求
+
+- **新功能开发**: `component-architecture` + `testing-standards`
+- **架构设计**: `architecture` + `component-architecture`
+- **代码重构**: `architecture` + `frontend-development`
+
+#### AI功能类请求
+
+- **AI功能开发**: `ai-integration` + `testing-standards`
+- **API集成**: `ai-integration` + `architecture`
+
+#### 工具流程类请求
+
+- **测试编写**: `testing-standards` + `project-tools`
+- **Git操作**: `development-workflow` + `project-tools`
+- **构建部署**: `project-tools` + `architecture`
+- **文档更新**: `documentation-structure` + `timestamp-system`
+
+#### 项目规划类请求
+
+- **MVP规划**: `mvp-development` + `architecture`
+- **项目初始化**: `initial-development` + `project-tools`
 
 ## 📋 规则维护
 

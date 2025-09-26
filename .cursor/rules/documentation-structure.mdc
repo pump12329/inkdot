@@ -1,6 +1,6 @@
 ---
-description: 项目文档结构规范，定义文档目录组织、文档分类、文档管理等文档体系指导
-alwaysApply: true
+description: 用于文档结构设计、文档组织、文档管理、文档规范等文档体系相关问题
+alwaysApply: false
 ---
 
 # 文档结构

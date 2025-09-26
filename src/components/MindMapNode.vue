@@ -4,12 +4,20 @@
     :class="{
       'mindmap-node--selected': isSelected,
       'mindmap-node--editing': isEditing,
-      'mindmap-node--dragging': isDragging
+      'mindmap-node--dragging': isDragging,
+      'mindmap-node--primary': (node.level ?? 0) === 0,
+      'mindmap-node--secondary': (node.level ?? 0) === 1,
+      'mindmap-node--tertiary': (node.level ?? 0) >= 2
     }"
     :style="nodeStyle"
+    :tabindex="isSelected ? 0 : -1"
+    :aria-label="`思维导图节点: ${node.content}`"
+    :aria-selected="isSelected"
+    role="treeitem"
     @click="handleClick"
     @dblclick="handleDoubleClick"
     @mousedown="handleMouseDown"
+    @keydown="handleKeyDown"
   >
     <div v-if="!isEditing" class="node-content">
       {{ node.content }}
@@ -20,6 +28,7 @@
       v-model="editingContent"
       class="node-input"
       type="text"
+      :aria-label="`编辑节点内容: ${node.content}`"
       @blur="handleSaveEdit"
       @keydown.enter="handleSaveEdit"
       @keydown.escape="handleCancelEdit"
@@ -51,6 +60,7 @@ const emit = defineEmits<{
   doubleClick: [nodeId: string];
   mouseDown: [nodeId: string, event: MouseEvent];
   updateContent: [nodeId: string, content: string];
+  delete: [nodeId: string];
 }>();
 
 // 响应式数据
@@ -83,6 +93,22 @@ function handleMouseDown(event: MouseEvent): void {
   }
 }
 
+function handleKeyDown(event: KeyboardEvent): void {
+  if (!isEditing.value) {
+    switch (event.key) {
+      case 'Enter':
+        startEdit();
+        break;
+      case 'F2':
+        startEdit();
+        break;
+      case 'Delete':
+        emit('delete', props.node.id);
+        break;
+    }
+  }
+}
+
 function startEdit(): void {
   isEditing.value = true;
   editingContent.value = props.node.content;
@@ -110,72 +136,3 @@ watch(isEditing, async newIsEditing => {
   }
 });
 </script>
-
-<style scoped>
-.mindmap-node {
-  position: absolute;
-  min-width: 60px;
-  min-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 2px solid #00000022;
-  cursor: pointer;
-  user-select: none;
-  transition: all 0.2s ease;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC',
-    'WenQuanYi Micro Hei', system-ui, sans-serif;
-}
-
-.mindmap-node:hover {
-  border-color: #000000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.mindmap-node--selected {
-  border-color: #000000;
-  background: #000000;
-  color: #ffffff;
-}
-
-.mindmap-node--editing {
-  border-color: #000000;
-}
-
-.mindmap-node--dragging {
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.node-content {
-  padding: 0.5rem;
-  text-align: center;
-  font-size: 0.875rem;
-  line-height: 1.2;
-  word-break: break-word;
-  max-width: 100px;
-}
-
-.node-input {
-  background: transparent;
-  border: none;
-  outline: none;
-  text-align: center;
-  font-size: 0.875rem;
-  font-family: inherit;
-  color: inherit;
-  width: 100%;
-  padding: 0.5rem;
-}
-
-.mindmap-node--selected .node-input {
-  color: #ffffff;
-}
-
-.mindmap-node--selected .node-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-</style>

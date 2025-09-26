@@ -1,4 +1,4 @@
-const { createChineseBrowser } = require('./playwright-chinese-config');
+import { createChineseBrowser } from './playwright-chinese-config.js';
 
 async function checkFonts() {
   const { browser, context, page } = await createChineseBrowser();
@@ -143,7 +143,7 @@ async function checkFonts() {
       </head>
       <body>
         <h1>中文字体渲染测试</h1>
-        
+
         <div class="test-section">
           <h2>基础中文字体测试</h2>
           <div class="font-test" style="font-family: 'Noto Sans CJK SC', sans-serif;">
@@ -156,7 +156,7 @@ async function checkFonts() {
             WenQuanYi Zen Hei: 这是文泉驿正黑字体测试
           </div>
         </div>
-        
+
         <div class="test-section">
           <h2>各种中文字符测试</h2>
           <div class="chinese-text">
@@ -168,7 +168,7 @@ async function checkFonts() {
             <p>数字和符号：0123456789 ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
           </div>
         </div>
-        
+
         <div class="test-section">
           <h2>字体大小测试</h2>
           <div style="font-size: 12px;">12px: 小号字体测试</div>

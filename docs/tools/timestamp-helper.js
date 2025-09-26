@@ -5,9 +5,13 @@
  * 用于获取和管理项目相对时间戳
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync: _execSync } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { execSync as _execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 项目启动时间 (T0 基准点)
 const PROJECT_START_DATE = new Date('2025-09-21T00:00:00Z');
@@ -543,12 +547,12 @@ function main() {
 }
 
 // 如果直接运行此脚本
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
 
 // 导出函数供其他模块使用
-module.exports = {
+export {
   getCurrentTimestamp,
   timestampToDate,
   getNextReviewTimestamp,
