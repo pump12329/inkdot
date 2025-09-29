@@ -1,14 +1,17 @@
-import type { MindMapNode, NodeConnection, Position, Project } from '@/types';
-import { generateId } from '@/utils';
+import type { MindMapNode, NodeConnection, Position } from '@/types';
 import { defineStore } from 'pinia';
-import { computed, readonly, ref } from 'vue';
+import { computed, ref } from 'vue';
+
+// 简单的ID生成器
+function generateId(): string {
+  return Math.random().toString(36).substr(2, 9);
+}
 
 export const useMindMapStore = defineStore('mindMap', () => {
   // 状态
   const nodes = ref<MindMapNode[]>([]);
   const connections = ref<NodeConnection[]>([]);
   const selectedNodeId = ref<string | null>(null);
-  const currentProject = ref<Project | null>(null);
   const isModified = ref(false);
 
   // 计算属性
@@ -17,16 +20,13 @@ export const useMindMapStore = defineStore('mindMap', () => {
     return nodes.value.find(node => node.id === selectedNodeId.value) || null;
   });
 
-  const nodeCount = computed(() => nodes.value.length);
-  const connectionCount = computed(() => connections.value.length);
-
-  // 操作
+  // 核心操作
   function addNode(nodeData: Omit<MindMapNode, 'id'>): MindMapNode {
     const newNode: MindMapNode = {
       id: generateId(),
       content: nodeData.content,
-      position: { ...nodeData.position },
-      connections: [...nodeData.connections]
+      position: nodeData.position,
+      connections: []
     };
 
     nodes.value.push(newNode);
@@ -34,17 +34,11 @@ export const useMindMapStore = defineStore('mindMap', () => {
     return newNode;
   }
 
-  function updateNode(nodeId: string, updates: Partial<Omit<MindMapNode, 'id'>>): void {
+  function updateNode(nodeId: string, updates: Partial<MindMapNode>): void {
     const nodeIndex = nodes.value.findIndex(node => node.id === nodeId);
     if (nodeIndex === -1) return;
 
-    const currentNode = nodes.value[nodeIndex];
-    nodes.value[nodeIndex] = {
-      ...currentNode,
-      ...updates,
-      id: nodeId // 确保ID不被覆盖
-    };
-
+    nodes.value[nodeIndex] = { ...nodes.value[nodeIndex], ...updates };
     isModified.value = true;
   }
 
@@ -57,7 +51,6 @@ export const useMindMapStore = defineStore('mindMap', () => {
   }
 
   function removeNode(nodeId: string): void {
-    // 移除节点
     const nodeIndex = nodes.value.findIndex(node => node.id === nodeId);
     if (nodeIndex === -1) return;
 
@@ -65,10 +58,9 @@ export const useMindMapStore = defineStore('mindMap', () => {
 
     // 移除相关连接
     connections.value = connections.value.filter(
-      connection => connection.fromNodeId !== nodeId && connection.toNodeId !== nodeId
+      conn => conn.fromNodeId !== nodeId && conn.toNodeId !== nodeId
     );
 
-    // 如果删除的是选中节点，清除选择
     if (selectedNodeId.value === nodeId) {
       selectedNodeId.value = null;
     }
@@ -76,40 +68,20 @@ export const useMindMapStore = defineStore('mindMap', () => {
     isModified.value = true;
   }
 
-  function addConnection(fromNodeId: string, toNodeId: string): NodeConnection | null {
-    // 检查节点是否存在
-    const fromNode = nodes.value.find(node => node.id === fromNodeId);
-    const toNode = nodes.value.find(node => node.id === toNodeId);
-
-    if (!fromNode || !toNode) return null;
-
-    // 检查连接是否已存在
-    const existingConnection = connections.value.find(
-      connection =>
-        (connection.fromNodeId === fromNodeId && connection.toNodeId === toNodeId) ||
-        (connection.fromNodeId === toNodeId && connection.toNodeId === fromNodeId)
+  function addConnection(fromNodeId: string, toNodeId: string): void {
+    // 检查是否已存在连接
+    const exists = connections.value.some(
+      conn =>
+        (conn.fromNodeId === fromNodeId && conn.toNodeId === toNodeId) ||
+        (conn.fromNodeId === toNodeId && conn.toNodeId === fromNodeId)
     );
 
-    if (existingConnection) return null;
-
-    const newConnection: NodeConnection = {
-      id: generateId(),
-      fromNodeId,
-      toNodeId
-    };
-
-    connections.value.push(newConnection);
-    isModified.value = true;
-    return newConnection;
-  }
-
-  function removeConnection(connectionId: string): void {
-    const connectionIndex = connections.value.findIndex(
-      connection => connection.id === connectionId
-    );
-
-    if (connectionIndex !== -1) {
-      connections.value.splice(connectionIndex, 1);
+    if (!exists) {
+      connections.value.push({
+        id: generateId(),
+        fromNodeId,
+        toNodeId
+      });
       isModified.value = true;
     }
   }
@@ -118,19 +90,7 @@ export const useMindMapStore = defineStore('mindMap', () => {
     selectedNodeId.value = nodeId;
   }
 
-  function clearSelection(): void {
-    selectedNodeId.value = null;
-  }
-
-  function createNewProject(name = '新项目'): void {
-    currentProject.value = {
-      id: generateId(),
-      name,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    // 清空当前数据
+  function createNewProject(): void {
     nodes.value = [];
     connections.value = [];
     selectedNodeId.value = null;
@@ -138,121 +98,181 @@ export const useMindMapStore = defineStore('mindMap', () => {
   }
 
   function saveCurrentProject(): void {
-    if (!currentProject.value) return;
-
-    const projectData = {
-      ...currentProject.value,
-      updatedAt: new Date(),
+    // 简化的保存 - 保存到localStorage
+    const data = {
       nodes: nodes.value,
-      connections: connections.value
+      connections: connections.value,
+      timestamp: new Date().toISOString()
     };
-
-    // 这里应该调用实际的保存服务
-    console.log('保存项目:', projectData);
-
+    localStorage.setItem('inkdot-project', JSON.stringify(data));
     isModified.value = false;
+    console.log('项目已保存');
   }
 
-  function loadProject(
-    project: Project & { nodes: MindMapNode[]; connections: NodeConnection[] }
-  ): void {
-    currentProject.value = {
-      id: project.id,
-      name: project.name,
-      createdAt: project.createdAt,
-      updatedAt: project.updatedAt
-    };
-
-    nodes.value = [...project.nodes];
-    connections.value = [...project.connections];
-    selectedNodeId.value = null;
-    isModified.value = false;
-  }
-
-  function clearProject(): void {
-    currentProject.value = null;
-    nodes.value = [];
-    connections.value = [];
-    selectedNodeId.value = null;
-    isModified.value = false;
-  }
-
-  function getNodeById(nodeId: string): MindMapNode | null {
-    return nodes.value.find(node => node.id === nodeId) || null;
-  }
-
-  function getConnectedNodes(nodeId: string): MindMapNode[] {
-    const connectedNodeIds = new Set<string>();
-
-    connections.value.forEach(connection => {
-      if (connection.fromNodeId === nodeId) {
-        connectedNodeIds.add(connection.toNodeId);
-      } else if (connection.toNodeId === nodeId) {
-        connectedNodeIds.add(connection.fromNodeId);
+  function loadProject(): void {
+    // 简化的加载 - 从localStorage加载
+    const saved = localStorage.getItem('inkdot-project');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        nodes.value = data.nodes || [];
+        connections.value = data.connections || [];
+        selectedNodeId.value = null;
+        isModified.value = false;
+        console.log('项目已加载');
+      } catch (e) {
+        console.error('加载项目失败:', e);
       }
-    });
-
-    return Array.from(connectedNodeIds)
-      .map(id => getNodeById(id))
-      .filter((node): node is MindMapNode => node !== null);
+    }
   }
 
-  function exportData(): {
-    project: Project | null;
-    nodes: MindMapNode[];
-    connections: NodeConnection[];
-  } {
-    return {
-      project: currentProject.value ? { ...currentProject.value } : null,
-      nodes: [...nodes.value],
-      connections: [...connections.value]
-    };
-  }
-
-  function importData(data: {
-    project?: Project;
-    nodes: MindMapNode[];
-    connections: NodeConnection[];
-  }): void {
-    if (data.project) {
-      currentProject.value = { ...data.project };
+  // 计算内容尺寸
+  function getContentSize(): { width: number; height: number } {
+    if (nodes.value.length === 0) {
+      return { width: 800, height: 600 };
     }
 
-    nodes.value = [...data.nodes];
-    connections.value = [...data.connections];
-    selectedNodeId.value = null;
-    isModified.value = false;
+    let maxX = 0;
+    let maxY = 0;
+
+    nodes.value.forEach(node => {
+      maxX = Math.max(maxX, node.position.x + 200);
+      maxY = Math.max(maxY, node.position.y + 60);
+    });
+
+    return {
+      width: Math.max(800, maxX + 100),
+      height: Math.max(600, maxY + 100)
+    };
+  }
+
+  // 树状布局计算
+  function calculateTreeLayout(): void {
+    if (nodes.value.length === 0) return;
+
+    // 找到根节点（没有父节点的节点）
+    const rootNodes = nodes.value.filter(
+      node => !connections.value.some(conn => conn.toNodeId === node.id)
+    );
+
+    if (rootNodes.length === 0 && nodes.value.length > 0) {
+      // 如果没有明确的根节点，选择第一个节点作为根节点
+      rootNodes.push(nodes.value[0]);
+    }
+
+    // 清除所有节点位置
+    nodes.value.forEach(node => {
+      node.position = { x: 0, y: 0 };
+    });
+
+    // 布局参数
+    const layout = {
+      levelHeight: 120,
+      nodeWidth: 200,
+      nodeHeight: 60,
+      horizontalSpacing: 40,
+      verticalSpacing: 80,
+      startX: 50,
+      startY: 50
+    };
+
+    // 计算每个层级的宽度
+    const levelWidths: { [level: number]: number } = {};
+
+    function calculateLevelWidth(nodeId: string, level: number): number {
+      const childNodes = connections.value
+        .filter(conn => conn.fromNodeId === nodeId)
+        .map(conn => conn.toNodeId);
+
+      if (childNodes.length === 0) {
+        return layout.nodeWidth;
+      }
+
+      const childrenWidth = childNodes.reduce((sum, childId) => {
+        return sum + calculateLevelWidth(childId, level + 1);
+      }, 0);
+
+      const totalWidth = Math.max(
+        layout.nodeWidth,
+        childrenWidth + (childNodes.length - 1) * layout.horizontalSpacing
+      );
+
+      levelWidths[level] = Math.max(levelWidths[level] || 0, totalWidth);
+      return totalWidth;
+    }
+
+    // 计算每个层级的宽度
+    rootNodes.forEach(rootNode => {
+      calculateLevelWidth(rootNode.id, 0);
+    });
+
+    // 布局节点
+    let currentX = layout.startX;
+    rootNodes.forEach(rootNode => {
+      const treeWidth = calculateLevelWidth(rootNode.id, 0);
+      positionNodeInTree(rootNode.id, 0, currentX, layout.startY, layout, levelWidths);
+      currentX += treeWidth + layout.horizontalSpacing;
+    });
+  }
+
+  // 递归设置节点位置
+  function positionNodeInTree(
+    nodeId: string,
+    level: number,
+    startX: number,
+    startY: number,
+    layout: any,
+    levelWidths: { [level: number]: number }
+  ): void {
+    const node = nodes.value.find(n => n.id === nodeId);
+    if (!node) return;
+
+    // 设置节点位置
+    node.position = {
+      x: startX + (levelWidths[level] - layout.nodeWidth) / 2,
+      y: startY + level * (layout.nodeHeight + layout.verticalSpacing)
+    };
+
+    // 获取子节点
+    const childNodes = connections.value
+      .filter(conn => conn.fromNodeId === nodeId)
+      .map(conn => conn.toNodeId);
+
+    if (childNodes.length === 0) return;
+
+    // 计算子节点总宽度
+    const childrenTotalWidth =
+      childNodes.length * layout.nodeWidth + (childNodes.length - 1) * layout.horizontalSpacing;
+
+    // 计算子节点起始位置
+    let childStartX = startX + (levelWidths[level] - childrenTotalWidth) / 2;
+
+    // 递归处理子节点
+    childNodes.forEach(childId => {
+      positionNodeInTree(childId, level + 1, childStartX, startY, layout, levelWidths);
+      childStartX += layout.nodeWidth + layout.horizontalSpacing;
+    });
   }
 
   // 返回公共接口
   return {
-    // 只读状态
+    // 状态
     nodes,
     connections,
     selectedNode,
-    selectedNodeId: readonly(selectedNodeId),
-    currentProject: readonly(currentProject),
-    isModified: readonly(isModified),
-    nodeCount,
-    connectionCount,
+    isModified,
 
     // 操作方法
     addNode,
-    updateNode,
     updateNodePosition,
     updateNodeContent,
     removeNode,
     addConnection,
-    removeConnection,
     selectNode,
-    clearSelection,
     createNewProject,
     saveCurrentProject,
     loadProject,
-    clearProject,
-    getNodeById,
-    getConnectedNodes,
-    exportData,
-    importData
+    calculateTreeLayout,
+    getContentSize
   };
 });

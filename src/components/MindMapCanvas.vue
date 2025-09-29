@@ -1,100 +1,164 @@
 <template>
-  <div class="mindmap-canvas-container">
-    <!-- SVG画布用于绘制连接线 -->
-    <svg class="connections-layer" :width="canvasSize.width" :height="canvasSize.height">
-      <defs>
-        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-          <polygon points="0 0, 10 3.5, 0 7" fill="#00000044" />
-        </marker>
-      </defs>
-
-      <!-- 连接线 -->
-      <line
-        v-for="connection in connections"
-        :key="connection.id"
-        :x1="getNodePosition(connection.fromNodeId).x"
-        :y1="getNodePosition(connection.fromNodeId).y"
-        :x2="getNodePosition(connection.toNodeId).x"
-        :y2="getNodePosition(connection.toNodeId).y"
-        stroke="#00000044"
-        stroke-width="2"
-        marker-end="url(#arrowhead)"
-        class="connection-line"
-      />
-    </svg>
-
-    <!-- 节点层 -->
-    <div
-      class="nodes-layer"
-      @click="handleCanvasClick"
-      @mousedown="handleCanvasMouseDown"
-      @mousemove="handleCanvasMouseMove"
-      @mouseup="handleCanvasMouseUp"
-    >
-      <MindMapNodeComponent
-        v-for="node in nodes"
-        :key="node.id"
-        :node="node"
-        :is-selected="selectedNodeId === node.id"
-        :is-dragging="draggingNodeId === node.id"
-        :scale="scale"
-        @click="handleNodeClick"
-        @double-click="handleNodeDoubleClick"
-        @mouse-down="handleNodeMouseDown"
-        @update-content="handleNodeContentUpdate"
-      />
+  <div
+    class="canvas-container"
+    :class="{
+      mobile: isMobile,
+      tablet: isTablet,
+      desktop: isDesktop,
+      landscape: canvasOrientation === 'landscape',
+      portrait: canvasOrientation === 'portrait'
+    }"
+  >
+    <!-- 控制面板 -->
+    <div class="controls" :class="layoutParams.controlsSize">
+      <button class="control-btn" title="放大 (+)" aria-label="放大画布" @click="zoomIn">
+        <span aria-hidden="true">+</span>
+      </button>
+      <button class="control-btn" title="缩小 (-)" aria-label="缩小画布" @click="zoomOut">
+        <span aria-hidden="true">−</span>
+      </button>
+      <button
+        class="control-btn"
+        title="适应内容 (F)"
+        aria-label="适应内容大小"
+        @click="fitToContent()"
+      >
+        <span aria-hidden="true">⤢</span>
+      </button>
+      <button class="control-btn" title="重置视图 (0)" aria-label="重置视图" @click="resetZoom">
+        <span aria-hidden="true">⟲</span>
+      </button>
+      <div class="zoom-info" role="status" aria-live="polite">{{ Math.round(scale * 100) }}%</div>
     </div>
 
-    <!-- 网格背景（可选） -->
-    <div v-if="showGrid" class="grid-background" :style="gridStyle" />
+    <!-- 画布 -->
+    <div
+      class="canvas"
+      :class="{ panning: isPanning }"
+      @click="handleCanvasClick"
+      @mousedown="startPan"
+      @wheel="handleWheel"
+    >
+      <!-- 连接线层 -->
+      <svg
+        class="connections"
+        :style="{ transform: transformStyle, transformOrigin: transformOrigin }"
+      >
+        <line
+          v-for="connection in props.connections"
+          :key="connection.id"
+          :x1="getNodePosition(connection.fromNodeId).x"
+          :y1="getNodePosition(connection.fromNodeId).y"
+          :x2="getNodePosition(connection.toNodeId).x"
+          :y2="getNodePosition(connection.toNodeId).y"
+          stroke="#d1d5db"
+          stroke-width="2"
+        />
+      </svg>
+
+      <!-- 节点层 -->
+      <div class="nodes" :style="{ transform: transformStyle, transformOrigin: transformOrigin }">
+        <MindMapNodeComponent
+          v-for="node in props.nodes"
+          :key="node.id"
+          :node="node"
+          :is-selected="props.selectedNodeId === node.id"
+          :has-children="hasChildren(node.id)"
+          @click="handleNodeClick"
+          @update-content="handleNodeContentUpdate"
+        />
+      </div>
+    </div>
+
+    <!-- 帮助信息 -->
+    <div class="help-info" role="status" aria-live="polite">
+      <span v-if="isPanning">正在平移画布...</span>
+      <span v-else-if="scale !== 1">缩放: {{ Math.round(scale * 100) }}%</span>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { MindMapNode, NodeConnection, Position } from '@/types';
-import { computed, ref } from 'vue';
 import MindMapNodeComponent from './MindMapNode.vue';
+import { useCanvasView } from '@/composables/useCanvasView';
+import { useResponsiveLayout } from '@/composables/useResponsiveLayout';
+import { watch, nextTick } from 'vue';
 
 // Props
 interface Props {
   nodes: MindMapNode[];
   connections: NodeConnection[];
   selectedNodeId?: string | null;
-  showGrid?: boolean;
-  scale?: number;
-  canvasSize?: { width: number; height: number };
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  selectedNodeId: null,
-  showGrid: false,
-  scale: 1,
-  canvasSize: () => ({ width: 800, height: 600 })
+const props = defineProps<Props>();
+
+// 响应式布局
+const { isMobile, isTablet, isDesktop, layoutParams, getOptimalZoom, canvasOrientation } =
+  useResponsiveLayout();
+
+// 监听节点和连接变化，更新画布尺寸
+watch(
+  [() => props.nodes, () => props.connections],
+  async () => {
+    await nextTick();
+
+    // 计算内容尺寸
+    let maxX = 0;
+    let maxY = 0;
+
+    props.nodes.forEach(node => {
+      maxX = Math.max(maxX, node.position.x + layoutParams.value.nodeWidth);
+      maxY = Math.max(maxY, node.position.y + layoutParams.value.nodeHeight);
+    });
+
+    const contentWidth = Math.max(800, maxX + layoutParams.value.padding);
+    const contentHeight = Math.max(600, maxY + layoutParams.value.padding);
+
+    updateContentSize(contentWidth, contentHeight);
+
+    // 在移动端自动调整缩放
+    if (isMobile.value) {
+      setTimeout(() => {
+        setScale(getOptimalZoom.value);
+      }, 100);
+    }
+  },
+  { deep: true, immediate: true }
+);
+
+// 监听设备类型变化，调整布局
+watch(isMobile, newValue => {
+  if (newValue) {
+    // 移动端优化
+    setScale(getOptimalZoom.value);
+  }
 });
 
 // Emits
 const emit = defineEmits<{
-  nodeClick: [nodeId: string, event: MouseEvent];
-  nodeDoubleClick: [nodeId: string];
+  nodeClick: [nodeId: string];
   nodeContentUpdate: [nodeId: string, content: string];
-  nodePositionUpdate: [nodeId: string, position: Position];
-  canvasClick: [position: Position, event: MouseEvent];
-  selectionChange: [nodeId: string | null];
+  canvasClick: [position: Position];
 }>();
 
-// 响应式数据
-const draggingNodeId = ref<string | null>(null);
-const dragOffset = ref<Position>({ x: 0, y: 0 });
-const isDragging = ref(false);
-
-// 计算属性
-const gridStyle = computed(() => ({
-  backgroundImage: `
-    linear-gradient(to right, #00000008 1px, transparent 1px),
-    linear-gradient(to bottom, #00000008 1px, transparent 1px)
-  `,
-  backgroundSize: '20px 20px'
-}));
+// 使用画布视图管理
+const {
+  scale,
+  offset,
+  isPanning,
+  transformStyle,
+  transformOrigin,
+  zoomIn,
+  zoomOut,
+  setScale,
+  resetZoom,
+  fitToContent,
+  updateContentSize,
+  startPan,
+  handleKeyDown
+} = useCanvasView();
 
 // 方法
 function getNodePosition(nodeId: string): Position {
@@ -102,31 +166,12 @@ function getNodePosition(nodeId: string): Position {
   return node ? node.position : { x: 0, y: 0 };
 }
 
-function handleNodeClick(nodeId: string, event: MouseEvent): void {
-  emit('nodeClick', nodeId, event);
-  emit('selectionChange', nodeId);
+function hasChildren(nodeId: string): boolean {
+  return props.connections.some(conn => conn.fromNodeId === nodeId);
 }
 
-function handleNodeDoubleClick(nodeId: string): void {
-  emit('nodeDoubleClick', nodeId);
-}
-
-function handleNodeMouseDown(nodeId: string, event: MouseEvent): void {
-  event.stopPropagation();
-
-  const node = props.nodes.find(n => n.id === nodeId);
-  if (!node) return;
-
-  draggingNodeId.value = nodeId;
-  isDragging.value = true;
-
-  // 计算拖拽偏移量
-  dragOffset.value = {
-    x: event.clientX - node.position.x,
-    y: event.clientY - node.position.y
-  };
-
-  emit('selectionChange', nodeId);
+function handleNodeClick(nodeId: string): void {
+  emit('nodeClick', nodeId);
 }
 
 function handleNodeContentUpdate(nodeId: string, content: string): void {
@@ -134,96 +179,281 @@ function handleNodeContentUpdate(nodeId: string, content: string): void {
 }
 
 function handleCanvasClick(event: MouseEvent): void {
-  // 只在点击空白区域时处理
-  if (event.target === event.currentTarget) {
-    const _rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-    const position: Position = {
-      x: event.clientX - _rect.left,
-      y: event.clientY - _rect.top
-    };
+  // 如果正在平移，不创建新节点
+  if (isPanning.value) return;
 
-    emit('canvasClick', position, event);
-    emit('selectionChange', null);
-  }
-}
-
-function handleCanvasMouseDown(event: MouseEvent): void {
-  // 在空白区域点击时清除选择
-  if (event.target === event.currentTarget) {
-    emit('selectionChange', null);
-  }
-}
-
-function handleCanvasMouseMove(event: MouseEvent): void {
-  if (!isDragging.value || !draggingNodeId.value) return;
-
-  const _rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-  const newPosition: Position = {
-    x: event.clientX - _rect.left - dragOffset.value.x,
-    y: event.clientY - _rect.top - dragOffset.value.y
+  const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+  const position: Position = {
+    x: (event.clientX - rect.left - offset.value.x) / scale.value,
+    y: (event.clientY - rect.top - offset.value.y) / scale.value
   };
 
-  // 限制在画布范围内
-  newPosition.x = Math.max(30, Math.min(props.canvasSize.width - 30, newPosition.x));
-  newPosition.y = Math.max(30, Math.min(props.canvasSize.height - 30, newPosition.y));
-
-  emit('nodePositionUpdate', draggingNodeId.value, newPosition);
+  emit('canvasClick', position);
 }
 
-function handleCanvasMouseUp(): void {
-  isDragging.value = false;
-  draggingNodeId.value = null;
-  dragOffset.value = { x: 0, y: 0 };
+function handleWheel(event: WheelEvent): void {
+  event.preventDefault();
+
+  const delta = event.deltaY > 0 ? -0.1 : 0.1;
+  const newScale = Math.max(0.1, Math.min(3, scale.value + delta));
+
+  setScale(newScale);
+}
+
+// 键盘事件监听
+if (typeof window !== 'undefined') {
+  window.addEventListener('keydown', handleKeyDown);
 }
 </script>
 
 <style scoped>
-.mindmap-canvas-container {
+.canvas-container {
   position: relative;
   width: 100%;
   height: 100%;
+  background: #f8f9fa;
   overflow: hidden;
-  background: #ffffff;
+}
+
+.controls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.control-btn {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+}
+
+.control-btn:active {
+  transform: translateY(0);
+}
+
+.zoom-info {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+  min-width: 3.5rem;
+  text-align: center;
+}
+
+.canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: white;
+  cursor: grab;
   user-select: none;
 }
 
-.connections-layer {
+.canvas.panning {
+  cursor: grabbing;
+}
+
+.connections {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   z-index: 1;
 }
 
-.nodes-layer {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  cursor: crosshair;
-}
-
-.grid-background {
+.nodes {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: 2;
   pointer-events: none;
 }
 
-.connection-line {
-  transition: stroke 0.2s ease;
+.nodes > * {
+  pointer-events: auto;
 }
 
-.connection-line:hover {
-  stroke: #000000;
-  stroke-width: 3;
+.help-info {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* 拖拽时的样式 */
-.nodes-layer.dragging {
-  cursor: grabbing;
+/* 响应式设计 */
+.mobile .controls {
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.375rem;
+  gap: 0.25rem;
+}
+
+.mobile .control-btn {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 1rem;
+}
+
+.mobile .zoom-info {
+  font-size: 0.75rem;
+  min-width: 3rem;
+}
+
+.mobile .help-info {
+  bottom: 0.5rem;
+  left: 0.5rem;
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+}
+
+/* 控制按钮尺寸 */
+.controls.small .control-btn {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 1rem;
+}
+
+.controls.medium .control-btn {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.125rem;
+}
+
+.controls.large .control-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 1.25rem;
+}
+
+/* 移动端触摸优化 */
+.mobile .canvas {
+  touch-action: pan-x pan-y;
+}
+
+.mobile .nodes {
+  touch-action: none;
+}
+
+/* 横竖屏优化 */
+.mobile.portrait .controls {
+  top: auto;
+  bottom: 1rem;
+  right: 1rem;
+  left: 1rem;
+  justify-content: center;
+}
+
+.mobile.portrait .help-info {
+  bottom: 4rem;
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .control-btn {
+    border-width: 2px;
+    font-weight: bold;
+  }
+
+  .node {
+    border-width: 2px;
+  }
+
+  .connections line {
+    stroke-width: 3px;
+  }
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+  .canvas-container {
+    background: #1f2937;
+  }
+
+  .controls {
+    background: rgba(31, 41, 55, 0.95);
+  }
+
+  .control-btn {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+
+  .control-btn:hover {
+    background: #4b5563;
+    border-color: #6b7280;
+  }
+
+  .zoom-info {
+    color: #9ca3af;
+  }
+
+  .canvas {
+    background: #111827;
+  }
+
+  .help-info {
+    background: rgba(31, 41, 55, 0.95);
+    color: #9ca3af;
+  }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  .control-btn,
+  .node,
+  .canvas {
+    transition: none;
+  }
+}
+
+/* 无障碍支持 */
+.control-btn:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 键盘导航指示 */
+.canvas:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
 }
 </style>

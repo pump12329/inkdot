@@ -1,345 +1,47 @@
 ---
-description: Vue 3 + TypeScript前端开发规范，包含代码规范、组件设计、样式规范等核心开发指导
+description: Vue 3 + TypeScript 核心开发规范
 alwaysApply: true
 ---
 
 # 前端开发规范
 
-## 技术栈
+## Vue 3 核心规范
+- **Composition API**：使用 `<script setup>` 语法
+- **组件命名**：PascalCase
+- **Props/Emits**：使用 `defineProps` 和 `defineEmits`
+- **响应式数据**：`ref/reactive` 管理
+- **组件职责**：单一职责，避免深层嵌套
 
-- **Vue 3.5.21** + **TypeScript 5.9.2** + **Pinia 3.0.3** + **Vite 7.0.0**
-- **样式**: CSS + 自定义组件库（基于墨点Logo设计）
-- **图标**: Lucide Vue Next 0.544.0
-- **测试**: Vitest 3.2.4 + Playwright 1.55.1
-- **代码质量**: ESLint 9.36.0 + Prettier 3.6.2
-
-## Vue 3 开发规范
-
-### 核心规范
-
-- **使用Composition API**：避免Options API，保持代码简洁
-- **使用`<script setup>`语法**：减少样板代码
-- **组件名使用PascalCase**：保持命名一致性
-- **Props使用defineProps，Emits使用defineEmits**：明确的接口定义
-- **使用ref/reactive进行响应式数据管理**：避免过度复杂的状态管理
-- **组件职责单一**：每个组件只负责一个功能
-- **避免深层嵌套**：保持组件结构扁平化
-- **优先使用组合式函数**：提高代码复用性
-
-### 组件示例
-
-```vue
-<script setup lang="ts">
-import { ref, computed } from 'vue';
-import type { MindMapNode } from '@/types';
-
-interface Props {
-  node: MindMapNode;
-  editable?: boolean;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  editable: false
-});
-
-const emit = defineEmits<{
-  update: [node: MindMapNode];
-  delete: [nodeId: string];
-}>();
-
-const isEditing = ref(false);
-const nodeContent = ref(props.node.content);
-</script>
-```
-
-## TypeScript 开发规范
-
-### 类型规范
-
-- 使用严格模式 `"strict": true`
-- 所有函数必须有明确的返回类型
-- 使用接口定义数据结构，避免any类型
-- 优先使用type而不是interface，除非需要继承
-- 使用泛型提高代码复用性
-
-### 代码示例
+## TypeScript 核心规范
+- **严格模式**：`"strict": true`
+- **明确类型**：所有函数有明确返回类型
+- **避免 any**：使用具体类型或泛型
+- **接口定义**：清晰的类型结构
 
 ```typescript
-// 好的示例
 interface MindMapNode {
   id: string;
   content: string;
   position: { x: number; y: number };
-  connections: string[];
 }
 
 function createNode(data: Partial<MindMapNode>): MindMapNode {
   return {
     id: generateId(),
     content: data.content || '',
-    position: data.position || { x: 0, y: 0 },
-    connections: data.connections || []
+    position: data.position || { x: 0, y: 0 }
   };
 }
 ```
 
-## 文件命名规范
+## 文件命名
+- 组件：`MindMapNode.vue`
+- 工具函数：`nodeUtils.ts`
+- 类型定义：`mindMapTypes.ts`
+- 常量：`API_CONSTANTS.ts`
 
-- **组件文件使用PascalCase**: `MindMapNode.vue`
-- **工具函数文件使用camelCase**: `nodeUtils.ts`
-- **类型定义文件使用camelCase**: `mindMapTypes.ts`
-- **常量文件使用UPPER_CASE**: `API_CONSTANTS.ts`
-- **避免过长的文件名**：保持简洁明了
-- **使用描述性名称**：文件名应该清楚表达内容
-- **避免缩写**：除非是广泛认知的缩写
-- **保持一致性**：相同类型的文件使用相同的命名模式
-
-## 中文字体支持规范
-
-### 字体配置原则
-
-- **系统字体优先**：优先使用系统内置的中文字体
-- **渐进降级**：提供多层字体回退方案
-- **性能优化**：避免加载大体积的Web字体
-- **跨平台兼容**：确保在Windows、macOS、Linux上正常显示
-
-### 字体声明
-
-```css
-/* 中文字体堆栈 */
-.chinese-text {
-  font-family:
-    /* 系统首选字体 */
-    'PingFang SC',
-    'Microsoft YaHei',
-    'SimHei',
-    /* 开源备选字体 */ 'Noto Sans CJK SC',
-    'WenQuanYi Micro Hei',
-    /* 通用回退 */ sans-serif;
-}
-
-/* 思维导图节点字体 */
-.mindmap-node {
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC',
-    'WenQuanYi Micro Hei', system-ui, sans-serif;
-}
-```
-
-### Docker环境中文支持
-
-```dockerfile
-# 在Dockerfile中安装中文字体
-RUN apt-get update && apt-get install -y \
-    fonts-noto-cjk \
-    fonts-wqy-microhei \
-    && rm -rf /var/lib/apt/lists/*
-```
-
-### 字体检测和加载
-
-```typescript
-// 字体支持检测
-interface FontConfig {
-  primary: string[];
-  fallback: string[];
-  testChar: string;
-}
-
-const chineseFontConfig: FontConfig = {
-  primary: ['PingFang SC', 'Microsoft YaHei', 'SimHei'],
-  fallback: ['Noto Sans CJK SC', 'WenQuanYi Micro Hei', 'sans-serif'],
-  testChar: '中'
-};
-
-// 检测字体可用性
-function detectFontSupport(fontFamily: string): boolean {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d')!;
-
-  context.font = '16px monospace';
-  const fallbackWidth = context.measureText(chineseFontConfig.testChar).width;
-
-  context.font = `16px ${fontFamily}, monospace`;
-  const testWidth = context.measureText(chineseFontConfig.testChar).width;
-
-  return testWidth !== fallbackWidth;
-}
-```
-
-## 组件设计原则
-
-### 思维导图组件设计原则
-
-- **核心功能优先**：节点展示、编辑、连接是核心功能
-- **层级结构清晰**：支持折叠/展开，但避免过深嵌套
-- **交互简化**：拖拽、点击、键盘快捷键，避免复杂手势
-- **视觉极简**：使用Canvas/SVG，避免复杂视觉效果
-- **渐进式功能**：高级功能（如AI辅助）按需启用
-- **中文优化**：确保中文内容在所有环境下正常显示
-
-### 工作区组件设计原则
-
-- **仿照Cursor设计风格**：专业且简洁的界面
-- **智能布局管理**：标签页和侧边栏可折叠，节省空间
-- **功能渐进披露**：项目和AI面板按需显示
-- **用户偏好记忆**：记住布局设置，减少重复配置
-- **响应式适配**：桌面端功能完整，移动端功能精简
-
-### 基础UI组件设计原则
-
-- **基于墨点Logo设计风格**：统一的视觉语言
-- **极简色彩系统**：黑白灰为主，品牌色点缀
-- **统一字体系统**：系统字体优先，确保跨平台一致性
-- **组件职责单一**：每个组件只负责一个功能
-- **无障碍设计**：支持键盘导航和屏幕阅读器
-
-## ESLint代码质量规范
-
-### 必须遵循的规则
-
-- **禁止使用any类型**：使用具体类型、泛型或unknown
-- **处理未使用变量**：移除或使用下划线前缀标记
-- **正确声明全局变量**：browser/node环境变量需要适当的类型声明
-- **Switch语句作用域**：使用花括号包装case块避免词法声明冲突
-- **安全的属性访问**：使用Object.hasOwn()或in操作符而不是hasOwnProperty
-- **Unicode正则表达式**：处理中文字符时使用/u标志
-
-### 类型安全要求
-
-```typescript
-// ✅ 正确：明确类型
-interface UserData {
-  id: string;
-  name: string;
-}
-
-// ✅ 正确：泛型使用
-function processData<T>(data: T): T {
-  return data;
-}
-
-// ✅ 正确：未使用参数处理
-try {
-  riskyOperation();
-} catch (_error) {
-  // 使用_前缀表示未使用
-  showErrorMessage('操作失败');
-}
-
-// ✅ 正确：Switch语句
-switch (type) {
-  case 'A': {
-    const result = processA();
-    return result;
-  }
-  case 'B': {
-    const result = processB();
-    return result;
-  }
-}
-```
-
-### 环境变量规范
-
-```typescript
-// 浏览器环境 - 可直接使用
-console.log('浏览器API');
-localStorage.setItem('key', 'value');
-
-// Node.js环境 - 需要声明
-declare global {
-  namespace NodeJS {
-    interface Global {
-      // 全局变量声明
-    }
-  }
-}
-```
-
-## 设计系统规范
-
-### 视觉极简主义
-
-#### 色彩系统
-
-```css
-/* 极简色彩系统 */
-:root {
-  --color-primary: #000000; /* 主色：黑 */
-  --color-secondary: #ffffff; /* 次要色：白 */
-  --color-accent: #000000; /* 强调色：黑 */
-  --color-background: #ffffff; /* 背景色：白 */
-  --color-surface: #ffffff; /* 表面色：白 */
-  --color-text: #000000; /* 文本色：黑 */
-  --color-muted: #00000022; /* 静音色：黑的透明 */
-}
-```
-
-#### 间距系统
-
-```css
-/* 极简间距系统 */
-.spacing-xs {
-  margin: 0.25rem;
-} /* 4px */
-.spacing-sm {
-  margin: 0.5rem;
-} /* 8px */
-.spacing-md {
-  margin: 1rem;
-} /* 16px */
-.spacing-lg {
-  margin: 1.5rem;
-} /* 24px */
-.spacing-xl {
-  margin: 2rem;
-} /* 32px */
-```
-
-#### 设计原则
-
-- **留白原则**: 充分使用留白空间，避免界面拥挤
-- **色彩克制**: 主要使用黑白灰配色，点缀少量品牌色
-- **字体简洁**: 选择易读性强的无衬线字体
-- **图标简约**: 使用线条简洁的图标，避免复杂装饰
-- **扁平化设计**: 避免过多的阴影和立体效果
-- **网格对齐**: 使用12列网格系统保持对齐
-
-### 交互极简主义
-
-#### 交互原则
-
-- **减少点击**: 每个功能最多3次点击到达
-- **智能默认**: 提供合理的默认设置和智能建议
-- **渐进披露**: 高级功能默认隐藏，按需显示
-- **一键操作**: 常用功能支持一键完成
-- **一致性**: 相同功能使用相同的交互模式
-- **可预测性**: 用户操作结果可预期
-
-#### SPA导航设计
-
-- **客户端路由**: 使用Vue Router实现客户端路由导航
-- **导航状态持久化**: 支持浏览器前进后退功能
-- **路由切换动画**: 使用简洁流畅的过渡效果
-- **面包屑导航**: 显示当前位置和导航路径
-- **响应式导航**: 移动端使用汉堡菜单，桌面端使用水平导航
-
-### 极简主义检查清单
-
-- [ ] 界面元素是否必要？能否移除？
-- [ ] 用户是否能快速理解功能？
-- [ ] 是否有多余的装饰元素？
-- [ ] 交互流程是否最简化？
-- [ ] 是否遵循"3次点击"原则？
-- [ ] 色彩使用是否克制？
-- [ ] 字体和间距是否统一？
-
-## 代码质量检查
-
-- **提交前必须**：运行 `npm run lint` 检查
-- **自动修复**：使用 `npm run lint:fix` 修复
-- **类型检查**：运行 `npm run type-check` 确保类型安全
-- **代码错误太多直接重写**
-- **代码变成屎山时请给出重构建议**
-- **简单就是美，简洁就是力量**：始终保持代码的简洁性和可读性
+## 设计原则
+- **极简主义**：黑白灰配色，充足留白
+- **3次点击原则**：任何功能最多3次点击到达
+- **响应式设计**：桌面端完整，移动端精简
+- **无障碍支持**：键盘导航和屏幕阅读器

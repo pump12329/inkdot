@@ -1,19 +1,19 @@
 ---
-description: 项目基本信息规范，包含项目概述、技术栈信息、版本管理、参考文档等项目信息指导
+description: 项目基本信息
 alwaysApply: true
 ---
 
-# 项目信息
+# InkDot 项目信息
 
-## 项目基本信息
-
-- **项目名称**: InkDot - 创意创作思维导图平台
-- **项目版本**: v1.0.0
-- **技术栈**: Vue 3.5.21 + TypeScript 5.9.2 + Pinia 3.0.3 + Vite 7.0.0
+## 基本信息
+- **项目**: InkDot - 创意创作思维导图平台
+- **版本**: v1.0.0
+- **技术栈**: Vue 3 + TypeScript + Pinia + Vite
 - **AI集成**: DeepSeek API + OpenRouter API
-- **测试工具**: Vitest 3.2.4 + Playwright 1.55.1
-- **Node.js要求**: ≥ 20.0.0
+- **Node.js**: ≥ 20.0.0
 
-## 参考文档
-
-请参考项目文档：docs/development/project-rules.md
+## 核心特性
+- **思维导图**: 可视化思维导图编辑
+- **AI辅助**: 智能内容生成和优化
+- **多格式支持**: 小说、跑团、文字冒险
+- **本地存储**: 数据本地化，隐私保护
