@@ -1,0 +1,110 @@
+#!/usr/bin/env sh
+
+# 提交信息规范检查
+echo "📝 Checking commit message format..."
+
+# 获取提交信息
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# 定义提交信息格式规则
+# 格式: type(scope): description
+# 类型: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert, WIP
+
+# 检查是否为空
+if [ -z "$COMMIT_MSG" ]; then
+  echo "❌ Commit message cannot be empty"
+  exit 1
+fi
+
+# 检查长度（第一行不超过72字符）
+FIRST_LINE=$(echo "$COMMIT_MSG" | head -n1)
+if [ ${#FIRST_LINE} -gt 72 ]; then
+  echo "❌ First line of commit message should be 72 characters or less"
+  echo "   Current length: ${#FIRST_LINE} characters"
+  exit 1
+fi
+
+# 检查以WIP开头的提交信息（工作进行中）
+if echo "$FIRST_LINE" | grep -q "^WIP"; then
+  echo "⚠️  Work in progress commit detected"
+  echo "   Make sure to finalize this before merging"
+  exit 0
+fi
+
+# 检查基本格式
+if ! echo "$FIRST_LINE" | grep -qE "^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?: .{1,72}"; then
+  echo "❌ Invalid commit message format"
+  echo ""
+  echo "   Expected format: type(scope): description"
+  echo "   Types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert"
+  echo ""
+  echo "   Examples:"
+  echo "     feat(mindmap): add node drag functionality"
+  echo "     fix(canvas): resolve zoom issue on mobile"
+  echo "     docs(api): update endpoint documentation"
+  echo "     test(components): add unit tests for MindMapNode"
+  echo ""
+  echo "   Current message: $FIRST_LINE"
+  exit 1
+fi
+
+# 检查是否有描述内容
+if echo "$FIRST_LINE" | grep -qE "^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?:\s*$"; then
+  echo "❌ Commit message cannot end with ':'"
+  echo "   Please add a description after the type"
+  exit 1
+fi
+
+# 检查是否以句号结尾（不应该）
+if echo "$FIRST_LINE" | grep -q "\.$"; then
+  echo "⚠️  Commit message should not end with a period"
+  echo "   Consider removing the trailing period"
+fi
+
+# 检查多行提交信息的格式
+BODY_LINES=$(echo "$COMMIT_MSG" | tail -n +2 | grep -v "^$")
+if [ -n "$BODY_LINES" ]; then
+  # 检查是否有空行分隔标题和正文
+  SECOND_LINE=$(echo "$COMMIT_MSG" | sed -n '2p')
+  if [ -n "$SECOND_LINE" ]; then
+    echo "⚠️  Consider adding a blank line between subject and body"
+  fi
+
+  # 检查正文行长度
+  LONG_LINES=$(echo "$COMMIT_MSG" | tail -n +2 | grep -E ".{81,}")
+  if [ -n "$LONG_LINES" ]; then
+    echo "⚠️  Some lines in commit body exceed 80 characters"
+    echo "   Consider wrapping them for better readability"
+  fi
+fi
+
+echo "✅ Commit message format is valid"
+
+# 提取提交类型和范围以提供额外检查
+COMMIT_TYPE=$(echo "$FIRST_LINE" | sed -E 's/^([a-z]+)(\([^)]*\))?:.*/\1/')
+COMMIT_SCOPE=$(echo "$FIRST_LINE" | sed -E 's/^[a-z]+\(([^)]*)\):.*/\1/' | grep -v '^[a-z]*$')
+
+# 根据提交类型提供建议
+case $COMMIT_TYPE in
+  "feat")
+    echo "💡 Feature commit detected - make sure to update tests if applicable"
+    ;;
+  "fix")
+    echo "🐛 Bug fix commit - consider adding regression tests"
+    ;;
+  "refactor")
+    echo "🔧 Refactor commit - ensure no functional changes"
+    ;;
+  "test")
+    echo "🧪 Test commit - consider updating test coverage"
+    ;;
+  "docs")
+    echo "📚 Documentation commit - consider updating changelog if needed"
+    ;;
+  "chore")
+    echo "🔨 Chore commit - build tooling or dependency updates"
+    ;;
+esac
+
+exit 0

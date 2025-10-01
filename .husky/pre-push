@@ -1,0 +1,95 @@
+#!/usr/bin/env sh
+
+# Pre-push hook - 推送前的完整检查
+echo "🚀 Running pre-push checks..."
+
+# 获取推送信息
+REMOTE=$1
+URL=$2
+
+# 检查是否推送到 main 分支
+CURRENT_BRANCH=$(git branch --show-current)
+if [ "$CURRENT_BRANCH" = "main" ] || [ "$CURRENT_BRANCH" = "master" ]; then
+  echo "⚠️  Pushing to main branch ($CURRENT_BRANCH)"
+  echo "   Running full test suite before push..."
+
+  # 运行完整测试套件
+  echo "🧪 Running full test suite..."
+  START_TIME=$(date +%s%N)
+  npm run test:run >/dev/null 2>&1
+  TEST_STATUS=$?
+  END_TIME=$(date +%s%N)
+  TEST_TIME=$(( ($END_TIME - $START_TIME) / 1000000 ))
+
+  if [ $TEST_STATUS -ne 0 ]; then
+    echo "❌ Full test suite failed (${TEST_TIME}ms)"
+    echo "   Please fix failing tests before pushing to main"
+    exit 1
+  fi
+  echo "✅ Full test suite passed (${TEST_TIME}ms)"
+
+  # 检查测试覆盖率
+  echo "📊 Checking test coverage..."
+  COVERAGE_OUTPUT=$(npm run test:coverage 2>&1)
+  COVERAGE_STATUS=$?
+
+  if [ $COVERAGE_STATUS -ne 0 ]; then
+    echo "❌ Coverage check failed"
+    exit 1
+  fi
+
+  # 提取覆盖率数据（简化版）
+  COVERAGE_LINES=$(echo "$COVERAGE_OUTPUT" | grep -E "All files" | grep -oE "[0-9]+" | head -1)
+  if [ -n "$COVERAGE_LINES" ] && [ "$COVERAGE_LINES" -lt 70 ]; then
+    echo "⚠️  Test coverage is below 70% (current: ${COVERAGE_LINES}%)"
+    echo "   Consider adding more tests before pushing to main"
+  fi
+
+else
+  echo "📦 Pushing to branch: $CURRENT_BRANCH"
+  echo "   Running basic checks (full tests run on CI/CD)"
+
+  # 非主分支只运行快速检查
+  echo "🧪 Running quick tests..."
+  npm run test:unit --silent --run >/dev/null 2>&1
+  QUICK_TEST_STATUS=$?
+
+  if [ $QUICK_TEST_STATUS -ne 0 ]; then
+    echo "❌ Quick tests failed"
+    echo "   Please fix failing tests before pushing"
+    exit 1
+  fi
+  echo "✅ Quick tests passed"
+fi
+
+# 检查是否有未提交的更改
+if [ -n "$(git status --porcelain)" ]; then
+  echo "⚠️  You have uncommitted changes"
+  echo "   Consider committing them before push, or use 'git push --no-verify' to skip"
+fi
+
+# 检查分支名称规范（可选）
+BRANCH_PATTERN="^(feat|fix|docs|style|refactor|test|chore|hotfix)\/[a-z0-9-]+$"
+if ! echo "$CURRENT_BRANCH" | grep -qE "$BRANCH_PATTERN"; then
+  echo "⚠️  Branch name doesn't follow conventional format"
+  echo "   Recommended format: type/description (e.g., feat/add-node-dragging)"
+  echo "   This is just a suggestion, not a requirement"
+fi
+
+# 统计推送信息
+ZERO_COMMIT="0000000000000000000000000000000000000000"
+COMMITS_TO_PUSH=$(git rev-list --count ${2:-origin/$CURRENT_BRANCH}..HEAD 2>/dev/null || echo "unknown")
+
+if [ "$COMMITS_TO_PUSH" != "unknown" ] && [ "$COMMITS_TO_PUSH" -gt 5 ]; then
+  echo "📈 Pushing $COMMITS_TO_PUSH commits"
+  echo "   Consider consolidating related commits for better history"
+fi
+
+echo "🎉 Pre-push checks completed successfully!"
+echo ""
+echo "📋 Push summary:"
+echo "   Remote: $REMOTE"
+echo "   Branch: $CURRENT_BRANCH"
+echo "   Commits: $COMMITS_TO_PUSH"
+
+exit 0

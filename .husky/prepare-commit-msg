@@ -1,0 +1,52 @@
+#!/usr/bin/env sh
+
+# Prepare commit message hook - 辅助创建规范的提交信息
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+SHA=$3
+
+# 只在未指定提交信息时提供帮助
+if [ "$COMMIT_SOURCE" = "message" ] || [ "$COMMIT_SOURCE" = "template" ] || [ "$COMMIT_SOURCE" = "" ]; then
+  # 检查当前文件变更来建议提交类型
+  CURRENT_MSG=$(cat "$COMMIT_MSG_FILE" 2>/dev/null || echo "")
+
+  # 如果已经有内容，不提供模板
+  if [ -n "$CURRENT_MSG" ]; then
+    exit 0
+  fi
+
+  # 分析文件变更
+  CHANGED_FILES=$(git diff --cached --name-only)
+  HAS_VUE=$(echo "$CHANGED_FILES" | grep -E '\.vue$' | wc -l)
+  HAS_TS=$(echo "$CHANGED_FILES" | grep -E '\.(ts|js)$' | wc -l)
+  HAS_TEST=$(echo "$CHANGED_FILES" | grep -E 'test|spec' | wc -l)
+  HAS_DOCS=$(echo "$CHANGED_FILES" | grep -E '\.md$' | wc -l)
+  HAS_CONFIG=$(echo "$CHANGED_FILES" | grep -E '\.(json|yml|yaml|config\.js|vite\.config|vitest\.config)' | wc -l)
+
+  # 生成建议的提交信息
+  SUGGESTION=""
+
+  if [ "$HAS_TEST" -gt 0 ] && [ "$HAS_VUE" -eq 0 ] && [ "$HAS_TS" -eq 0 ]; then
+    SUGGESTION="test: "
+  elif [ "$HAS_DOCS" -gt 0 ] && [ "$HAS_VUE" -eq 0 ] && [ "$HAS_TS" -eq 0 ]; then
+    SUGGESTION="docs: "
+  elif [ "$HAS_CONFIG" -gt 0 ] && [ "$HAS_VUE" -eq 0 ] && [ "$HAS_TS" -eq 0 ]; then
+    SUGGESTION="chore: update configuration"
+  elif [ "$HAS_VUE" -gt 0 ] || [ "$HAS_TS" -gt 0 ]; then
+    # 如果是代码变更，显示帮助信息但不自动填充
+    echo "💡 Tip: Use conventional commit format"
+    echo "   Examples:"
+    echo "     feat(component): add new functionality"
+    echo "     fix(bug): resolve issue with component"
+    echo "     refactor(utils): improve code structure"
+    echo ""
+    exit 0
+  fi
+
+  # 如果有明确的建议，写入提交信息文件
+  if [ -n "$SUGGESTION" ]; then
+    echo "$SUGGESTION" > "$COMMIT_MSG_FILE"
+  fi
+fi
+
+exit 0

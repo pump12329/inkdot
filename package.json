@@ -63,7 +63,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "keywords": [
     "mindmap",
@@ -116,14 +116,31 @@
   },
   "lint-staged": {
     "*.{js,ts,vue}": [
-      "eslint --fix",
-      "prettier --write"
+      "eslint --fix --quiet",
+      "prettier --write --log-level warn"
     ],
     "*.{json,md,yml,yaml}": [
-      "prettier --write"
+      "prettier --write --log-level warn"
     ],
     "*.md": [
-      "node docs/tools/timestamp-helper.js check-timestamp"
+      "node docs/tools/timestamp-helper.js check-timestamp",
+      "prettier --write --log-level warn"
+    ],
+    "package.json": [
+      "prettier --write --log-level warn",
+      "node -e \"console.log('📦 package.json formatted')\""
+    ],
+    "vitest.config.{js,ts}": [
+      "eslint --fix --quiet",
+      "prettier --write --log-level warn"
+    ],
+    "vite.config.{js,ts}": [
+      "eslint --fix --quiet",
+      "prettier --write --log-level warn"
+    ],
+    ".husky/*": [
+      "shellcheck --severity=warning",
+      "node -e \"console.log('🔧 Hook scripts validated')\""
     ]
   }
 }
