@@ -5,7 +5,20 @@ echo "📝 Checking commit message format..."
 
 # 获取提交信息
 COMMIT_MSG_FILE=$1
-COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# 检查文件路径是否提供
+if [ -z "$COMMIT_MSG_FILE" ]; then
+  echo "❌ Commit message file not provided"
+  exit 1
+fi
+
+# 读取提交信息
+if [ -f "$COMMIT_MSG_FILE" ]; then
+  COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+else
+  echo "❌ Commit message file not found: $COMMIT_MSG_FILE"
+  exit 1
+fi
 
 # 定义提交信息格式规则
 # 格式: type(scope): description
@@ -63,7 +76,13 @@ if echo "$FIRST_LINE" | grep -q "\.$"; then
 fi
 
 # 检查多行提交信息的格式
-BODY_LINES=$(echo "$COMMIT_MSG" | tail -n +2 | grep -v "^$")
+# 更安全的方式获取正文行
+if echo "$COMMIT_MSG" | grep -q '^$'; then
+  BODY_LINES=$(echo "$COMMIT_MSG" | tail -n +2 | grep -v "^$")
+else
+  BODY_LINES=""
+fi
+
 if [ -n "$BODY_LINES" ]; then
   # 检查是否有空行分隔标题和正文
   SECOND_LINE=$(echo "$COMMIT_MSG" | sed -n '2p')

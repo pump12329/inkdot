@@ -7,6 +7,15 @@ export function useCanvasView() {
   const offset = ref<Position>({ x: 0, y: 0 });
   const isPanning = ref(false);
   const panStart = ref<Position>({ x: 0, y: 0 });
+  const lastPanPosition = ref<Position>({ x: 0, y: 0 });
+  const velocity = ref<Position>({ x: 0, y: 0 });
+  const isAnimating = ref(false);
+
+  // 触摸状态
+  const isTouching = ref(false);
+  const touchStart = ref<Position>({ x: 0, y: 0 });
+  const lastTouchDistance = ref(0);
+  const touchCenter = ref<Position>({ x: 0, y: 0 });
 
   // 画布尺寸
   const canvasSize = ref({ width: 800, height: 600 });
@@ -42,13 +51,21 @@ export function useCanvasView() {
     offset.value = { x: 0, y: 0 };
   }
 
-  // 平移功能
+  // 平移功能 - 桌面端
   function startPan(event: MouseEvent): void {
+    // 如果点击的是可交互元素，不开始平移
+    if ((event.target as HTMLElement).closest('button, .node, input')) {
+      return;
+    }
+
     isPanning.value = true;
     panStart.value = {
       x: event.clientX - offset.value.x,
       y: event.clientY - offset.value.y
     };
+    lastPanPosition.value = { x: event.clientX, y: event.clientY };
+    velocity.value = { x: 0, y: 0 };
+    stopMomentumAnimation();
 
     document.addEventListener('mousemove', handlePan);
     document.addEventListener('mouseup', endPan);
@@ -57,16 +74,152 @@ export function useCanvasView() {
   function handlePan(event: MouseEvent): void {
     if (!isPanning.value) return;
 
-    offset.value = {
-      x: event.clientX - panStart.value.x,
-      y: event.clientY - panStart.value.y
+    const currentX = event.clientX;
+    const currentY = event.clientY;
+
+    // 计算速度（用于惯性滑动）
+    velocity.value = {
+      x: currentX - lastPanPosition.value.x,
+      y: currentY - lastPanPosition.value.y
     };
+
+    offset.value = {
+      x: currentX - panStart.value.x,
+      y: currentY - panStart.value.y
+    };
+
+    lastPanPosition.value = { x: currentX, y: currentY };
   }
 
   function endPan(): void {
+    if (!isPanning.value) return;
+
     isPanning.value = false;
     document.removeEventListener('mousemove', handlePan);
     document.removeEventListener('mouseup', endPan);
+
+    // 开始惯性滑动
+    startMomentumAnimation();
+  }
+
+  // 触摸事件处理
+  function handleTouchStart(event: TouchEvent): void {
+    const touch = event.touches[0];
+    isTouching.value = true;
+    touchStart.value = { x: touch.clientX, y: touch.clientY };
+    lastPanPosition.value = { x: touch.clientX, y: touch.clientY };
+    velocity.value = { x: 0, y: 0 };
+    stopMomentumAnimation();
+
+    if (event.touches.length === 2) {
+      // 双指缩放
+      const touch1 = event.touches[0];
+      const touch2 = event.touches[1];
+      lastTouchDistance.value = getTouchDistance(touch1, touch2);
+      touchCenter.value = getTouchCenter(touch1, touch2);
+    }
+
+    event.preventDefault();
+  }
+
+  function handleTouchMove(event: TouchEvent): void {
+    if (!isTouching.value) return;
+
+    const touch = event.touches[0];
+
+    if (event.touches.length === 1) {
+      // 单指平移
+      velocity.value = {
+        x: touch.clientX - lastPanPosition.value.x,
+        y: touch.clientY - lastPanPosition.value.y
+      };
+
+      offset.value = {
+        x: touch.clientX - touchStart.value.x,
+        y: touch.clientY - touchStart.value.y
+      };
+    } else if (event.touches.length === 2) {
+      // 双指缩放
+      const touch1 = event.touches[0];
+      const touch2 = event.touches[1];
+      const currentDistance = getTouchDistance(touch1, touch2);
+      const scaleDelta = currentDistance / lastTouchDistance.value;
+
+      // 以触摸中心为缩放原点
+      const newScale = Math.max(0.1, Math.min(3, scale.value * scaleDelta));
+      const scaleChange = newScale - scale.value;
+
+      offset.value.x -= ((touchCenter.value.x - offset.value.x) * scaleChange) / scale.value;
+      offset.value.y -= ((touchCenter.value.y - offset.value.y) * scaleChange) / scale.value;
+
+      scale.value = newScale;
+      lastTouchDistance.value = currentDistance;
+    }
+
+    lastPanPosition.value = { x: touch.clientX, y: touch.clientY };
+    event.preventDefault();
+  }
+
+  function handleTouchEnd(event: TouchEvent): void {
+    if (!isTouching.value) return;
+
+    isTouching.value = false;
+
+    if (event.touches.length === 0) {
+      startMomentumAnimation();
+    }
+
+    event.preventDefault();
+  }
+
+  // 辅助函数
+  function getTouchDistance(touch1: Touch, touch2: Touch): number {
+    const dx = touch2.clientX - touch1.clientX;
+    const dy = touch2.clientY - touch1.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  function getTouchCenter(touch1: Touch, touch2: Touch): Position {
+    return {
+      x: (touch1.clientX + touch2.clientX) / 2,
+      y: (touch1.clientY + touch2.clientY) / 2
+    };
+  }
+
+  // 惯性滑动动画
+  function startMomentumAnimation(): void {
+    const friction = 0.95;
+    const minVelocity = 0.5;
+
+    if (Math.abs(velocity.value.x) < minVelocity && Math.abs(velocity.value.y) < minVelocity) {
+      return;
+    }
+
+    isAnimating.value = true;
+
+    function animate() {
+      if (!isAnimating.value) return;
+
+      velocity.value.x *= friction;
+      velocity.value.y *= friction;
+
+      offset.value.x += velocity.value.x;
+      offset.value.y += velocity.value.y;
+
+      if (Math.abs(velocity.value.x) < minVelocity && Math.abs(velocity.value.y) < minVelocity) {
+        isAnimating.value = false;
+        return;
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  function stopMomentumAnimation(): void {
+    isAnimating.value = false;
+    velocity.value = { x: 0, y: 0 };
   }
 
   // 键盘控制
@@ -173,6 +326,8 @@ export function useCanvasView() {
     scale,
     offset,
     isPanning,
+    isTouching,
+    isAnimating,
     canvasSize,
     containerSize,
     contentSize,
@@ -189,6 +344,9 @@ export function useCanvasView() {
     startPan,
     handlePan,
     endPan,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
     handleKeyDown,
     fitToContent,
     updateContentSize,

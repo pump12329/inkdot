@@ -1,0 +1,430 @@
+/* InkDot 主样式文件 */
+
+/* 导入所有样式模块 */
+@import './base.css';
+@import './components.css';
+@import './layout.css';
+@import './responsive.css';
+@import './themes.css';
+@import './tokens.css';
+@import './utilities.css';
+
+/* 全局样式重置和增强 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 防止文本选中 */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 可选文本 */
+.select-text {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* 隐藏滚动条但保持滚动功能 */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* 自定义滚动条 */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-surface);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-tertiary);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
+}
+
+/* 焦点管理 */
+.focus-ring {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.focus-ring-inset {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+/* 骨架屏动画 */
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 0px,
+    var(--color-border) 40px,
+    var(--color-surface) 80px
+  );
+  background-size: 200px 100%;
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn var(--transition-normal) ease-out;
+}
+
+/* 缩放动画 */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.scale-in {
+  animation: scaleIn var(--transition-normal) ease-out;
+}
+
+/* 滑入动画 */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in {
+  animation: slideIn var(--transition-normal) ease-out;
+}
+
+/* 脉冲动画 */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse {
+  animation: pulse var(--transition-slow) ease-in-out infinite;
+}
+
+/* 闪烁动画 */
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blink var(--transition-normal) ease-in-out infinite;
+}
+
+/* 加载动画 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin var(--transition-slow) linear infinite;
+}
+
+/* 渐变背景 */
+.gradient-bg {
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-background) 100%);
+}
+
+/* 毛玻璃效果 */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 深色模式毛玻璃 */
+@media (prefers-color-scheme: dark) {
+  .glass-effect {
+    background: rgba(26, 26, 26, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* 网格背景 */
+.grid-bg {
+  background-image:
+    radial-gradient(circle at 1px 1px, var(--color-border-light) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* 点阵背景 */
+.dots-bg {
+  background-image: radial-gradient(circle, var(--color-border-light) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* 渐变文本 */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 阴影文本 */
+.text-shadow {
+  text-shadow: 0 1px 2px var(--color-shadow);
+}
+
+/* 多行文本省略 */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 响应式文本大小 */
+.responsive-text {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+}
+
+.responsive-text-lg {
+  font-size: clamp(1rem, 3vw, 1.25rem);
+}
+
+.responsive-text-xl {
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
+}
+
+/* 可访问性增强 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 高对比度模式增强 */
+@media (prefers-contrast: high) {
+  .focus-ring,
+  .focus-ring-inset {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+
+  .btn,
+  .input,
+  .card,
+  .node {
+    border-width: 2px;
+  }
+}
+
+/* 焦点可见性增强 */
+.focus-visible:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.focus-visible:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* 键盘导航指示 */
+.keyboard-nav-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--color-background);
+  color: var(--color-text-secondary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-notification);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all var(--transition-normal);
+}
+
+.keyboard-nav-indicator.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 打印优化 */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .card,
+  .node {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+  }
+
+  .connections line {
+    stroke: #333 !important;
+    stroke-width: 1px !important;
+  }
+}
+
+/* 性能优化 */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* 防止布局偏移 */
+.preserve-aspect {
+  aspect-ratio: 16/9;
+}
+
+/* 自定义光标 */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-default {
+  cursor: default;
+}
+
+.cursor-text {
+  cursor: text;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.cursor-grab {
+  cursor: grab;
+}
+
+.cursor-grabbing {
+  cursor: grabbing;
+}
+
+/* 选择器增强 */
+::selection {
+  background: var(--color-primary);
+  color: var(--color-background);
+}
+
+::-moz-selection {
+  background: var(--color-primary);
+  color: var(--color-background);
+}
+
+/* 输入法优化 */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+textarea {
+  ime-mode: active;
+}
+
+/* 占位符样式 */
+::placeholder {
+  color: var(--color-text-tertiary);
+  opacity: 0.8;
+}
+
+::-webkit-input-placeholder {
+  color: var(--color-text-tertiary);
+  opacity: 0.8;
+}
+
+::-moz-placeholder {
+  color: var(--color-text-tertiary);
+  opacity: 0.8;
+}
+
+::-ms-input-placeholder {
+  color: var(--color-text-tertiary);
+  opacity: 0.8;
+}

@@ -14,6 +14,19 @@
     @focus="handleFocus"
     @blur="handleBlur"
   >
+    <!-- 展开/折叠按钮 -->
+    <button
+      v-if="props.hasChildren"
+      class="expand-btn"
+      :title="props.isExpanded ? '折叠分支' : '展开分支'"
+      :aria-label="props.isExpanded ? '折叠分支' : '展开分支'"
+      @click="toggleExpand"
+      @keydown="handleExpandKeydown"
+    >
+      <ChevronRight v-if="!props.isExpanded" :size="16" :stroke-width="2" aria-hidden="true" />
+      <ChevronDown v-else :size="16" :stroke-width="2" aria-hidden="true" />
+    </button>
+
     <!-- 显示模式 -->
     <div v-if="!isEditing" class="node-content" @click="startEdit">
       {{ props.node.content || '点击编辑' }}
@@ -38,6 +51,7 @@
 <script setup lang="ts">
 import type { MindMapNode } from '@/types';
 import { computed, nextTick, ref, watch } from 'vue';
+import { ChevronRight, ChevronDown } from 'lucide-vue-next';
 
 // Props
 interface Props {
@@ -45,12 +59,14 @@ interface Props {
   isSelected?: boolean;
   isFocused?: boolean;
   hasChildren?: boolean;
+  isExpanded?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isSelected: false,
   isFocused: false,
-  hasChildren: false
+  hasChildren: false,
+  isExpanded: true
 });
 
 // Emits
@@ -59,6 +75,7 @@ const emit = defineEmits<{
   updateContent: [nodeId: string, content: string];
   focus: [nodeId: string];
   blur: [nodeId: string];
+  toggleExpand: [nodeId: string];
 }>();
 
 // 响应式数据
@@ -120,6 +137,21 @@ function cancelEdit(): void {
   isEditing.value = false;
 }
 
+function toggleExpand(event?: MouseEvent): void {
+  if (event) {
+    event.stopPropagation();
+  }
+  emit('toggleExpand', props.node.id);
+}
+
+function handleExpandKeydown(event: KeyboardEvent): void {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleExpand();
+  }
+}
+
 // 监听编辑状态，自动聚焦输入框
 watch(isEditing, async newIsEditing => {
   if (newIsEditing) {
@@ -137,34 +169,45 @@ watch(isEditing, async newIsEditing => {
   min-height: 40px;
   padding: 8px 12px;
   border-radius: 8px;
-  background: #ffffff;
-  border: 2px solid #d1d5db;
+  background: var(--color-surface, #ffffff);
+  border: 2px solid var(--color-border, #d1d5db);
   cursor: pointer;
   user-select: none;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  animation: fadeInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .node:hover {
-  border-color: #9ca3af;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-border-hover, #9ca3af);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
+  transform: translateY(-1px);
 }
 
 .node.selected {
-  border-color: #3b82f6;
-  background: #eff6ff;
+  border-color: var(--color-accent, #3b82f6);
+  background: var(--color-accent-50, #eff6ff);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .node.focused {
-  border-color: #1d4ed8;
-  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
-  outline: 2px solid #1d4ed8;
+  border-color: var(--color-accent-hover, #1d4ed8);
+  box-shadow:
+    0 0 0 3px rgba(29, 78, 216, 0.2),
+    0 0 20px rgba(29, 78, 216, 0.3);
+  outline: 2px solid var(--color-accent-hover, #1d4ed8);
   outline-offset: 2px;
 }
 
 .node.editing {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-accent, #3b82f6);
+  background: var(--color-accent-50, #eff6ff);
+  box-shadow:
+    0 0 0 3px rgba(59, 130, 246, 0.3),
+    0 0 25px rgba(59, 130, 246, 0.4);
 }
 
 .node-content {
@@ -172,7 +215,7 @@ watch(isEditing, async newIsEditing => {
   font-size: 14px;
   line-height: 1.4;
   word-break: break-word;
-  color: #374151;
+  color: var(--color-text-primary, #374151);
   min-width: 60px;
 }
 
@@ -183,13 +226,44 @@ watch(isEditing, async newIsEditing => {
   text-align: center;
   font-size: 14px;
   font-family: inherit;
-  color: #1f2937;
+  color: var(--color-text-primary, #1f2937);
   width: 100%;
   min-width: 60px;
 }
 
 .node.selected .node-input {
-  color: #1e40af;
+  color: var(--color-accent-700, #1e40af);
+}
+
+.expand-btn {
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--color-border, #d1d5db);
+  background: var(--color-surface, #ffffff);
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary, #6b7280);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.expand-btn:hover {
+  background: var(--color-surface-hover, #f3f4f6);
+  border-color: var(--color-border-hover, #9ca3af);
+  color: var(--color-text-primary, #374151);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.expand-btn:focus-visible {
+  outline: 2px solid var(--color-accent, #3b82f6);
+  outline-offset: 2px;
 }
 
 /* 响应式节点样式 */
@@ -230,46 +304,9 @@ watch(isEditing, async newIsEditing => {
   }
 }
 
-/* 深色模式 */
+/* 深色模式优化 */
 @media (prefers-color-scheme: dark) {
-  .node {
-    background: #1f2937;
-    border-color: #4b5563;
-    color: #f9fafb;
-  }
-
-  .node:hover {
-    border-color: #6b7280;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  }
-
-  .node.selected {
-    border-color: #3b82f6;
-    background: #1e3a8a;
-  }
-
-  .node.focused {
-    border-color: #1d4ed8;
-    background: #1e3a8a;
-  }
-
-  .node.editing {
-    border-color: #3b82f6;
-    background: #1e3a8a;
-  }
-
-  .node-content {
-    color: #f9fafb;
-  }
-
-  .node-input {
-    color: #f9fafb;
-    background: transparent;
-  }
-
-  .node.selected .node-input {
-    color: #bfdbfe;
-  }
+  /* 使用CSS变量，无需额外覆盖 */
 }
 
 /* 减少动画模式 */
@@ -295,7 +332,7 @@ watch(isEditing, async newIsEditing => {
   }
 
   .node:hover {
-    border-color: #d1d5db;
+    border-color: var(--color-border, #d1d5db);
     box-shadow: none;
   }
 }

@@ -2,6 +2,9 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 
+// 导入样式
+import './assets/styles/index.css';
+
 console.log('main.ts loaded');
 
 const app = createApp(App);

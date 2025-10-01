@@ -1,7 +1,7 @@
 const { createChineseBrowser, testChineseFont } = require('./playwright-chinese-config');
 
 async function testChineseSupport() {
-  const { browser, context, page } = await createChineseBrowser();
+  const { browser, _context, page } = await createChineseBrowser();
 
   // 监听控制台消息
   page.on('console', msg => {
@@ -25,7 +25,7 @@ async function testChineseSupport() {
     console.log('\n=== 测试中文字体支持 ===');
 
     // 测试中文字体
-    const fontTestResult = await testChineseFont(page);
+    const _fontTestResult = await testChineseFont(page);
 
     console.log('\n=== 检查页面中文内容 ===');
 

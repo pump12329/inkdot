@@ -1,0 +1,490 @@
+/* InkDot 主题系统 */
+
+/* 浅色主题 */
+.theme-light {
+  --color-primary: #000000;
+  --color-primary-light: #1a1a1a;
+  --color-secondary: #666666;
+  --color-secondary-light: #888888;
+  --color-tertiary: #999999;
+  --color-background: #ffffff;
+  --color-surface: #fafafa;
+  --color-border: #e5e5e5;
+  --color-border-light: #f0f0f0;
+  --color-text-primary: #000000;
+  --color-text-secondary: #666666;
+  --color-text-tertiary: #999999;
+  --color-shadow: rgba(0, 0, 0, 0.08);
+  --color-shadow-light: rgba(0, 0, 0, 0.04);
+  --color-success: #16a34a;
+  --color-warning: #ea580c;
+  --color-error: #dc2626;
+  --color-info: #2563eb;
+  --color-success-bg: #f0fdf4;
+  --color-warning-bg: #fff7ed;
+  --color-error-bg: #fef2f2;
+  --color-info-bg: #eff6ff;
+}
+
+/* 深色主题 */
+.theme-dark {
+  --color-primary: #ffffff;
+  --color-primary-light: #f3f4f6;
+  --color-secondary: #cccccc;
+  --color-secondary-light: #999999;
+  --color-tertiary: #999999;
+  --color-background: #0a0a0a;
+  --color-surface: #1a1a1a;
+  --color-border: #333333;
+  --color-border-light: #404040;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #cccccc;
+  --color-text-tertiary: #999999;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+  --color-shadow-light: rgba(0, 0, 0, 0.2);
+  --color-success: #4ade80;
+  --color-warning: #fb923c;
+  --color-error: #f87171;
+  --color-info: #60a5fa;
+  --color-success-bg: #14532d;
+  --color-warning-bg: #7c2d12;
+  --color-error-bg: #7f1d1d;
+  --color-info-bg: #1e3a8a;
+}
+
+/* 高对比度浅色主题 */
+.theme-high-contrast-light {
+  --color-primary: #000000;
+  --color-primary-light: #000000;
+  --color-secondary: #000000;
+  --color-secondary-light: #333333;
+  --color-tertiary: #333333;
+  --color-background: #ffffff;
+  --color-surface: #ffffff;
+  --color-border: #000000;
+  --color-border-light: #000000;
+  --color-text-primary: #000000;
+  --color-text-secondary: #000000;
+  --color-text-tertiary: #333333;
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  --color-shadow-light: rgba(0, 0, 0, 0.3);
+  --color-success: #000000;
+  --color-warning: #000000;
+  --color-error: #000000;
+  --color-info: #000000;
+  --color-success-bg: #e5e5e5;
+  --color-warning-bg: #e5e5e5;
+  --color-error-bg: #e5e5e5;
+  --color-info-bg: #e5e5e5;
+}
+
+/* 高对比度深色主题 */
+.theme-high-contrast-dark {
+  --color-primary: #ffffff;
+  --color-primary-light: #ffffff;
+  --color-secondary: #ffffff;
+  --color-secondary-light: #cccccc;
+  --color-tertiary: #cccccc;
+  --color-background: #000000;
+  --color-surface: #000000;
+  --color-border: #ffffff;
+  --color-border-light: #ffffff;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #ffffff;
+  --color-text-tertiary: #cccccc;
+  --color-shadow: rgba(255, 255, 255, 0.3);
+  --color-shadow-light: rgba(255, 255, 255, 0.2);
+  --color-success: #ffffff;
+  --color-warning: #ffffff;
+  --color-error: #ffffff;
+  --color-info: #ffffff;
+  --color-success-bg: #333333;
+  --color-warning-bg: #333333;
+  --color-error-bg: #333333;
+  --color-info-bg: #333333;
+}
+
+/* 护眼模式（暖色调） */
+.theme-warm {
+  --color-primary: #2d1810;
+  --color-primary-light: #4a2c1a;
+  --color-secondary: #8b6f47;
+  --color-secondary-light: #a0826d;
+  --color-tertiary: #c9b8a8;
+  --color-background: #faf8f3;
+  --color-surface: #f5f2ed;
+  --color-border: #e8dfd1;
+  --color-border-light: #f0ebe0;
+  --color-text-primary: #2d1810;
+  --color-text-secondary: #5c4033;
+  --color-text-tertiary: #8b6f47;
+  --color-shadow: rgba(45, 24, 16, 0.1);
+  --color-shadow-light: rgba(45, 24, 16, 0.05);
+  --color-success: #8b7355;
+  --color-warning: #d4a574;
+  --color-error: #c85a54;
+  --color-info: #7a9cc6;
+  --color-success-bg: #f0ebe0;
+  --color-warning-bg: #fdf1e7;
+  --color-error-bg: #fdf0ed;
+  --color-info-bg: #e8f0f8;
+}
+
+/* 护眼模式（冷色调） */
+.theme-cool {
+  --color-primary: #1a2f3a;
+  --color-primary-light: #2c4152;
+  --color-secondary: #5d7385;
+  --color-secondary-light: #8399a8;
+  --color-tertiary: #b8c5d0;
+  --color-background: #f0f4f8;
+  --color-surface: #e8eef4;
+  --color-border: #d1dae3;
+  --color-border-light: #e0e8f0;
+  --color-text-primary: #1a2f3a;
+  --color-text-secondary: #3d5261;
+  --color-text-tertiary: #5d7385;
+  --color-shadow: rgba(26, 47, 58, 0.1);
+  --color-shadow-light: rgba(26, 47, 58, 0.05);
+  --color-success: #5d8a7a;
+  --color-warning: #a67c52;
+  --color-error: #c85a54;
+  --color-info: #7a9cc6;
+  --color-success-bg: #e0f0ea;
+  --color-warning-bg: #f5ece4;
+  --color-error-bg: #fdf0ed;
+  --color-info-bg: #e8f0f8;
+}
+
+/* 纸质模式 */
+.theme-paper {
+  --color-primary: #2c1810;
+  --color-primary-light: #4a2c1a;
+  --color-secondary: #8b6f47;
+  --color-secondary-light: #a0826d;
+  --color-tertiary: #c9b8a8;
+  --color-background: #faf7f0;
+  --color-surface: #f5f0e5;
+  --color-border: #e5dcc6;
+  --color-border-light: #ede6d1;
+  --color-text-primary: #2c1810;
+  --color-text-secondary: #5c4033;
+  --color-text-tertiary: #8b6f47;
+  --color-shadow: rgba(44, 24, 16, 0.08);
+  --color-shadow-light: rgba(44, 24, 16, 0.04);
+  --color-success: #8b7355;
+  --color-warning: #d4a574;
+  --color-error: #c85a54;
+  --color-info: #7a9cc6;
+  --color-success-bg: #f0e8d6;
+  --color-warning-bg: #fdf1e7;
+  --color-error-bg: #fdf0ed;
+  --color-info-bg: #e8f0f8;
+}
+
+/* 暗黑模式 */
+.theme-midnight {
+  --color-primary: #ffffff;
+  --color-primary-light: #f3f4f6;
+  --color-secondary: #a1a1aa;
+  --color-secondary-light: #71717a;
+  --color-tertiary: #52525b;
+  --color-background: #000000;
+  --color-surface: #050505;
+  --color-border: #27272a;
+  --color-border-light: #18181b;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a1a1aa;
+  --color-text-tertiary: #71717a;
+  --color-shadow: rgba(255, 255, 255, 0.1);
+  --color-shadow-light: rgba(255, 255, 255, 0.05);
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+  --color-info: #60a5fa;
+  --color-success-bg: #064e3b;
+  --color-warning-bg: #78350f;
+  --color-error-bg: #7f1d1d;
+  --color-info-bg: #1e3a8a;
+}
+
+/* 主题切换动画 */
+.theme-transition * {
+  transition: background-color var(--transition-normal),
+              border-color var(--transition-normal),
+              color var(--transition-normal),
+              box-shadow var(--transition-normal),
+              fill var(--transition-normal),
+              stroke var(--transition-normal) !important;
+}
+
+/* 主题选择器按钮 */
+.theme-selector {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+  padding: var(--spacing-xs);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.theme-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-btn:hover {
+  transform: scale(1.1);
+  border-color: var(--color-primary);
+}
+
+.theme-btn.active {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-shadow);
+}
+
+.theme-btn::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.theme-btn.active::after {
+  opacity: 1;
+}
+
+/* 主题颜色 */
+.theme-btn.light {
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  border-color: #e5e5e5;
+}
+
+.theme-btn.dark {
+  background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+  border-color: #333333;
+}
+
+.theme-btn.high-contrast-light {
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  border-color: #000000;
+}
+
+.theme-btn.high-contrast-dark {
+  background: linear-gradient(135deg, #000000, #000000);
+  border-color: #ffffff;
+}
+
+.theme-btn.warm {
+  background: linear-gradient(135deg, #faf8f3, #f5f2ed);
+  border-color: #e8dfd1;
+}
+
+.theme-btn.cool {
+  background: linear-gradient(135deg, #f0f4f8, #e8eef4);
+  border-color: #d1dae3;
+}
+
+.theme-btn.paper {
+  background: linear-gradient(135deg, #faf7f0, #f5f0e5);
+  border-color: #e5dcc6;
+}
+
+.theme-btn.midnight {
+  background: linear-gradient(135deg, #000000, #050505);
+  border-color: #27272a;
+}
+
+/* 主题标签 */
+.theme-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin: 0 var(--spacing-sm);
+}
+
+/* 响应式主题选择器 */
+@media (max-width: 640px) {
+  .theme-selector {
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 200px;
+  }
+
+  .theme-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .theme-label {
+    display: none;
+  }
+}
+
+/* 主题快捷键提示 */
+.theme-shortcut-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  margin-left: var(--spacing-xs);
+}
+
+/* 自动主题切换 */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    /* 默认浅色主题 */
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    /* 默认深色主题 */
+  }
+}
+
+/* 主题特定的组件样式 */
+.theme-light .card {
+  background: var(--color-background);
+  border-color: var(--color-border);
+}
+
+.theme-dark .card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.theme-warm .node {
+  background: #faf8f3;
+  border-color: #e8dfd1;
+}
+
+.theme-cool .node {
+  background: #f0f4f8;
+  border-color: #d1dae3;
+}
+
+.theme-paper .canvas {
+  background: #faf7f0;
+  background-image:
+    radial-gradient(circle at 1px 1px, #e5dcc6 1px, transparent 1px);
+}
+
+.theme-midnight .canvas {
+  background: #000000;
+  background-image:
+    radial-gradient(circle at 1px 1px, #27272a 1px, transparent 1px);
+}
+
+/* 主题切换时的加载动画 */
+.theme-switching {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+
+.theme-switching.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.theme-switching-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin var(--transition-slow) linear infinite;
+}
+
+/* 主题保存状态指示器 */
+-theme-save-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all var(--transition-normal);
+  z-index: var(--z-notification);
+}
+
+.theme-save-indicator.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 主题特定的阴影效果 */
+.theme-light .shadow-theme {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.theme-dark .shadow-theme {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-warm .shadow-theme {
+  box-shadow: 0 2px 8px rgba(45, 24, 16, 0.1);
+}
+
+.theme-cool .shadow-theme {
+  box-shadow: 0 2px 8px rgba(26, 47, 58, 0.1);
+}
+
+.theme-paper .shadow-theme {
+  box-shadow: 0 2px 8px rgba(44, 24, 16, 0.08);
+}
+
+.theme-midnight .shadow-theme {
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* 主题特定的渐变 */
+.theme-light .gradient-theme {
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+}
+
+.theme-dark .gradient-theme {
+  background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+}
+
+.theme-warm .gradient-theme {
+  background: linear-gradient(135deg, #faf8f3, #f5f2ed);
+}
+
+.theme-cool .gradient-theme {
+  background: linear-gradient(135deg, #f0f4f8, #e8eef4);
+}
+
+.theme-paper .gradient-theme {
+  background: linear-gradient(135deg, #faf7f0, #f5f0e5);
+}
+
+.theme-midnight .gradient-theme {
+  background: linear-gradient(135deg, #000000, #050505);
+}

@@ -8,7 +8,7 @@ function cleanup() {
   console.log('🧹 开始清理项目文件...');
 
   // 要清理的文件和目录
-  const cleanupItems = [
+  const _cleanupItems = [
     // 临时文件
     '*.tmp',
     '*.temp',

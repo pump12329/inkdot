@@ -91,7 +91,7 @@ function checkEnvironment() {
     // 检查Playwright是否安装
     require('playwright');
     console.log('✅ Playwright 已安装');
-  } catch (error) {
+  } catch {
     console.error(
       '❌ Playwright 未安装，请运行: npm install --save-dev @playwright/test playwright'
     );

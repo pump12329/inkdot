@@ -1,0 +1,1909 @@
+/* InkDot 工具类 */
+
+/* 文本工具类 */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.text-start {
+  text-align: start;
+}
+
+.text-end {
+  text-align: end;
+}
+
+/* 文本装饰 */
+.underline {
+  text-decoration-line: underline;
+}
+
+.overline {
+  text-decoration-line: overline;
+}
+
+.line-through {
+  text-decoration-line: line-through;
+}
+
+.no-underline {
+  text-decoration-line: none;
+}
+
+/* 文本变换 */
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.normal-case {
+  text-transform: none;
+}
+
+/* 字重 */
+.font-thin {
+  font-weight: var(--font-weight-thin);
+}
+
+.font-extralight {
+  font-weight: var(--font-weight-extralight);
+}
+
+.font-light {
+  font-weight: var(--font-weight-light);
+}
+
+.font-normal {
+  font-weight: var(--font-weight-normal);
+}
+
+.font-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+.font-semibold {
+  font-weight: var(--font-weight-semibold);
+}
+
+.font-bold {
+  font-weight: var(--font-weight-bold);
+}
+
+.font-extrabold {
+  font-weight: var(--font-weight-extrabold);
+}
+
+.font-black {
+  font-weight: var(--font-weight-black);
+}
+
+/* 字体大小 */
+.text-xs {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-tight);
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+}
+
+.text-base {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+.text-lg {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-snug);
+}
+
+.text-xl {
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-tight);
+}
+
+.text-2xl {
+  font-size: var(--font-size-2xl);
+  line-height: var(--line-height-tight);
+}
+
+.text-3xl {
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-snug);
+}
+
+.text-4xl {
+  font-size: var(--font-size-4xl);
+  line-height: var(--line-height-tight);
+}
+
+.text-5xl {
+  font-size: var(--font-size-5xl);
+  line-height: var(--line-height-none);
+}
+
+.text-6xl {
+  font-size: var(--font-size-6xl);
+  line-height: var(--line-height-none);
+}
+
+.text-7xl {
+  font-size: var(--font-size-7xl);
+  line-height: var(--line-height-none);
+}
+
+.text-8xl {
+  font-size: var(--font-size-8xl);
+  line-height: var(--line-height-none);
+}
+
+.text-9xl {
+  font-size: var(--font-size-9xl);
+  line-height: var(--line-height-none);
+}
+
+/* 行高 */
+.leading-none {
+  line-height: var(--leading-none);
+}
+
+.leading-tight {
+  line-height: var(--leading-tight);
+}
+
+.leading-snug {
+  line-height: var(--leading-snug);
+}
+
+.leading-normal {
+  line-height: var(--leading-normal);
+}
+
+.leading-relaxed {
+  line-height: var(--leading-relaxed);
+}
+
+.leading-loose {
+  line-height: var(--leading-loose);
+}
+
+/* 字间距 */
+.tracking-tighter {
+  letter-spacing: var(--tracking-tighter);
+}
+
+.tracking-tight {
+  letter-spacing: var(--tracking-tight);
+}
+
+.tracking-normal {
+  letter-spacing: var(--tracking-normal);
+}
+
+.tracking-wide {
+  letter-spacing: var(--tracking-wide);
+}
+
+.tracking-wider {
+  letter-spacing: var(--tracking-wider);
+}
+
+.tracking-widest {
+  letter-spacing: var(--tracking-widest);
+}
+
+/* 颜色工具类 */
+.text-current {
+  color: currentColor;
+}
+
+.text-inherit {
+  color: inherit;
+}
+
+.text-transparent {
+  color: transparent;
+}
+
+.text-black {
+  color: var(--color-black);
+}
+
+.text-white {
+  color: var(--color-white);
+}
+
+.text-gray-50 {
+  color: var(--color-gray-50);
+}
+
+.text-gray-100 {
+  color: var(--color-gray-100);
+}
+
+.text-gray-200 {
+  color: var(--color-gray-200);
+}
+
+.text-gray-300 {
+  color: var(--color-gray-300);
+}
+
+.text-gray-400 {
+  color: var(--color-gray-400);
+}
+
+.text-gray-500 {
+  color: var(--color-gray-500);
+}
+
+.text-gray-600 {
+  color: var(--color-gray-600);
+}
+
+.text-gray-700 {
+  color: var(--color-gray-700);
+}
+
+.text-gray-800 {
+  color: var(--color-gray-800);
+}
+
+.text-gray-900 {
+  color: var(--color-gray-900);
+}
+
+.text-primary {
+  color: var(--color-primary-default);
+}
+
+.text-success {
+  color: var(--color-success-default);
+}
+
+.text-warning {
+  color: var(--color-warning-default);
+}
+
+.text-error {
+  color: var(--color-error-default);
+}
+
+.text-info {
+  color: var(--color-info-default);
+}
+
+/* 背景颜色 */
+.bg-current {
+  background-color: currentColor;
+}
+
+.bg-inherit {
+  background-color: inherit;
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
+.bg-black {
+  background-color: var(--color-black);
+}
+
+.bg-white {
+  background-color: var(--color-white);
+}
+
+.bg-gray-50 {
+  background-color: var(--color-gray-50);
+}
+
+.bg-gray-100 {
+  background-color: var(--color-gray-100);
+}
+
+.bg-gray-200 {
+  background-color: var(--color-gray-200);
+}
+
+.bg-gray-300 {
+  background-color: var(--color-gray-300);
+}
+
+.bg-gray-400 {
+  background-color: var(--color-gray-400);
+}
+
+.bg-gray-500 {
+  background-color: var(--color-gray-500);
+}
+
+.bg-gray-600 {
+  background-color: var(--color-gray-600);
+}
+
+.bg-gray-700 {
+  background-color: var(--color-gray-700);
+}
+
+.bg-gray-800 {
+  background-color: var(--color-gray-800);
+}
+
+.bg-gray-900 {
+  background-color: var(--color-gray-900);
+}
+
+.bg-primary {
+  background-color: var(--color-primary-default);
+}
+
+.bg-success {
+  background-color: var(--color-success-default);
+}
+
+.bg-warning {
+  background-color: var(--color-warning-default);
+}
+
+.bg-error {
+  background-color: var(--color-error-default);
+}
+
+.bg-info {
+  background-color: var(--color-info-default);
+}
+
+/* 边框颜色 */
+.border-current {
+  border-color: currentColor;
+}
+
+.border-inherit {
+  border-color: inherit;
+}
+
+.border-transparent {
+  border-color: transparent;
+}
+
+.border-black {
+  border-color: var(--color-black);
+}
+
+.border-white {
+  border-color: var(--color-white);
+}
+
+.border-gray-50 {
+  border-color: var(--color-gray-50);
+}
+
+.border-gray-100 {
+  border-color: var(--color-gray-100);
+}
+
+.border-gray-200 {
+  border-color: var(--color-gray-200);
+}
+
+.border-gray-300 {
+  border-color: var(--color-gray-300);
+}
+
+.border-gray-400 {
+  border-color: var(--color-gray-400);
+}
+
+.border-gray-500 {
+  border-color: var(--color-gray-500);
+}
+
+.border-gray-600 {
+  border-color: var(--color-gray-600);
+}
+
+.border-gray-700 {
+  border-color: var(--color-gray-700);
+}
+
+.border-gray-800 {
+  border-color: var(--color-gray-800);
+}
+
+.border-gray-900 {
+  border-color: var(--color-gray-900);
+}
+
+.border-primary {
+  border-color: var(--color-primary-default);
+}
+
+.border-success {
+  border-color: var(--color-success-default);
+}
+
+.border-warning {
+  border-color: var(--color-warning-default);
+}
+
+.border-error {
+  border-color: var(--color-error-default);
+}
+
+.border-info {
+  border-color: var(--color-info-default);
+}
+
+/* 透明度 */
+.opacity-0 {
+  opacity: var(--opacity-0);
+}
+
+.opacity-5 {
+  opacity: var(--opacity-5);
+}
+
+.opacity-10 {
+  opacity: var(--opacity-10);
+}
+
+.opacity-15 {
+  opacity: var(--opacity-15);
+}
+
+.opacity-20 {
+  opacity: var(--opacity-20);
+}
+
+.opacity-25 {
+  opacity: var(--opacity-25);
+}
+
+.opacity-30 {
+  opacity: var(--opacity-30);
+}
+
+.opacity-35 {
+  opacity: var(--opacity-35);
+}
+
+.opacity-40 {
+  opacity: var(--opacity-40);
+}
+
+.opacity-45 {
+  opacity: var(--opacity-45);
+}
+
+.opacity-50 {
+  opacity: var(--opacity-50);
+}
+
+.opacity-55 {
+  opacity: var(--opacity-55);
+}
+
+.opacity-60 {
+  opacity: var(--opacity-60);
+}
+
+.opacity-65 {
+  opacity: var(--opacity-65);
+}
+
+.opacity-70 {
+  opacity: var(--opacity-70);
+}
+
+.opacity-75 {
+  opacity: var(--opacity-75);
+}
+
+.opacity-80 {
+  opacity: var(--opacity-80);
+}
+
+.opacity-85 {
+  opacity: var(--opacity-85);
+}
+
+.opacity-90 {
+  opacity: var(--opacity-90);
+}
+
+.opacity-95 {
+  opacity: var(--opacity-95);
+}
+
+.opacity-100 {
+  opacity: var(--opacity-100);
+}
+
+/* 圆角 */
+.rounded-none {
+  border-radius: var(--radius-none);
+}
+
+.rounded-xs {
+  border-radius: var(--radius-xs);
+}
+
+.rounded-sm {
+  border-radius: var(--radius-sm);
+}
+
+.rounded-md {
+  border-radius: var(--radius-md);
+}
+
+.rounded-lg {
+  border-radius: var(--radius-lg);
+}
+
+.rounded-xl {
+  border-radius: var(--radius-xl);
+}
+
+.rounded-2xl {
+  border-radius: var(--radius-2xl);
+}
+
+.rounded-3xl {
+  border-radius: var(--radius-3xl);
+}
+
+.rounded-full {
+  border-radius: var(--radius-full);
+}
+
+/* 阴影 */
+.shadow-none {
+  box-shadow: var(--shadow-none);
+}
+
+.shadow-xs {
+  box-shadow: var(--shadow-xs);
+}
+
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+.shadow-2xl {
+  box-shadow: var(--shadow-2xl);
+}
+
+.shadow-inner {
+  box-shadow: var(--shadow-inner);
+}
+
+/* 变换 */
+.transform {
+  transform: translate(var(--translate-x), var(--translate-y)) rotate(var(--rotate)) scale(var(--scale));
+}
+
+.transform-gpu {
+  transform: translate3d(var(--translate-x), var(--translate-y), 0) rotate(var(--rotate)) scale(var(--scale));
+}
+
+.transform-none {
+  transform: none;
+}
+
+/* 缩放 */
+.scale-90 {
+  --scale: var(--scale-90);
+}
+
+.scale-95 {
+  --scale: var(--scale-95);
+}
+
+.scale-100 {
+  --scale: var(--scale-100);
+}
+
+.scale-105 {
+  --scale: var(--scale-105);
+}
+
+.scale-110 {
+  --scale: var(--scale-110);
+}
+
+.scale-125 {
+  --scale: var(--scale-125);
+}
+
+.scale-150 {
+  --scale: var(--scale-150);
+}
+
+/* 旋转 */
+.rotate-0 {
+  --rotate: var(--rotate-0);
+}
+
+.rotate-1 {
+  --rotate: var(--rotate-1);
+}
+
+.rotate-2 {
+  --rotate: var(--rotate-2);
+}
+
+.rotate-3 {
+  --rotate: var(--rotate-3);
+}
+
+.rotate-6 {
+  --rotate: var(--rotate-6);
+}
+
+.rotate-12 {
+  --rotate: var(--rotate-12);
+}
+
+.rotate-45 {
+  --rotate: var(--rotate-45);
+}
+
+.rotate-90 {
+  --rotate: var(--rotate-90);
+}
+
+.rotate-180 {
+  --rotate: var(--rotate-180);
+}
+
+/* 平移 */
+.translate-x-0 {
+  --translate-x: var(--translate-x-0);
+}
+
+.translate-y-0 {
+  --translate-y: var(--translate-y-0);
+}
+
+/* 模糊 */
+.blur-none {
+  filter: blur(var(--blur-none));
+}
+
+.blur-sm {
+  filter: blur(var(--blur-sm));
+}
+
+.blur-md {
+  filter: blur(var(--blur-md));
+}
+
+.blur-lg {
+  filter: blur(var(--blur-lg));
+}
+
+.blur-xl {
+  filter: blur(var(--blur-xl));
+}
+
+.blur-2xl {
+  filter: blur(var(--blur-2xl));
+}
+
+.blur-3xl {
+  filter: blur(var(--blur-3xl));
+}
+
+/* 过渡 */
+.transition-none {
+  transition-property: none;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: var(--ease-in-out);
+  transition-duration: var(--duration-150);
+}
+
+.transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: var(--ease-in-out);
+  transition-duration: var(--duration-150);
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: var(--ease-in-out);
+  transition-duration: var(--duration-150);
+}
+
+.transition-shadow {
+  transition-property: box-shadow;
+  transition-timing-function: var(--ease-in-out);
+  transition-duration: var(--duration-150);
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: var(--ease-in-out);
+  transition-duration: var(--duration-150);
+}
+
+/* 持续时间 */
+.duration-75 {
+  transition-duration: var(--duration-75);
+}
+
+.duration-100 {
+  transition-duration: var(--duration-100);
+}
+
+.duration-150 {
+  transition-duration: var(--duration-150);
+}
+
+.duration-200 {
+  transition-duration: var(--duration-200);
+}
+
+.duration-300 {
+  transition-duration: var(--duration-300);
+}
+
+.duration-500 {
+  transition-duration: var(--duration-500);
+}
+
+.duration-700 {
+  transition-duration: var(--duration-700);
+}
+
+.duration-1000 {
+  transition-duration: var(--duration-1000);
+}
+
+/* 缓动函数 */
+.ease-linear {
+  transition-timing-function: var(--ease-linear);
+}
+
+.ease-in {
+  transition-timing-function: var(--ease-in);
+}
+
+.ease-out {
+  transition-timing-function: var(--ease-out);
+}
+
+.ease-in-out {
+  transition-timing-function: var(--ease-in-out);
+}
+
+/* 延迟 */
+.delay-75 {
+  transition-delay: 75ms;
+}
+
+.delay-100 {
+  transition-delay: 100ms;
+}
+
+.delay-150 {
+  transition-delay: 150ms;
+}
+
+.delay-200 {
+  transition-delay: 200ms;
+}
+
+.delay-300 {
+  transition-delay: 300ms;
+}
+
+.delay-500 {
+  transition-delay: 500ms;
+}
+
+.delay-700 {
+  transition-delay: 700ms;
+}
+
+.delay-1000 {
+  transition-delay: 1000ms;
+}
+
+/* 动画 */
+.animate-none {
+  animation: none;
+}
+
+.animate-spin {
+  animation: spin var(--duration-1000) linear infinite;
+}
+
+.animate-ping {
+  animation: ping var(--duration-1000) cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.animate-pulse {
+  animation: pulse var(--duration-2000) cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-bounce {
+  animation: bounce var(--duration-1000) infinite;
+}
+
+/* Z-index */
+.z-auto {
+  z-index: var(--z-auto);
+}
+
+.z-0 {
+  z-index: var(--z-0);
+}
+
+.z-10 {
+  z-index: var(--z-10);
+}
+
+.z-20 {
+  z-index: var(--z-20);
+}
+
+.z-30 {
+  z-index: var(--z-30);
+}
+
+.z-40 {
+  z-index: var(--z-40);
+}
+
+.z-50 {
+  z-index: var(--z-50);
+}
+
+/* 光标 */
+.cursor-auto {
+  cursor: auto;
+}
+
+.cursor-default {
+  cursor: default;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-wait {
+  cursor: wait;
+}
+
+.cursor-text {
+  cursor: text;
+}
+
+.cursor-move {
+  cursor: move;
+}
+
+.cursor-help {
+  cursor: help;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.cursor-progress {
+  cursor: progress;
+}
+
+.cursor-grab {
+  cursor: grab;
+}
+
+.cursor-grabbing {
+  cursor: grabbing;
+}
+
+/* 用户选择 */
+.select-none {
+  user-select: none;
+}
+
+.select-text {
+  user-select: text;
+}
+
+.select-all {
+  user-select: all;
+}
+
+.select-auto {
+  user-select: auto;
+}
+
+/* 溢出 */
+.overflow-auto {
+  overflow: auto;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-clip {
+  overflow: clip;
+}
+
+.overflow-visible {
+  overflow: visible;
+}
+
+.overflow-scroll {
+  overflow: scroll;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.overflow-y-hidden {
+  overflow-y: hidden;
+}
+
+.overflow-x-clip {
+  overflow-x: clip;
+}
+
+.overflow-y-clip {
+  overflow-y: clip;
+}
+
+.overflow-x-visible {
+  overflow-x: visible;
+}
+
+.overflow-y-visible {
+  overflow-y: visible;
+}
+
+.overflow-x-scroll {
+  overflow-x: scroll;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
+
+/* 位置 */
+.static {
+  position: static;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+}
+
+/* 插入 */
+.inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.inset-x-0 {
+  left: 0;
+  right: 0;
+}
+
+.inset-y-0 {
+  top: 0;
+  bottom: 0;
+}
+
+/* 显示 */
+.block {
+  display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.inline {
+  display: inline;
+}
+
+.flex {
+  display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.grid {
+  display: grid;
+}
+
+.inline-grid {
+  display: inline-grid;
+}
+
+.hidden {
+  display: none;
+}
+
+/* 可见性 */
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+/* 滤镜 */
+.filter {
+  filter: var(--filter);
+}
+
+.filter-none {
+  filter: none;
+}
+
+/* 背景混合 */
+.bg-blend-normal {
+  background-blend-mode: var(--blend-normal);
+}
+
+.bg-blend-multiply {
+  background-blend-mode: var(--blend-multiply);
+}
+
+.bg-blend-screen {
+  background-blend-mode: var(--blend-screen);
+}
+
+.bg-blend-overlay {
+  background-blend-mode: var(--blend-overlay);
+}
+
+.bg-blend-darken {
+  background-blend-mode: var(--blend-darken);
+}
+
+.bg-blend-lighten {
+  background-blend-mode: var(--blend-lighten);
+}
+
+.bg-blend-color-dodge {
+  background-blend-mode: var(--blend-color-dodge);
+}
+
+.bg-blend-color-burn {
+  background-blend-mode: var(--blend-color-burn);
+}
+
+.bg-blend-hard-light {
+  background-blend-mode: var(--blend-hard-light);
+}
+
+.bg-blend-soft-light {
+  background-blend-mode: var(--blend-soft-light);
+}
+
+.bg-blend-difference {
+  background-blend-mode: var(--blend-difference);
+}
+
+.bg-blend-exclusion {
+  background-blend-mode: var(--blend-exclusion);
+}
+
+.bg-blend-hue {
+  background-blend-mode: var(--blend-hue);
+}
+
+.bg-blend-saturation {
+  background-blend-mode: var(--blend-saturation);
+}
+
+.bg-blend-color {
+  background-blend-mode: var(--blend-color);
+}
+
+.bg-blend-luminosity {
+  background-blend-mode: var(--blend-luminosity);
+}
+
+/* 混合模式 */
+.mix-blend-normal {
+  mix-blend-mode: var(--blend-normal);
+}
+
+.mix-blend-multiply {
+  mix-blend-mode: var(--blend-multiply);
+}
+
+.mix-blend-screen {
+  mix-blend-mode: var(--blend-screen);
+}
+
+.mix-blend-overlay {
+  mix-blend-mode: var(--blend-overlay);
+}
+
+.mix-blend-darken {
+  mix-blend-mode: var(--blend-darken);
+}
+
+.mix-blend-lighten {
+  mix-blend-mode: var(--blend-lighten);
+}
+
+.mix-blend-color-dodge {
+  mix-blend-mode: var(--blend-color-dodge);
+}
+
+.mix-blend-color-burn {
+  mix-blend-mode: var(--blend-color-burn);
+}
+
+.mix-blend-hard-light {
+  mix-blend-mode: var(--blend-hard-light);
+}
+
+.mix-blend-soft-light {
+  mix-blend-mode: var(--blend-soft-light);
+}
+
+.mix-blend-difference {
+  mix-blend-mode: var(--blend-difference);
+}
+
+.mix-blend-exclusion {
+  mix-blend-mode: var(--blend-exclusion);
+}
+
+.mix-blend-hue {
+  mix-blend-mode: var(--blend-hue);
+}
+
+.mix-blend-saturation {
+  mix-blend-mode: var(--blend-saturation);
+}
+
+.mix-blend-color {
+  mix-blend-mode: var(--blend-color);
+}
+
+.mix-blend-luminosity {
+  mix-blend-mode: var(--blend-luminosity);
+}
+
+/* 尺寸 */
+.w-0 {
+  width: var(--space-0);
+}
+
+.w-px {
+  width: var(--space-px);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-screen {
+  width: 100vw;
+}
+
+.w-min {
+  width: min-content;
+}
+
+.w-max {
+  width: max-content;
+}
+
+.w-fit {
+  width: fit-content;
+}
+
+.h-0 {
+  height: var(--space-0);
+}
+
+.h-px {
+  height: var(--space-px);
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.h-min {
+  height: min-content;
+}
+
+.h-max {
+  height: max-content;
+}
+
+.h-fit {
+  height: fit-content;
+}
+
+/* 交互 */
+.appearance-none {
+  appearance: none;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
+.resize-none {
+  resize: none;
+}
+
+.resize-y {
+  resize: vertical;
+}
+
+.resize-x {
+  resize: horizontal;
+}
+
+.resize {
+  resize: both;
+}
+
+/* 可访问性 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.not-sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* 响应式前缀 */
+@media (min-width: 640px) {
+  .sm\: {
+    /* 在这里添加 sm 断点特定的类 */
+  }
+}
+
+@media (min-width: 768px) {
+  .md\: {
+    /* 在这里添加 md 断点特定的类 */
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\: {
+    /* 在这里添加 lg 断点特定的类 */
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\: {
+    /* 在这里添加 xl 断点特定的类 */
+  }
+}
+
+@media (min-width: 1536px) {
+  .\32xl\: {
+    /* 在这里添加 2xl 断点特定的类 */
+  }
+}
+
+/* 状态 */
+.disabled\:opacity-50:disabled {
+  opacity: 0.5;
+}
+
+.disabled\:cursor-not-allowed:disabled {
+  cursor: not-allowed;
+}
+
+.disabled\:pointer-events-none:disabled {
+  pointer-events: none;
+}
+
+/* 焦点状态 */
+.focus\:outline-none:focus {
+  outline: none;
+}
+
+.focus\:ring-2:focus {
+  outline: 2px solid var(--color-primary-default);
+  outline-offset: 2px;
+}
+
+.focus\:ring-4:focus {
+  outline: 4px solid var(--color-primary-default);
+  outline-offset: 2px;
+}
+
+.focus\:ring-offset-2:focus {
+  outline-offset: 2px;
+}
+
+.focus\:ring-offset-4:focus {
+  outline-offset: 4px;
+}
+
+/* 悬停状态 */
+.hover\:bg-gray-50:hover {
+  background-color: var(--color-gray-50);
+}
+
+.hover\:bg-gray-100:hover {
+  background-color: var(--color-gray-100);
+}
+
+.hover\:bg-gray-200:hover {
+  background-color: var(--color-gray-200);
+}
+
+.hover\:opacity-80:hover {
+  opacity: 0.8;
+}
+
+.hover\:opacity-90:hover {
+  opacity: 0.9;
+}
+
+.hover\:opacity-100:hover {
+  opacity: 1;
+}
+
+.hover\:shadow-md:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.hover\:shadow-lg:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.hover\:shadow-xl:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+/* 激活状态 */
+.active\:bg-gray-100:active {
+  background-color: var(--color-gray-100);
+}
+
+.active\:bg-gray-200:active {
+  background-color: var(--color-gray-200);
+}
+
+.active\:opacity-80:active {
+  opacity: 0.8;
+}
+
+.active\:opacity-90:active {
+  opacity: 0.9;
+}
+
+.active\:opacity-100:active {
+  opacity: 1;
+}
+
+/* 动画关键帧 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* 屏幕阅读器专用 */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border-width: 0 !important;
+}
+
+/* 焦点管理 */
+.focus-visible\:ring-2:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.focus-visible\:ring-4:focus-visible {
+  outline: 4px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* 无障碍焦点指示 */
+.focus-indicator {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* 高对比度焦点 */
+@media (prefers-contrast: high) {
+  .focus-indicator,
+  .focus-visible\:ring-2:focus-visible,
+  .focus-visible\:ring-4:focus-visible {
+    outline-width: 3px;
+    outline-style: solid;
+  }
+}
+
+/* 增强动画和过渡效果 */
+/* 平滑过渡 */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-smooth-slow {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-colors {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.transition-transform {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-opacity {
+  transition: opacity 0.3s ease;
+}
+
+.transition-shadow {
+  transition: box-shadow 0.3s ease;
+}
+
+/* 悬浮效果 */
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-rotate {
+  transition: transform 0.3s ease;
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg);
+}
+
+/* 按压效果 */
+.active-scale {
+  transition: transform 0.1s ease;
+}
+
+.active-scale:active {
+  transform: scale(0.95);
+}
+
+.active-bounce {
+  transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.active-bounce:active {
+  transform: scale(0.9);
+}
+
+/* 发光效果 */
+.glow {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.glow-sm {
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+.glow-lg {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.7);
+}
+
+/* 脉冲动画 */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 呼吸动画 */
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* 滑入动画 */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.4s ease-out;
+}
+
+.animate-slide-in-down {
+  animation: slideInDown 0.4s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.4s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.4s ease-out;
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 弹性动画 */
+@keyframes elasticIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes elasticOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-elastic-in {
+  animation: elasticIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-elastic-out {
+  animation: elasticOut 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* 交互反馈 */
+.interactive-feedback {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.interactive-feedback::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.interactive-feedback:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* 加载动画 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-spin-reverse {
+  animation: spin-reverse 1s linear infinite;
+}
+
+/* 特殊效果 */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* 响应式动画减少 */
+@media (prefers-reduced-motion: reduce) {
+  .transition-smooth,
+  .transition-smooth-slow,
+  .transition-colors,
+  .transition-transform,
+  .transition-opacity,
+  .transition-shadow,
+  .hover-lift,
+  .hover-scale,
+  .hover-rotate,
+  .active-scale,
+  .active-bounce {
+    transition: none;
+  }
+
+  .hover-lift:hover,
+  .hover-scale:hover,
+  .hover-rotate:hover {
+    transform: none;
+  }
+
+  .active-scale:active,
+  .active-bounce:active {
+    transform: none;
+  }
+
+  .animate-pulse-soft,
+  .animate-breathe,
+  .animate-slide-in-up,
+  .animate-slide-in-down,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-fade-in,
+  .animate-fade-in-scale,
+  .animate-elastic-in,
+  .animate-elastic-out,
+  .animate-spin,
+  .animate-spin-reverse,
+  .shimmer {
+    animation: none;
+  }
+}

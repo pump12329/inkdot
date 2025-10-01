@@ -1,7 +1,7 @@
 const { createChineseBrowser, testChineseFont } = require('./playwright-chinese-config');
 
 async function testButtons() {
-  const { browser, context, page } = await createChineseBrowser();
+  const { browser, _context, page } = await createChineseBrowser();
 
   // 监听控制台消息
   page.on('console', msg => {

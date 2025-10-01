@@ -152,20 +152,20 @@ async function createChineseBrowser() {
   console.log('🚀 启动支持中文的Playwright浏览器...');
 
   const browser = await chromium.launch(chineseConfig);
-  const context = await browser.newContext({
+  const _context = await browser.newContext({
     locale: 'zh-CN',
     timezoneId: 'Asia/Shanghai',
     viewport: { width: 1280, height: 720 }
   });
 
-  const page = await context.newPage();
+  const page = await _context.newPage();
 
   // 设置中文支持
   await setupChineseSupport(page);
 
   console.log('✅ 浏览器启动成功，中文支持已配置');
 
-  return { browser, context, page };
+  return { browser, _context, page };
 }
 
 // 测试中文字体是否正确加载

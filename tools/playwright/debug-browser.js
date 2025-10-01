@@ -2,7 +2,7 @@ const fs = require('fs');
 const { createChineseBrowser } = require('./playwright-chinese-config');
 
 async function debugBrowser() {
-  const { browser, context, page } = await createChineseBrowser();
+  const { browser, _context, page } = await createChineseBrowser();
 
   // 监听控制台消息
   const consoleLogs = [];

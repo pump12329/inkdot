@@ -1,7 +1,7 @@
 const { createChineseBrowser } = require('./playwright-chinese-config');
 
 async function checkFonts() {
-  const { browser, context, page } = await createChineseBrowser();
+  const { browser, _context, page } = await createChineseBrowser();
 
   try {
     console.log('🔍 检查系统可用字体...');

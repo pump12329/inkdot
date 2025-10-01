@@ -1,4 +1,15 @@
 import type { MindMapNode, NodeConnection, Position } from '@/types';
+
+// 布局配置类型
+interface LayoutConfig {
+  levelHeight: number;
+  nodeWidth: number;
+  nodeHeight: number;
+  horizontalSpacing: number;
+  verticalSpacing: number;
+  startX: number;
+  startY: number;
+}
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
@@ -68,6 +79,81 @@ export const useMindMapStore = defineStore('mindMap', () => {
     isModified.value = true;
   }
 
+  function copyNode(nodeId: string): void {
+    const nodeToCopy = nodes.value.find(node => node.id === nodeId);
+    if (!nodeToCopy) return;
+
+    const copiedNode: MindMapNode = {
+      id: generateId(),
+      content: nodeToCopy.content + ' (副本)',
+      position: {
+        x: nodeToCopy.position.x + 20,
+        y: nodeToCopy.position.y + 20
+      },
+      connections: []
+    };
+
+    nodes.value.push(copiedNode);
+    isModified.value = true;
+  }
+
+  function toggleNodeExpand(nodeId: string): void {
+    const node = nodes.value.find(n => n.id === nodeId);
+    if (!node) return;
+
+    const isCollapsed = node.connections.includes('collapsed');
+
+    if (isCollapsed) {
+      // 展开节点：移除折叠标记
+      node.connections = node.connections.filter(conn => conn !== 'collapsed');
+    } else {
+      // 折叠节点：添加折叠标记
+      if (!node.connections.includes('collapsed')) {
+        node.connections.push('collapsed');
+      }
+    }
+
+    isModified.value = true;
+    saveExpandCollapseStates();
+  }
+
+  // 保存展开/折叠状态到 localStorage
+  function saveExpandCollapseStates(): void {
+    try {
+      const states: { [nodeId: string]: boolean } = {};
+      nodes.value.forEach(node => {
+        states[node.id] = !node.connections.includes('collapsed');
+      });
+      localStorage.setItem('inkdot-expand-states', JSON.stringify(states));
+    } catch (error) {
+      console.warn('Failed to save expand/collapse states:', error);
+    }
+  }
+
+  // 从 localStorage 加载展开/折叠状态
+  function loadExpandCollapseStates(): void {
+    try {
+      const saved = localStorage.getItem('inkdot-expand-states');
+      if (saved) {
+        const states: { [nodeId: string]: boolean } = JSON.parse(saved);
+        nodes.value.forEach(node => {
+          const isExpanded = states[node.id];
+          if (isExpanded !== undefined) {
+            const isCollapsed = !isExpanded;
+            const collapsedIndex = node.connections.indexOf('collapsed');
+            if (isCollapsed && collapsedIndex === -1) {
+              node.connections.push('collapsed');
+            } else if (!isCollapsed && collapsedIndex !== -1) {
+              node.connections.splice(collapsedIndex, 1);
+            }
+          }
+        });
+      }
+    } catch (error) {
+      console.warn('Failed to load expand/collapse states:', error);
+    }
+  }
+
   function addConnection(fromNodeId: string, toNodeId: string): void {
     // 检查是否已存在连接
     const exists = connections.value.some(
@@ -120,6 +206,9 @@ export const useMindMapStore = defineStore('mindMap', () => {
         selectedNodeId.value = null;
         isModified.value = false;
         console.log('项目已加载');
+
+        // 加载展开/折叠状态
+        loadExpandCollapseStates();
       } catch (e) {
         console.error('加载项目失败:', e);
       }
@@ -166,7 +255,7 @@ export const useMindMapStore = defineStore('mindMap', () => {
     });
 
     // 布局参数
-    const layout = {
+    const layout: LayoutConfig = {
       levelHeight: 120,
       nodeWidth: 200,
       nodeHeight: 60,
@@ -221,7 +310,7 @@ export const useMindMapStore = defineStore('mindMap', () => {
     level: number,
     startX: number,
     startY: number,
-    layout: any,
+    layout: LayoutConfig,
     levelWidths: { [level: number]: number }
   ): void {
     const node = nodes.value.find(n => n.id === nodeId);
@@ -267,12 +356,16 @@ export const useMindMapStore = defineStore('mindMap', () => {
     updateNodePosition,
     updateNodeContent,
     removeNode,
+    copyNode,
     addConnection,
     selectNode,
+    toggleNodeExpand,
     createNewProject,
     saveCurrentProject,
     loadProject,
     calculateTreeLayout,
-    getContentSize
+    getContentSize,
+    saveExpandCollapseStates,
+    loadExpandCollapseStates
   };
 });

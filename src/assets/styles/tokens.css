@@ -1,0 +1,557 @@
+/* InkDot 设计令牌系统 */
+
+/* 颜色令牌 */
+:root {
+  /* 基础颜色 */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* 语义化颜色 */
+  --color-primary-default: var(--color-black);
+  --color-primary-hover: #1a1a1a;
+  --color-primary-active: #333333;
+  --color-primary-disabled: #999999;
+
+  --color-success-default: #16a34a;
+  --color-success-hover: #15803d;
+  --color-success-active: #166534;
+  --color-success-disabled: #86efac;
+
+  --color-warning-default: #ea580c;
+  --color-warning-hover: #c2410c;
+  --color-warning-active: #9a3412;
+  --color-warning-disabled: #fdba74;
+
+  --color-error-default: #dc2626;
+  --color-error-hover: #b91c1c;
+  --color-error-active: #991b1b;
+  --color-error-disabled: #fca5a5;
+
+  --color-info-default: #2563eb;
+  --color-info-hover: #1d4ed8;
+  --color-info-active: #1e40af;
+  --color-info-disabled: #93c5fd;
+
+  /* 中性色 */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+
+  /* 间距令牌 */
+  --space-px: 1px;
+  --space-0-5: 2px;
+  --space-1: 4px;
+  --space-1-5: 6px;
+  --space-2: 8px;
+  --space-2-5: 10px;
+  --space-3: 12px;
+  --space-3-5: 14px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 40px;
+  --space-11: 44px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-28: 112px;
+  --space-32: 128px;
+  --space-36: 144px;
+  --space-40: 160px;
+  --space-44: 176px;
+  --space-48: 192px;
+  --space-52: 208px;
+  --space-56: 224px;
+  --space-60: 240px;
+  --space-64: 256px;
+  --space-72: 288px;
+  --space-80: 320px;
+  --space-96: 384px;
+
+  /* 字体大小令牌 */
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
+  --font-size-3xl: 1.875rem;    /* 30px */
+  --font-size-4xl: 2.25rem;     /* 36px */
+  --font-size-5xl: 3rem;        /* 48px */
+  --font-size-6xl: 3.75rem;     /* 60px */
+  --font-size-7xl: 4.5rem;      /* 72px */
+  --font-size-8xl: 6rem;        /* 96px */
+  --font-size-9xl: 8rem;        /* 128px */
+
+  /* 行高令牌 */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  /* 字重令牌 */
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* 字间距令牌 */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+
+  /* 圆角令牌 */
+  --radius-none: 0;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-full: 50%;
+
+  /* 阴影令牌 */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --shadow-none: none;
+
+  /* 动画时长令牌 */
+  --duration-75: 75ms;
+  --duration-100: 100ms;
+  --duration-150: 150ms;
+  --duration-200: 200ms;
+  --duration-300: 300ms;
+  --duration-500: 500ms;
+  --duration-700: 700ms;
+  --duration-1000: 1000ms;
+
+  /* 动画缓动函数令牌 */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+
+  /* Z-index 令牌 */
+  --z-auto: auto;
+  --z-0: 0;
+  --z-10: 10;
+  --z-20: 20;
+  --z-30: 30;
+  --z-40: 40;
+  --z-50: 50;
+  --z-auto: auto;
+  --z-base: 1;
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+
+  /* 混合模式令牌 */
+  --blend-normal: normal;
+  --blend-multiply: multiply;
+  --blend-screen: screen;
+  --blend-overlay: overlay;
+  --blend-darken: darken;
+  --blend-lighten: lighten;
+  --blend-color-dodge: color-dodge;
+  --blend-color-burn: color-burn;
+  --blend-hard-light: hard-light;
+  --blend-soft-light: soft-light;
+  --blend-difference: difference;
+  --blend-exclusion: exclusion;
+  --blend-hue: hue;
+  --blend-saturation: saturation;
+  --blend-color: color;
+  --blend-luminosity: luminosity;
+
+  /* 变换令牌 */
+  --scale-90: 0.9;
+  --scale-95: 0.95;
+  --scale-100: 1;
+  --scale-105: 1.05;
+  --scale-110: 1.1;
+  --scale-125: 1.25;
+  --scale-150: 1.5;
+
+  --rotate-0: 0deg;
+  --rotate-1: 1deg;
+  --rotate-2: 2deg;
+  --rotate-3: 3deg;
+  --rotate-6: 6deg;
+  --rotate-12: 12deg;
+  --rotate-45: 45deg;
+  --rotate-90: 90deg;
+  --rotate-180: 180deg;
+
+  --translate-x-0: 0;
+  --translate-x-px: 1px;
+  --translate-x-0-5: 2px;
+  --translate-x-1: 4px;
+  --translate-x-1-5: 6px;
+  --translate-x-2: 8px;
+  --translate-x-2-5: 10px;
+  --translate-x-3: 12px;
+  --translate-x-3-5: 14px;
+  --translate-x-4: 16px;
+  --translate-x-5: 20px;
+  --translate-x-6: 24px;
+  --translate-x-7: 28px;
+  --translate-x-8: 32px;
+  --translate-x-9: 36px;
+  --translate-x-10: 40px;
+  --translate-x-11: 44px;
+  --translate-x-12: 48px;
+  --translate-x-14: 56px;
+  --translate-x-16: 64px;
+  --translate-x-20: 80px;
+  --translate-x-24: 96px;
+  --translate-x-28: 112px;
+  --translate-x-32: 128px;
+  --translate-x-36: 144px;
+  --translate-x-40: 160px;
+  --translate-x-44: 176px;
+  --translate-x-48: 192px;
+  --translate-x-52: 208px;
+  --translate-x-56: 224px;
+  --translate-x-60: 240px;
+  --translate-x-64: 256px;
+  --translate-x-72: 288px;
+  --translate-x-80: 320px;
+  --translate-x-96: 384px;
+
+  --translate-y-0: 0;
+  --translate-y-px: 1px;
+  --translate-y-0-5: 2px;
+  --translate-y-1: 4px;
+  --translate-y-1-5: 6px;
+  --translate-y-2: 8px;
+  --translate-y-2-5: 10px;
+  --translate-y-3: 12px;
+  --translate-y-3-5: 14px;
+  --translate-y-4: 16px;
+  --translate-y-5: 20px;
+  --translate-y-6: 24px;
+  --translate-y-7: 28px;
+  --translate-y-8: 32px;
+  --translate-y-9: 36px;
+  --translate-y-10: 40px;
+  --translate-y-11: 44px;
+  --translate-y-12: 48px;
+  --translate-y-14: 56px;
+  --translate-y-16: 64px;
+  --translate-y-20: 80px;
+  --translate-y-24: 96px;
+  --translate-y-28: 112px;
+  --translate-y-32: 128px;
+  --translate-y-36: 144px;
+  --translate-y-40: 160px;
+  --translate-y-44: 176px;
+  --translate-y-48: 192px;
+  --translate-y-52: 208px;
+  --translate-y-56: 224px;
+  --translate-y-60: 240px;
+  --translate-y-64: 256px;
+  --translate-y-72: 288px;
+  --translate-y-80: 320px;
+  --translate-y-96: 384px;
+
+  /* 模糊令牌 */
+  --blur-none: 0;
+  --blur-sm: 4px;
+  --blur-md: 8px;
+  --blur-lg: 16px;
+  --blur-xl: 24px;
+  --blur-2xl: 32px;
+  --blur-3xl: 64px;
+
+  /* 透明度令牌 */
+  --opacity-0: 0;
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-15: 0.15;
+  --opacity-20: 0.2;
+  --opacity-25: 0.25;
+  --opacity-30: 0.3;
+  --opacity-35: 0.35;
+  --opacity-40: 0.4;
+  --opacity-45: 0.45;
+  --opacity-50: 0.5;
+  --opacity-55: 0.55;
+  --opacity-60: 0.6;
+  --opacity-65: 0.65;
+  --opacity-70: 0.7;
+  --opacity-75: 0.75;
+  --opacity-80: 0.8;
+  --opacity-85: 0.85;
+  --opacity-90: 0.9;
+  --opacity-95: 0.95;
+  --opacity-100: 1;
+
+  /* 间隔令牌 */
+  --gap-0: 0;
+  --gap-px: 1px;
+  --gap-0-5: 2px;
+  --gap-1: 4px;
+  --gap-1-5: 6px;
+  --gap-2: 8px;
+  --gap-2-5: 10px;
+  --gap-3: 12px;
+  --gap-3-5: 14px;
+  --gap-4: 16px;
+  --gap-5: 20px;
+  --gap-6: 24px;
+  --gap-7: 28px;
+  --gap-8: 32px;
+  --gap-9: 36px;
+  --gap-10: 40px;
+  --gap-11: 44px;
+  --gap-12: 48px;
+  --gap-14: 56px;
+  --gap-16: 64px;
+  --gap-20: 80px;
+  --gap-24: 96px;
+  --gap-28: 112px;
+  --gap-32: 128px;
+  --gap-36: 144px;
+  --gap-40: 160px;
+  --gap-44: 176px;
+  --gap-48: 192px;
+  --gap-52: 208px;
+  --gap-56: 224px;
+  --gap-60: 240px;
+  --gap-64: 256px;
+  --gap-72: 288px;
+  --gap-80: 320px;
+  --gap-96: 384px;
+
+  /* 网格令牌 */
+  --grid-cols-1: repeat(1, minmax(0, 1fr));
+  --grid-cols-2: repeat(2, minmax(0, 1fr));
+  --grid-cols-3: repeat(3, minmax(0, 1fr));
+  --grid-cols-4: repeat(4, minmax(0, 1fr));
+  --grid-cols-5: repeat(5, minmax(0, 1fr));
+  --grid-cols-6: repeat(6, minmax(0, 1fr));
+  --grid-cols-7: repeat(7, minmax(0, 1fr));
+  --grid-cols-8: repeat(8, minmax(0, 1fr));
+  --grid-cols-9: repeat(9, minmax(0, 1fr));
+  --grid-cols-10: repeat(10, minmax(0, 1fr));
+  --grid-cols-11: repeat(11, minmax(0, 1fr));
+  --grid-cols-12: repeat(12, minmax(0, 1fr));
+
+  --grid-rows-1: repeat(1, minmax(0, 1fr));
+  --grid-rows-2: repeat(2, minmax(0, 1fr));
+  --grid-rows-3: repeat(3, minmax(0, 1fr));
+  --grid-rows-4: repeat(4, minmax(0, 1fr));
+  --grid-rows-5: repeat(5, minmax(0, 1fr));
+  --grid-rows-6: repeat(6, minmax(0, 1fr));
+
+  /* 最大宽度令牌 */
+  --max-w-none: none;
+  --max-w-xs: 20rem;
+  --max-w-sm: 24rem;
+  --max-w-md: 28rem;
+  --max-w-lg: 32rem;
+  --max-w-xl: 36rem;
+  --max-w-2xl: 42rem;
+  --max-w-3xl: 48rem;
+  --max-w-4xl: 56rem;
+  --max-w-5xl: 64rem;
+  --max-w-6xl: 72rem;
+  --max-w-7xl: 80rem;
+  --max-w-full: 100%;
+  --max-w-screen-sm: 640px;
+  --max-w-screen-md: 768px;
+  --max-w-screen-lg: 1024px;
+  --max-w-screen-xl: 1280px;
+  --max-w-screen-2xl: 1536px;
+
+  /* 最小宽度令牌 */
+  --min-w-0: 0;
+  --min-w-full: 100%;
+  --min-w-min: min-content;
+  --min-w-max: max-content;
+  --min-w-fit: fit-content;
+
+  /* 最大高度令牌 */
+  --max-h-0: 0;
+  --max-h-px: 1px;
+  --max-h-0-5: 2px;
+  --max-h-1: 4px;
+  --max-h-1-5: 6px;
+  --max-h-2: 8px;
+  --max-h-2-5: 10px;
+  --max-h-3: 12px;
+  --max-h-3-5: 14px;
+  --max-h-4: 16px;
+  --max-h-5: 20px;
+  --max-h-6: 24px;
+  --max-h-7: 28px;
+  --max-h-8: 32px;
+  --max-h-9: 36px;
+  --max-h-10: 40px;
+  --max-h-11: 44px;
+  --max-h-12: 48px;
+  --max-h-14: 56px;
+  --max-h-16: 64px;
+  --max-h-20: 80px;
+  --max-h-24: 96px;
+  --max-h-28: 112px;
+  --max-h-32: 128px;
+  --max-h-36: 144px;
+  --max-h-40: 160px;
+  --max-h-44: 176px;
+  --max-h-48: 192px;
+  --max-h-52: 208px;
+  --max-h-56: 224px;
+  --max-h-60: 240px;
+  --max-h-64: 256px;
+  --max-h-72: 288px;
+  --max-h-80: 320px;
+  --max-h-96: 384px;
+  --max-h-full: 100%;
+  --max-h-screen: 100vh;
+  --max-h-min: min-content;
+  --max-h-max: max-content;
+  --max-h-fit: fit-content;
+
+  /* 边框宽度令牌 */
+  --border-width-0: 0;
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --border-width-4: 4px;
+  --border-width-8: 8px;
+
+  /* 边框样式令牌 */
+  --border-style-solid: solid;
+  --border-style-dashed: dashed;
+  --border-style-dotted: dotted;
+  --border-style-double: double;
+  --border-style-hidden: hidden;
+  --border-style-none: none;
+
+  /* 分隔线令牌 */
+  --divide-width-0: 0;
+  --divide-width-1: 1px;
+  --divide-width-2: 2px;
+  --divide-width-4: 4px;
+  --divide-width-8: 8px;
+
+  --divide-style-solid: solid;
+  --divide-style-dashed: dashed;
+  --divide-style-dotted: dotted;
+  --divide-style-double: double;
+  --divide-style-none: none;
+}
+
+/* 响应式断点令牌 */
+@media (min-width: 640px) {
+  :root {
+    --breakpoint-sm: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --breakpoint-md: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --breakpoint-lg: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --breakpoint-xl: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  :root {
+    --breakpoint-2xl: 1536px;
+  }
+}
+
+/* 暗色模式令牌 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* 调整暗色模式下的颜色 */
+    --color-gray-50: #111827;
+    --color-gray-100: #1f2937;
+    --color-gray-200: #374151;
+    --color-gray-300: #4b5563;
+    --color-gray-400: #6b7280;
+    --color-gray-500: #9ca3af;
+    --color-gray-600: #d1d5db;
+    --color-gray-700: #e5e7eb;
+    --color-gray-800: #f3f4f6;
+    --color-gray-900: #f9fafb;
+
+    /* 调整阴影 */
+    --shadow-xs: 0 1px 2px 0 rgba(255, 255, 255, 0.05);
+    --shadow-sm: 0 1px 3px 0 rgba(255, 255, 255, 0.1), 0 1px 2px 0 rgba(255, 255, 255, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -1px rgba(255, 255, 255, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(255, 255, 255, 0.1), 0 4px 6px -2px rgba(255, 255, 255, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(255, 255, 255, 0.1), 0 10px 10px -5px rgba(255, 255, 255, 0.04);
+    --shadow-2xl: 0 25px 50px -12px rgba(255, 255, 255, 0.25);
+  }
+}
+
+/* 高对比度模式令牌 */
+@media (prefers-contrast: high) {
+  :root {
+    /* 增强对比度 */
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+}

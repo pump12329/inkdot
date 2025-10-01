@@ -48,29 +48,50 @@ npm run change:auto       # Auto-detect changes for changelog
 npm run status:update     # Update project status
 ```
 
+### Additional Commands
+
+```bash
+npm run cleanup           # Clean up build artifacts and temp files
+npm run test:performance  # Run performance-specific tests
+npm run test:playwright:all    # Run all Playwright tests
+npm run test:playwright:debug  # Debug Playwright tests
+```
+
 ## Architecture Overview
 
 ### Core Components Structure
 
 - **App.vue**: Main application container with header, toolbar, canvas, and sidebar
-- **MindMapCanvas.vue**: Central canvas component that renders nodes and connections
-- **MindMapNode.vue**: Individual node component with inline editing
-- **Toolbar.vue**: Application toolbar with save/load/node operations
+- **MindMapCanvas.vue**: Central canvas component that renders nodes and connections with zoom/pan controls
+- **MindMapNode.vue**: Individual node component with inline editing and expand/collapse functionality
+- **FloatingActionBar.vue**: Context-sensitive floating action bar for node operations
 
 ### State Management
 
 - **Pinia Store** (`src/stores/mindmap.ts`): Centralized state management for nodes, connections, and project data
-- **Composables**: Reusable logic hooks for keyboard shortcuts, mind map interactions, and viewport management
+  - Local storage persistence for projects and expand/collapse states
+  - Tree layout algorithm for automatic node positioning
+  - Node operations: add, update, remove, copy, expand/collapse
+- **Composables**: Reusable logic hooks
+  - `useCanvasView.ts`: Canvas viewport management, zoom/pan controls
+  - `useKeyboardNavigation.ts`: Keyboard shortcuts and navigation
+  - `useResponsiveLayout.ts`: Mobile/tablet responsive behavior
+  - `useTheme.ts`: Theme management (light/dark mode)
 
 ### Type System
 
-- **Central Types** (`src/types/index.ts`): Comprehensive type definitions for mind map nodes, connections, and project data
+- **Central Types** (`src/types/index.ts`): Simplified MVP type definitions
+  - `MindMapNode`: Basic node structure with id, content, position, connections
+  - `NodeConnection`: Connection relationships between nodes
+  - `Position`: Coordinate system for node placement
 - **Strict TypeScript**: `"strict": true` with explicit typing throughout
 
 ### Configuration
 
-- **Vite** (`vite.config.ts`): Development server on port 3000 with path aliases
-- **Vitest** (`vitest.config.ts`): Testing configuration with 70% coverage thresholds
+- **Vite** (`vite.config.ts`): Development server on port 3000 with basic path alias (`@` → `src/`)
+- **Vitest** (`vitest.config.ts`): Comprehensive testing configuration with 70% coverage thresholds
+  - Multiple path aliases for clean imports (`@core`, `@ai`, `@ui`, `@services`, etc.)
+  - JSDOM environment for component testing
 - **ESLint**: Modern flat config with Vue and TypeScript support
 
 ## Key Development Principles
