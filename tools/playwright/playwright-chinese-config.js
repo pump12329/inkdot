@@ -1,4 +1,4 @@
-const { chromium } = require('playwright');
+import { chromium } from 'playwright';
 
 // 中文支持的Playwright配置
 const chineseConfig = {
@@ -256,7 +256,7 @@ async function forceChineseFont(page) {
   console.log('✅ 已强制应用中文字体');
 }
 
-module.exports = {
+export {
   chineseConfig,
   chineseFontCSS,
   createChineseBrowser,

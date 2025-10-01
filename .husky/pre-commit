@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # 优化后的 pre-commit hook
 echo "🔍 Running optimized pre-commit checks..."
 
@@ -86,6 +83,34 @@ else
   echo "⏭️  Skipping unit tests (no code files changed)"
 fi
 
+# 5. Playwright 快速UI测试 - 只在有UI相关文件变更时执行
+STAGED_UI_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(vue|css|scss|less)$' | wc -l)
+if [ $STAGED_UI_FILES -gt 0 ]; then
+  echo "🎭 Step 5: Quick Playwright UI tests..."
+  START_TIME=$(date +%s%N)
+
+  # 检查是否在CI环境或用户设置了跳过Playwright
+  if [ "$CI" = "true" ] || [ "$SKIP_PLAYWRIGHT" = "true" ]; then
+    echo "⏭️  Skipping Playwright tests (CI or SKIP_PLAYWRIGHT=true)"
+  else
+    # 运行快速UI测试（基于构建文件的静态测试）
+    if node tools/playwright/quick-ui-test.js 2>/dev/null; then
+      PLAYWRIGHT_STATUS=0
+      echo "✅ Playwright UI tests passed"
+    else
+      PLAYWRIGHT_STATUS=$?
+      echo "⚠️  Playwright UI tests failed (but not blocking commit)"
+      echo "   💡 Run manually: npm run test:playwright:debug"
+      echo "   💡 Or run quick test: node tools/playwright/quick-ui-test.js"
+    fi
+    END_TIME=$(date +%s%N)
+    PLAYWRIGHT_TIME=$(( ($END_TIME - $START_TIME) / 1000000 ))
+    echo "⏱️  Playwright tests completed in ${PLAYWRIGHT_TIME}ms"
+  fi
+else
+  echo "⏭️  Skipping Playwright tests (no UI files changed)"
+fi
+
 # 计算总耗时
 TOTAL_END_TIME=$(date +%s%N)
 TOTAL_TIME=$(( ($TOTAL_END_TIME - $(echo "$START_TIME" | sed 's/[^0-9]//g')) * -1 / 1000000 ))
@@ -94,4 +119,5 @@ echo ""
 echo "💡 Tips:"
 echo "   - Full test suite: npm run test:run"
 echo "   - Coverage report: npm run test:coverage"
-echo "   - E2E tests: npm run test:e2e"
+echo "   - Playwright tests: npm run test:playwright:all"
+echo "   - Skip Playwright: export SKIP_PLAYWRIGHT=true"

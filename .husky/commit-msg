@@ -1,5 +1,3 @@
-#!/usr/bin/env sh
-
 # 提交信息规范检查
 echo "📝 Checking commit message format..."
 

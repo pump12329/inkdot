@@ -1,7 +1,8 @@
-const fs = require('fs');
-const { createChineseBrowser } = require('./playwright-chinese-config');
+import fs from 'fs';
+import { createChineseBrowser } from './playwright-chinese-config.js';
 
-async function debugBrowser() {
+async function debugBrowser(options = {}) {
+  const { quick = false, port = 3003 } = options;
   const { browser, _context, page } = await createChineseBrowser();
 
   // 监听控制台消息
@@ -41,18 +42,19 @@ async function debugBrowser() {
   });
 
   try {
-    console.log('正在访问 http://localhost:3001...');
+    const url = `http://localhost:${port}`;
+    console.log(`正在访问 ${url}...`);
 
     // 访问页面
-    await page.goto('http://localhost:3001', {
+    await page.goto(url, {
       waitUntil: 'networkidle',
-      timeout: 10000
+      timeout: quick ? 5000 : 10000
     });
 
     console.log('页面加载完成，等待Vue应用启动...');
 
     // 等待Vue应用启动
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(quick ? 1000 : 3000);
 
     // 检查页面内容
     const content = await page.content();
@@ -76,47 +78,72 @@ async function debugBrowser() {
 
     // 截图
     console.log('正在截图...');
+    const screenshotPath = quick
+      ? 'tools/screenshots/quick-debug-screenshot.png'
+      : 'tools/screenshots/debug-screenshot.png';
     await page.screenshot({
       fullPage: true,
-      path: 'tools/screenshots/debug-screenshot.png'
+      path: screenshotPath
     });
-    console.log('截图已保存为 tools/screenshots/debug-screenshot.png');
+    console.log(`截图已保存为 ${screenshotPath}`);
 
-    // 保存控制台日志
-    const debugInfo = {
-      timestamp: new Date().toISOString(),
-      url: 'http://localhost:3001',
-      consoleLogs,
-      pageErrors,
-      networkErrors,
-      pageText,
-      hasVueContent,
-      contentLength: content.length
-    };
+    // 保存控制台日志（只在非快速模式下）
+    if (!quick) {
+      const debugInfo = {
+        timestamp: new Date().toISOString(),
+        url: `http://localhost:${port}`,
+        consoleLogs,
+        pageErrors,
+        networkErrors,
+        pageText,
+        hasVueContent,
+        contentLength: content.length
+      };
 
-    // 确保screenshots目录存在
-    const screenshotsDir = 'tools/screenshots';
-    if (!fs.existsSync(screenshotsDir)) {
-      fs.mkdirSync(screenshotsDir, { recursive: true });
+      // 确保screenshots目录存在
+      const screenshotsDir = 'tools/screenshots';
+      if (!fs.existsSync(screenshotsDir)) {
+        fs.mkdirSync(screenshotsDir, { recursive: true });
+      }
+
+      fs.writeFileSync('tools/screenshots/debug-info.json', JSON.stringify(debugInfo, null, 2));
+      console.log('调试信息已保存为 tools/screenshots/debug-info.json');
     }
 
-    fs.writeFileSync('tools/screenshots/debug-info.json', JSON.stringify(debugInfo, null, 2));
-    console.log('调试信息已保存为 tools/screenshots/debug-info.json');
-
     // 等待一下让页面完全加载
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(quick ? 500 : 2000);
 
-    console.log('正在截图...');
-    await page.screenshot({
-      path: 'tools/screenshots/debug-screenshot.png',
-      fullPage: true
-    });
-    console.log('截图已保存为 tools/screenshots/debug-screenshot.png');
+    if (!quick) {
+      console.log('正在截图...');
+      await page.screenshot({
+        path: 'tools/screenshots/debug-screenshot.png',
+        fullPage: true
+      });
+      console.log('截图已保存为 tools/screenshots/debug-screenshot.png');
+    }
   } catch (error) {
     console.log('访问页面时出错:', error.message);
+    if (quick) {
+      console.log('快速模式下出现错误是正常的，可能开发服务器未启动');
+    }
   } finally {
     await browser.close();
   }
 }
 
-debugBrowser().catch(console.error);
+// 支持命令行参数
+const args = process.argv.slice(2);
+const options = {};
+
+if (args.includes('--quick')) {
+  options.quick = true;
+}
+
+if (args.includes('--port')) {
+  const portIndex = args.indexOf('--port');
+  if (portIndex !== -1 && args[portIndex + 1]) {
+    options.port = parseInt(args[portIndex + 1]);
+  }
+}
+
+debugBrowser(options).catch(console.error);

@@ -170,3 +170,5 @@ inkdot/
 
 **InkDot** - 让创意在思维导图中绽放 ✨
 test change
+
+# Git Hooks 优化完成测试

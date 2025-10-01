@@ -83,6 +83,7 @@
       :is-visible="showFloatingBar"
       :has-children="selectedNodeHasChildren"
       :is-expanded="isNodeExpanded"
+      :node-position="selectedNodeInfo?.position || null"
       @add-root-node="handleAddRootNode"
       @add-child="handleAddChild"
       @edit="handleEditNode"
@@ -91,7 +92,6 @@
       @toggle-expand="handleToggleExpand"
       @import="handleImport"
       @export="handleExport"
-      @reset-zoom="handleResetZoom"
       @toggle-theme="handleToggleTheme"
       @close="closeFloatingBar"
     />
@@ -127,8 +127,7 @@ const props = defineProps<Props>();
 const { isMobile, isTablet, isDesktop, layoutParams, getOptimalZoom, canvasOrientation } =
   useResponsiveLayout();
 
-// 悬浮按钮栏状态 - 始终显示
-const showFloatingBar = ref(true);
+// 悬浮按钮栏状态 - 根据选中节点显示
 const selectedNodeForBar = ref<MindMapNode | null>(null);
 const expandedNodes = ref<Set<string>>(new Set());
 
@@ -136,6 +135,12 @@ const expandedNodes = ref<Set<string>>(new Set());
 const selectedNodeInfo = computed(() => {
   if (!props.selectedNodeId) return null;
   return props.nodes.find(node => node.id === props.selectedNodeId) || null;
+});
+
+// 计算是否显示悬浮按钮栏
+const showFloatingBar = computed(() => {
+  // 始终显示基础操作栏，节点操作根据选中状态显示
+  return true;
 });
 
 // 计算选中节点是否有子节点
@@ -320,13 +325,6 @@ function hasChildren(nodeId: string): boolean {
 
 function handleNodeClick(nodeId: string): void {
   emit('nodeClick', nodeId);
-
-  // 显示悬浮按钮栏
-  const clickedNode = props.nodes.find(node => node.id === nodeId);
-  if (clickedNode) {
-    selectedNodeForBar.value = clickedNode;
-    showFloatingBar.value = true;
-  }
 }
 
 function handleNodeContentUpdate(nodeId: string, content: string): void {
@@ -336,9 +334,6 @@ function handleNodeContentUpdate(nodeId: string, content: string): void {
 function handleCanvasClick(event: MouseEvent): void {
   // 如果正在平移，不创建新节点
   if (isPanning.value) return;
-
-  // 关闭悬浮按钮栏
-  closeFloatingBar();
 
   const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
   const position: Position = {
@@ -411,20 +406,15 @@ function handleExport(): void {
   emit('export');
 }
 
-function handleResetZoom(): void {
-  resetZoom();
-}
-
 function handleToggleTheme(): void {
   emit('toggleTheme');
 }
 
 function closeFloatingBar(): void {
-  showFloatingBar.value = false;
   selectedNodeForBar.value = null;
 }
 
-// 监听选中节点变化
+// 监听选中节点变化，同步悬浮按钮栏状态
 watch(
   () => props.selectedNodeId,
   newNodeId => {
@@ -437,17 +427,6 @@ watch(
       }
     }
   }
-);
-
-// 监听节点删除
-watch(
-  () => props.nodes,
-  newNodes => {
-    if (selectedNodeInfo.value && !newNodes.some(n => n.id === selectedNodeInfo.value?.id)) {
-      closeFloatingBar();
-    }
-  },
-  { deep: true }
 );
 
 // 键盘快捷键支持
